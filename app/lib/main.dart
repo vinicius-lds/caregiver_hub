@@ -1,3 +1,5 @@
+import 'package:caregiver_hub/employer/providers/caregiver_provider.dart';
+import 'package:caregiver_hub/employer/screens/caregiver_list/caregiver_list_screen.dart';
 import 'package:caregiver_hub/shared/constants/routes.dart';
 import 'package:caregiver_hub/shared/providers/profile_provider.dart';
 import 'package:caregiver_hub/shared/screens/landing_screen/landing_screen.dart';
@@ -20,6 +22,9 @@ class MyApp extends StatelessWidget {
         ChangeNotifierProvider(
           create: (ctx) => ProfileProvider(),
         ),
+        ChangeNotifierProvider(
+          create: (ctx) => CaregiverProvider(),
+        ),
       ],
       child: MaterialApp(
         title: 'CaregiverHub',
@@ -30,6 +35,7 @@ class MyApp extends StatelessWidget {
           // caregiver
 
           // employer
+          Routes.CAREGIVER_LIST: (_) => const CaregiverListScreen(),
 
           // shared
           Routes.LANDING_SCREEN: (_) => const LandingScreen(),
