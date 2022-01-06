@@ -1,4 +1,4 @@
-import 'package:caregiver_hub/ui/shared/exceptions/not_implemented_exception.dart';
+import 'package:caregiver_hub/shared/exceptions/not_implemented_exception.dart';
 import 'package:flutter/cupertino.dart';
 
 class LandingScreenCup extends StatelessWidget {
