@@ -1,11 +1,9 @@
 import 'package:caregiver_hub/shared/constants/routes.dart';
-import 'package:caregiver_hub/shared/providers/profile_provider.dart';
 import 'package:caregiver_hub/shared/validation/functions.dart';
 import 'package:caregiver_hub/shared/validation/validators.dart';
 import 'package:caregiver_hub/shared/widgets/form_button_footer/form_button_footer.dart';
 import 'package:caregiver_hub/shared/widgets/google_sign_in_button/google_sign_in_button.dart';
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
 
 class LoginScreenMat extends StatefulWidget {
   const LoginScreenMat({Key? key}) : super(key: key);
@@ -36,6 +34,7 @@ class _LoginScreenMatState extends State<LoginScreenMat> {
 
   void _login() {
     print('login');
+    Navigator.pushNamed(context, Routes.CAREGIVER_LIST);
   }
 
   void _signIn() {
