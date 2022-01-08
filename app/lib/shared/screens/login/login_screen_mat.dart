@@ -34,16 +34,17 @@ class _LoginScreenMatState extends State<LoginScreenMat> {
 
   void _login() {
     print('login');
-    Navigator.pushNamed(context, Routes.CAREGIVER_LIST);
+    Navigator.pushNamed(context, Routes.caregiverFilter);
   }
 
   void _signIn() {
     print('signIn');
-    Navigator.pushNamed(context, Routes.PROFILE_FORM_SCREEN);
+    Navigator.pushNamed(context, Routes.profileForm);
   }
 
   void _signInWithGoogle() {
     print('signInWithGoogle');
+    Navigator.pushNamed(context, Routes.caregiverFilter);
   }
 
   @override

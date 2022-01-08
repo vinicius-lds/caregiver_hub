@@ -21,8 +21,8 @@ String? Function(String?) equalTo(String? other) {
   };
 }
 
-String? requiredValue(String? value) {
-  if (value == null || value.isEmpty) {
+String? requiredValue(dynamic value) {
+  if (value == null || value == '') {
     return 'O campo é obrigatório';
   }
   return null;

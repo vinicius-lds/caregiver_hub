@@ -1,11 +1,28 @@
 import 'package:caregiver_hub/employer/models/caregiver.dart';
+import 'package:caregiver_hub/employer/models/service_type.dart';
+import 'package:caregiver_hub/employer/models/skill_type.dart';
 import 'package:flutter/foundation.dart';
 
 class CaregiverProvider with ChangeNotifier {
-  final List<Caregiver> _caregivers = []; // _loadMockData();
+  final List<Caregiver> _caregivers = _loadMockData();
 
   Stream<List<Caregiver>> listStream() {
     return Stream.value(_caregivers);
+  }
+
+  void applyFilter({
+    DateTime? startDate,
+    DateTime? endDate,
+    List<ServiceType?>? serviceTypes,
+    List<SkillType?>? skillTypes,
+  }) {
+    print('''
+    applyFilter
+    startDate: $startDate;
+    endDate: $endDate;
+    serviceTypes: $serviceTypes;
+    skillTypes: $skillTypes.
+    ''');
   }
 }
 

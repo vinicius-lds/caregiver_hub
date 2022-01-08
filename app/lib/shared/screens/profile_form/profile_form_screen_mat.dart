@@ -50,6 +50,7 @@ class _ProfileFormScreenMatState extends State<ProfileFormScreenMat> {
     if (!isValid) {
       return;
     }
+    _formKey.currentState!.save();
     print('submit');
   }
 

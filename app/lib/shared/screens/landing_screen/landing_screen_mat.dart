@@ -8,12 +8,12 @@ class LandingScreenMat extends StatelessWidget {
 
   void _pushCaregiverLogin(BuildContext context) {
     Provider.of<ProfileProvider>(context, listen: false).isCaregiver = true;
-    Navigator.of(context).pushNamed(Routes.LOGIN_SCREEN);
+    Navigator.of(context).pushNamed(Routes.login);
   }
 
   void _pushEmployerLogin(BuildContext context) {
     Provider.of<ProfileProvider>(context, listen: false).isCaregiver = false;
-    Navigator.of(context).pushNamed(Routes.LOGIN_SCREEN);
+    Navigator.of(context).pushNamed(Routes.login);
   }
 
   @override
