@@ -1,13 +1,13 @@
 import 'package:caregiver_hub/employer/models/caregiver.dart';
 import 'package:caregiver_hub/employer/providers/caregiver_provider.dart';
-import 'package:caregiver_hub/employer/widgets/caregiver_list_item/caregiver_list_item.dart';
-import 'package:caregiver_hub/shared/widgets/loading/loading.dart';
+import 'package:caregiver_hub/employer/widgets/caregiver_list_item.dart';
+import 'package:caregiver_hub/shared/widgets/loading.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:provider/provider.dart';
 
-class CaregiverListScreenMat extends StatelessWidget {
-  const CaregiverListScreenMat({Key? key}) : super(key: key);
+class CaregiverListScreen extends StatelessWidget {
+  const CaregiverListScreen({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {

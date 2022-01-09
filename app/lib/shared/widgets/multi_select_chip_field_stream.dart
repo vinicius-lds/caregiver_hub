@@ -1,17 +1,16 @@
-import 'package:caregiver_hub/shared/validation/validators.dart';
-import 'package:caregiver_hub/shared/widgets/loading/loading.dart';
+import 'package:caregiver_hub/shared/widgets/loading.dart';
 import 'package:flutter/material.dart';
 import 'package:multi_select_flutter/chip_field/multi_select_chip_field.dart';
 import 'package:multi_select_flutter/multi_select_flutter.dart';
 
-class MultiSelectChipFieldStreamMat<T, K> extends StatelessWidget {
+class MultiSelectChipFieldStream<T, K> extends StatelessWidget {
   final Stream<List<T?>> items;
   final String title;
   final String Function(T?) labelFn;
   final K Function(T?) idFn;
   final Function(List<T?>)? onTap;
 
-  const MultiSelectChipFieldStreamMat({
+  const MultiSelectChipFieldStream({
     Key? key,
     required this.items,
     required this.title,

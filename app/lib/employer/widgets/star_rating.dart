@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
-class StarRatingMat extends StatelessWidget {
-  const StarRatingMat({
+class StarRating extends StatelessWidget {
+  const StarRating({
     Key? key,
     required this.rating,
   }) : super(key: key);

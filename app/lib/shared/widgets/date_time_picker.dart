@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
-class DateTimePickerMat extends FormField<DateTime?> {
-  DateTimePickerMat({
+class DateTimePicker extends FormField<DateTime?> {
+  DateTimePicker({
     String? label,
     FormFieldSetter<DateTime?>? onSaved,
     FormFieldValidator<DateTime?>? validator,

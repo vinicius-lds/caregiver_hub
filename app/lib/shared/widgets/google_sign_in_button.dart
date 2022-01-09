@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 
-class GoogleSignInButtonMat extends StatefulWidget {
+class GoogleSignInButton extends StatefulWidget {
   final void Function() onPressed;
 
-  const GoogleSignInButtonMat({
+  const GoogleSignInButton({
     Key? key,
     required this.onPressed,
   });
@@ -12,7 +12,7 @@ class GoogleSignInButtonMat extends StatefulWidget {
   _GoogleSignInButtonMatState createState() => _GoogleSignInButtonMatState();
 }
 
-class _GoogleSignInButtonMatState extends State<GoogleSignInButtonMat> {
+class _GoogleSignInButtonMatState extends State<GoogleSignInButton> {
   bool _isSigningIn = false;
 
   @override

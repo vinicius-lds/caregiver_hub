@@ -1,18 +1,18 @@
 import 'package:caregiver_hub/shared/constants/routes.dart';
 import 'package:caregiver_hub/shared/validation/functions.dart';
 import 'package:caregiver_hub/shared/validation/validators.dart';
-import 'package:caregiver_hub/shared/widgets/form_button_footer/form_button_footer.dart';
-import 'package:caregiver_hub/shared/widgets/google_sign_in_button/google_sign_in_button.dart';
+import 'package:caregiver_hub/shared/widgets/form_button_footer.dart';
+import 'package:caregiver_hub/shared/widgets/google_sign_in_button.dart';
 import 'package:flutter/material.dart';
 
-class LoginScreenMat extends StatefulWidget {
-  const LoginScreenMat({Key? key}) : super(key: key);
+class LoginScreen extends StatefulWidget {
+  const LoginScreen({Key? key}) : super(key: key);
 
   @override
-  _LoginScreenMatState createState() => _LoginScreenMatState();
+  _LoginScreenState createState() => _LoginScreenState();
 }
 
-class _LoginScreenMatState extends State<LoginScreenMat> {
+class _LoginScreenState extends State<LoginScreen> {
   final _formKey = GlobalKey<FormState>();
 
   String? _email;

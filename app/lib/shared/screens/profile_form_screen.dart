@@ -6,14 +6,14 @@ import 'package:caregiver_hub/shared/validation/validators.dart';
 import 'package:flutter/material.dart';
 import 'package:mask_text_input_formatter/mask_text_input_formatter.dart';
 
-class ProfileFormScreenMat extends StatefulWidget {
-  const ProfileFormScreenMat({Key? key}) : super(key: key);
+class ProfileFormScreen extends StatefulWidget {
+  const ProfileFormScreen({Key? key}) : super(key: key);
 
   @override
-  _ProfileFormScreenMatState createState() => _ProfileFormScreenMatState();
+  _ProfileFormScreenState createState() => _ProfileFormScreenState();
 }
 
-class _ProfileFormScreenMatState extends State<ProfileFormScreenMat> {
+class _ProfileFormScreenState extends State<ProfileFormScreen> {
   final _formKey = GlobalKey<FormState>();
 
   final _fullNameFocusNode = FocusNode();

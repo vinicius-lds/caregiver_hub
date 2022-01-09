@@ -1,10 +1,10 @@
 import 'package:caregiver_hub/employer/models/caregiver.dart';
-import 'package:caregiver_hub/employer/widgets/star_rating/star_rating.dart';
+import 'package:caregiver_hub/employer/widgets/star_rating.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
-class CaregiverListItemMat extends StatelessWidget {
-  const CaregiverListItemMat({
+class CaregiverListItem extends StatelessWidget {
+  const CaregiverListItem({
     Key? key,
     required this.caregiver,
   }) : super(key: key);

@@ -5,20 +5,19 @@ import 'package:caregiver_hub/employer/providers/service_type_provider.dart';
 import 'package:caregiver_hub/employer/providers/skill_type_provider.dart';
 import 'package:caregiver_hub/shared/constants/routes.dart';
 import 'package:caregiver_hub/shared/validation/validators.dart';
-import 'package:caregiver_hub/shared/widgets/date_time_picker/date_time_picker.dart';
-import 'package:caregiver_hub/shared/widgets/multi_select_chip_field_stream/multi_select_chip_field_stream.dart';
+import 'package:caregiver_hub/shared/widgets/date_time_picker.dart';
+import 'package:caregiver_hub/shared/widgets/multi_select_chip_field_stream.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-class CaregiverFilterScreenMat extends StatefulWidget {
-  const CaregiverFilterScreenMat({Key? key}) : super(key: key);
+class CaregiverFilterScreen extends StatefulWidget {
+  const CaregiverFilterScreen({Key? key}) : super(key: key);
 
   @override
-  State<CaregiverFilterScreenMat> createState() =>
-      _CaregiverFilterScreenMatState();
+  State<CaregiverFilterScreen> createState() => _CaregiverFilterScreenState();
 }
 
-class _CaregiverFilterScreenMatState extends State<CaregiverFilterScreenMat> {
+class _CaregiverFilterScreenState extends State<CaregiverFilterScreen> {
   final _formKey = GlobalKey<FormState>();
 
   DateTime? _startDate;

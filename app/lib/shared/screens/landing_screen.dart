@@ -3,8 +3,8 @@ import 'package:caregiver_hub/shared/providers/profile_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-class LandingScreenMat extends StatelessWidget {
-  const LandingScreenMat({Key? key}) : super(key: key);
+class LandingScreen extends StatelessWidget {
+  const LandingScreen({Key? key}) : super(key: key);
 
   void _pushCaregiverLogin(BuildContext context) {
     Provider.of<ProfileProvider>(context, listen: false).isCaregiver = true;

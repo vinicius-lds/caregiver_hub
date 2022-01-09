@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 
-class FormButtonFooterMat extends StatelessWidget {
-  const FormButtonFooterMat({
+class FormButtonFooter extends StatelessWidget {
+  const FormButtonFooter({
     Key? key,
     required this.primaryText,
     required this.secondaryText,
