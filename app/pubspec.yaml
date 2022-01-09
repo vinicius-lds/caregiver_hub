@@ -30,3 +30,6 @@ flutter:
     - assets/images/user_profile_placeholder.png
     - assets/images/google_logo.png
     - assets/images/nothing_found.png
+    - assets/images/chat.png
+    - assets/images/whatsapp.png
+    - assets/images/phone.png

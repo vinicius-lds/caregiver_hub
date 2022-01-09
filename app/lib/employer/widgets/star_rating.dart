@@ -23,6 +23,7 @@ class StarRating extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Row(
+      mainAxisSize: MainAxisSize.min,
       children: [
         _buildStar(factor: 1 - rating),
         _buildStar(factor: 2 - rating),

@@ -1,8 +1,8 @@
-class ServiceType {
+class Service {
   final String id;
   final String description;
 
-  const ServiceType({
+  const Service({
     required this.id,
     required this.description,
   });

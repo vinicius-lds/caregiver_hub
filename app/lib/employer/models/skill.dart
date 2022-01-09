@@ -1,8 +1,8 @@
-class SkillType {
+class Skill {
   final String id;
   final String description;
 
-  const SkillType({
+  const Skill({
     required this.id,
     required this.description,
   });

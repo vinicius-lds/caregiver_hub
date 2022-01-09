@@ -1,7 +1,8 @@
 import 'package:caregiver_hub/employer/models/caregiver.dart';
+import 'package:caregiver_hub/employer/widgets/caregiver_pricing.dart';
 import 'package:caregiver_hub/employer/widgets/star_rating.dart';
+import 'package:caregiver_hub/shared/constants/routes.dart';
 import 'package:flutter/material.dart';
-import 'package:intl/intl.dart';
 
 class CaregiverListItem extends StatelessWidget {
   const CaregiverListItem({
@@ -11,25 +12,9 @@ class CaregiverListItem extends StatelessWidget {
 
   final Caregiver caregiver;
 
-  String _buildPriceRangeString() {
-    final formatter =
-        NumberFormat.simpleCurrency(decimalDigits: 2, locale: 'pt_BR');
-    final startPriceRangeString = caregiver.startPriceRange == null
-        ? null
-        : formatter.format(caregiver.startPriceRange);
-    final endPriceRangeString = caregiver.endPriceRange == null
-        ? null
-        : formatter.format(caregiver.endPriceRange);
-    if (caregiver.startPriceRange == null && caregiver.endPriceRange == null) {
-      return 'A negociar';
-    } else if (caregiver.startPriceRange != null &&
-        caregiver.endPriceRange != null) {
-      return 'De $startPriceRangeString até $endPriceRangeString';
-    } else if (caregiver.startPriceRange != null) {
-      return 'A partir de $startPriceRangeString';
-    } else {
-      return 'Até $endPriceRangeString';
-    }
+  void _pushCaregiverProfileScreen(BuildContext context) {
+    Navigator.of(context).pushNamed(Routes.caregiverProfile,
+        arguments: {'caregiver': caregiver});
   }
 
   @override
@@ -37,24 +22,28 @@ class CaregiverListItem extends StatelessWidget {
     return Card(
       elevation: 5,
       child: InkWell(
-        onTap: () {},
+        onTap: () => _pushCaregiverProfileScreen(context),
         child: ListTile(
-          leading: CircleAvatar(
-            radius: 30,
-            backgroundImage: NetworkImage(caregiver.imageURL),
+          leading: Hero(
+            tag: caregiver.id,
+            child: CircleAvatar(
+              radius: 30,
+              backgroundImage: NetworkImage(caregiver.imageURL),
+            ),
           ),
           title: Text(caregiver.name),
           subtitle: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Text(
-                _buildPriceRangeString(),
-                style: const TextStyle(
-                  color: Colors.green,
-                ),
+              CaregiverPricing(
+                startPrice: caregiver.startPrice,
+                endPrice: caregiver.endPrice,
               ),
-              StarRating(
-                rating: caregiver.rating,
+              Container(
+                alignment: Alignment.centerLeft,
+                child: StarRating(
+                  rating: caregiver.rating,
+                ),
               ),
             ],
           ),

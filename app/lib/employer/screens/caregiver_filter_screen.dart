@@ -1,12 +1,12 @@
-import 'package:caregiver_hub/employer/models/service_type.dart';
-import 'package:caregiver_hub/employer/models/skill_type.dart';
+import 'package:caregiver_hub/employer/models/service.dart';
+import 'package:caregiver_hub/employer/models/skill.dart';
 import 'package:caregiver_hub/employer/providers/caregiver_provider.dart';
-import 'package:caregiver_hub/employer/providers/service_type_provider.dart';
-import 'package:caregiver_hub/employer/providers/skill_type_provider.dart';
+import 'package:caregiver_hub/employer/providers/service_provider.dart';
+import 'package:caregiver_hub/employer/providers/skill_provider.dart';
 import 'package:caregiver_hub/shared/constants/routes.dart';
 import 'package:caregiver_hub/shared/validation/validators.dart';
 import 'package:caregiver_hub/shared/widgets/date_time_picker.dart';
-import 'package:caregiver_hub/shared/widgets/multi_select_chip_field_stream.dart';
+import 'package:caregiver_hub/shared/widgets/multi_select_chip_field_custom.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -22,8 +22,8 @@ class _CaregiverFilterScreenState extends State<CaregiverFilterScreen> {
 
   DateTime? _startDate;
   DateTime? _endDate;
-  List<ServiceType?>? _serviceTypes;
-  List<SkillType?>? _skillTypes;
+  List<Service?>? _serviceTypes;
+  List<Skill?>? _skillTypes;
 
   void _applyFilter(BuildContext context) {
     final isValid = _formKey.currentState!.validate();
@@ -44,8 +44,8 @@ class _CaregiverFilterScreenState extends State<CaregiverFilterScreen> {
   @override
   Widget build(BuildContext context) {
     final textScaleFactor = MediaQuery.of(context).textScaleFactor;
-    final serviceTypeProvider = Provider.of<ServiceTypeProvider>(context);
-    final skillTypeProvider = Provider.of<SkillTypeProvider>(context);
+    final serviceTypeProvider = Provider.of<ServiceProvider>(context);
+    final skillTypeProvider = Provider.of<SkillProvider>(context);
     return Scaffold(
       appBar: AppBar(
         title: const Text('CaregiverHub'),
@@ -81,24 +81,24 @@ class _CaregiverFilterScreenState extends State<CaregiverFilterScreen> {
                 ),
                 Padding(
                   padding: const EdgeInsets.symmetric(vertical: 4),
-                  child: MultiSelectChipFieldStream<ServiceType, String>(
-                    items: serviceTypeProvider.listStream(),
+                  child: MultiSelectChipFieldCustom<Service, String>(
+                    stream: serviceTypeProvider.listStream(),
                     idFn: (serviceType) =>
                         serviceType == null ? '' : serviceType.id,
                     labelFn: (serviceType) =>
                         serviceType == null ? '' : serviceType.description,
-                    title: 'Tipo de serviço',
+                    title: 'Serviços',
                     onTap: (values) => _serviceTypes = values,
                   ),
                 ),
                 Padding(
                   padding: const EdgeInsets.symmetric(vertical: 4),
-                  child: MultiSelectChipFieldStream<SkillType, String>(
-                    items: skillTypeProvider.listStream(),
+                  child: MultiSelectChipFieldCustom<Skill, String>(
+                    stream: skillTypeProvider.listStream(),
                     idFn: (skillType) => skillType == null ? '' : skillType.id,
                     labelFn: (skillType) =>
                         skillType == null ? '' : skillType.description,
-                    title: 'Tipo de habilidade',
+                    title: 'Habilidades',
                     onTap: (values) => _skillTypes = values,
                   ),
                 ),
