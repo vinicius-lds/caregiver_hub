@@ -2,7 +2,8 @@ import 'package:caregiver_hub/employer/screens/caregiver_filter_screen.dart';
 import 'package:caregiver_hub/employer/screens/caregiver_list_screen.dart';
 import 'package:caregiver_hub/employer/screens/caregiver_profile_screen.dart';
 import 'package:caregiver_hub/job/providers/job_provider.dart';
-import 'package:caregiver_hub/job/screens/job_form_screen.dart';
+import 'package:caregiver_hub/job/screens/job_description_screen.dart';
+import 'package:caregiver_hub/job/screens/job_proposal_screen.dart';
 import 'package:caregiver_hub/job/screens/job_list_screen.dart';
 import 'package:caregiver_hub/shared/constants/routes.dart';
 import 'package:caregiver_hub/shared/providers/caregiver_provider.dart';
@@ -60,7 +61,8 @@ class MyApp extends StatelessWidget {
           Routes.caregiverProfile: (_) => const CaregiverProfileScreen(),
 
           // job
-          Routes.jobForm: (_) => const JobFormScreen(),
+          Routes.jobDescription: (_) => const JobDescriptionScreen(),
+          Routes.jobForm: (_) => const JobProposalScreen(),
           Routes.jobList: (_) => const JobList(),
 
           // shared

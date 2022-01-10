@@ -1,28 +1,16 @@
 import 'package:caregiver_hub/employer/widgets/caregiver_pricing.dart';
 import 'package:caregiver_hub/employer/widgets/caregiver_recomendation_list.dart';
-import 'package:caregiver_hub/employer/widgets/contact_item.dart';
 import 'package:caregiver_hub/shared/constants/routes.dart';
 import 'package:caregiver_hub/shared/models/caregiver.dart';
 import 'package:caregiver_hub/shared/models/service.dart';
 import 'package:caregiver_hub/shared/models/skill.dart';
 import 'package:caregiver_hub/shared/widgets/app_bar_popup_menu_button.dart';
+import 'package:caregiver_hub/shared/widgets/contacts_bar.dart';
 import 'package:caregiver_hub/shared/widgets/multi_select_chip_field_custom.dart';
 import 'package:flutter/material.dart';
 
 class CaregiverProfileScreen extends StatelessWidget {
   const CaregiverProfileScreen({Key? key}) : super(key: key);
-
-  void _pushChat(BuildContext context) {
-    print('pushChat');
-  }
-
-  void _pushWhatsApp(BuildContext context) {
-    print('pushWhatsApp');
-  }
-
-  void _pushPhone(BuildContext context) {
-    print('pushPhone');
-  }
 
   void _pushJobForm(
     BuildContext context, {
@@ -73,26 +61,10 @@ class CaregiverProfileScreen extends StatelessWidget {
                   padding: const EdgeInsets.symmetric(horizontal: 10),
                   child: Column(
                     children: [
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          ContactItem(
-                            icon: const AssetImage('assets/images/chat.png'),
-                            size: constraints.maxHeight * 0.1,
-                            onTap: () => _pushChat(context),
-                          ),
-                          ContactItem(
-                            icon:
-                                const AssetImage('assets/images/whatsapp.png'),
-                            size: constraints.maxHeight * 0.1,
-                            onTap: () => _pushWhatsApp(context),
-                          ),
-                          ContactItem(
-                            icon: const AssetImage('assets/images/phone.png'),
-                            size: constraints.maxHeight * 0.1,
-                            onTap: () => _pushPhone(context),
-                          ),
-                        ],
+                      ContactsBar(
+                        size: constraints.maxHeight * 0.1,
+                        otherUserId: caregiver.id,
+                        otherUserPhone: caregiver.phone,
                       ),
                       Container(
                         alignment: Alignment.center,

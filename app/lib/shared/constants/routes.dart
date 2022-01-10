@@ -7,6 +7,7 @@ class Routes {
   static const String caregiverProfile = '/caregiver-profile';
 
   // job
+  static const String jobDescription = '/job-description';
   static const String jobForm = '/job-form';
   static const String jobList = '/job-list';
 

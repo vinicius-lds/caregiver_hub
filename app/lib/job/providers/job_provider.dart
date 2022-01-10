@@ -29,10 +29,14 @@ List<Job> _loadMockData(int i) {
   return [
     Job(
       id: (1 + (i * 6)).toString(),
+      caregiverId: '1',
       caregiverName: 'Alice Monteiro Cordeiro',
       caregiverImageURL: 'https://picsum.photos/1920/1080?random=1',
+      caregiverPhone: '+5547955729869',
+      employerId: '1',
       employerName: 'Iara Álves Quintana',
       employerImageURL: 'https://picsum.photos/1920/1080?random=2',
+      employerPhone: '+5547955729869',
       startDate: DateTime(2023),
       endDate: DateTime(2024),
       services: const [
@@ -46,10 +50,14 @@ List<Job> _loadMockData(int i) {
     ),
     Job(
       id: (2 + (i * 6)).toString(),
+      caregiverId: '2',
       caregiverName: 'Clarice Amaral Henriques',
       caregiverImageURL: 'https://picsum.photos/1920/1080?random=3',
+      caregiverPhone: '+5547955729869',
+      employerId: '1',
       employerName: 'Cláudia Ávila da Cunha',
       employerImageURL: 'https://picsum.photos/1920/1080?random=4',
+      employerPhone: '+5547955729869',
       startDate: DateTime(2023),
       endDate: DateTime(2024),
       services: const [
@@ -62,10 +70,14 @@ List<Job> _loadMockData(int i) {
     ),
     Job(
       id: (3 + (i * 6)).toString(),
+      caregiverId: '3',
       caregiverName: 'Betina Vila Moreira',
       caregiverImageURL: 'https://picsum.photos/1920/1080?random=5',
+      caregiverPhone: '+5547955729869',
+      employerId: '1',
       employerName: 'Manoela Pereira Cardoso',
       employerImageURL: 'https://picsum.photos/1920/1080?random=6',
+      employerPhone: '+5547955729869',
       startDate: DateTime(2023),
       endDate: DateTime(2024),
       services: const [
@@ -80,10 +92,14 @@ List<Job> _loadMockData(int i) {
     ),
     Job(
       id: (4 + (i * 6)).toString(),
+      caregiverId: '4',
       caregiverName: 'Beatriz Medeiras Higashi',
       caregiverImageURL: 'https://picsum.photos/1920/1080?random=7',
+      caregiverPhone: '+5547955729869',
+      employerId: '1',
       employerName: 'Vanuza Maldonado Meireles',
       employerImageURL: 'https://picsum.photos/1920/1080?random=8',
+      employerPhone: '+5547955729869',
       startDate: DateTime(2023),
       endDate: DateTime(2024),
       services: const [
@@ -96,10 +112,14 @@ List<Job> _loadMockData(int i) {
     ),
     Job(
       id: (5 + (i * 6)).toString(),
+      caregiverId: '5',
       caregiverName: 'Miriam Lacerda Fraga',
       caregiverImageURL: 'https://picsum.photos/1920/1080?random=9',
+      caregiverPhone: '+5547955729869',
+      employerId: '1',
       employerName: 'Paula Ramos Farias',
       employerImageURL: 'https://picsum.photos/1920/1080?random=10',
+      employerPhone: '+5547955729869',
       startDate: DateTime(2022),
       endDate: DateTime(2023),
       services: const [
@@ -114,10 +134,14 @@ List<Job> _loadMockData(int i) {
     ),
     Job(
       id: (6 + (i * 6)).toString(),
+      caregiverId: '6',
       caregiverName: 'Isadora Belluci da Cunha',
       caregiverImageURL: 'https://picsum.photos/1920/1080?random=11',
+      caregiverPhone: '+5547955729869',
+      employerId: '1',
       employerName: 'Flávia Garcia Lemos',
       employerImageURL: 'https://picsum.photos/1920/1080?random=12',
+      employerPhone: '+5547955729869',
       startDate: DateTime(2020),
       endDate: DateTime(2021),
       services: const [

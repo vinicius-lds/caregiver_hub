@@ -1,5 +1,6 @@
 import 'package:caregiver_hub/job/models/job.dart';
 import 'package:caregiver_hub/job/widgets/job_status_type_icon.dart';
+import 'package:caregiver_hub/shared/constants/routes.dart';
 import 'package:caregiver_hub/shared/providers/profile_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -12,7 +13,10 @@ class JobItem extends StatelessWidget {
     required this.job,
   }) : super(key: key);
 
-  void _pushJobScreen(BuildContext context) {}
+  void _pushJobScreen(BuildContext context) {
+    Navigator.of(context)
+        .pushNamed(Routes.jobDescription, arguments: {'job': job});
+  }
 
   @override
   Widget build(BuildContext context) {
