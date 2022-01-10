@@ -6,7 +6,9 @@ import 'package:multi_select_flutter/multi_select_flutter.dart';
 class MultiSelectChipFieldCustom<T, K> extends StatelessWidget {
   final Stream<List<T?>>? stream;
   final List<T?>? items;
+  final List<T?>? initialValue;
   final bool displayOnly;
+  final FormFieldValidator<List<T?>>? validator;
   final String title;
   final String Function(T?) labelFn;
   final K Function(T?) idFn;
@@ -16,12 +18,29 @@ class MultiSelectChipFieldCustom<T, K> extends StatelessWidget {
     Key? key,
     this.stream,
     this.items,
+    this.initialValue,
     this.displayOnly = false,
+    this.validator,
     required this.title,
     required this.labelFn,
     required this.idFn,
     this.onTap,
   }) : super(key: key);
+
+  List<K> _buildInitialValue(List<T?> data) {
+    if (displayOnly) {
+      if (initialValue != null) {
+        return initialValue!.map((e) => idFn(e)).toList();
+      } else {
+        return data.map((e) => idFn(e)).toList();
+      }
+    } else {
+      if (initialValue != null) {
+        return initialValue!.map((e) => idFn(e)).toList();
+      }
+    }
+    return [];
+  }
 
   dynamic _onTap(List<T?> data, List<K?> selectedIds) {
     if (onTap == null) {
@@ -30,6 +49,18 @@ class MultiSelectChipFieldCustom<T, K> extends StatelessWidget {
     final selectedItems =
         data.where((item) => selectedIds.contains(idFn(item))).toList();
     return onTap!(selectedItems);
+  }
+
+  String? _onValidator(List<T?> data, List<K?>? selectedIds) {
+    if (validator == null) {
+      return null;
+    }
+    if (selectedIds == null) {
+      return validator!(null);
+    }
+    final selectedItems =
+        data.where((item) => selectedIds.contains(idFn(item))).toList();
+    return validator!(selectedItems);
   }
 
   Widget _buildFromData(
@@ -51,7 +82,8 @@ class MultiSelectChipFieldCustom<T, K> extends StatelessWidget {
         selectedChipColor: Theme.of(context).colorScheme.primary,
         selectedTextStyle: const TextStyle(color: Colors.white),
         scroll: false,
-        initialValue: displayOnly ? data.map((e) => idFn(e)).toList() : [],
+        validator: (selectedIds) => _onValidator(data, selectedIds),
+        initialValue: _buildInitialValue(data),
         onTap: (selectedIds) => _onTap(data, selectedIds),
       ),
     );

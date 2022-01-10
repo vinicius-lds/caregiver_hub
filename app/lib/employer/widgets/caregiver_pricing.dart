@@ -14,18 +14,17 @@ class CaregiverPricing extends StatelessWidget {
   String _buildPriceRangeString() {
     final formatter =
         NumberFormat.simpleCurrency(decimalDigits: 2, locale: 'pt_BR');
-    final startPriceRangeString =
+    final startPriceString =
         startPrice == null ? null : formatter.format(startPrice);
-    final endPriceRangeString =
-        endPrice == null ? null : formatter.format(endPrice);
+    final endPriceString = endPrice == null ? null : formatter.format(endPrice);
     if (startPrice == null && endPrice == null) {
       return 'A negociar';
     } else if (startPrice != null && endPrice != null) {
-      return 'De $startPriceRangeString até $endPriceRangeString';
+      return 'De $startPriceString até $endPriceString';
     } else if (startPrice != null) {
-      return 'A partir de $startPriceRangeString';
+      return 'A partir de $startPriceString';
     } else {
-      return 'Até $endPriceRangeString';
+      return 'Até $endPriceString';
     }
   }
 

@@ -1,4 +1,4 @@
-import 'package:caregiver_hub/employer/models/skill.dart';
+import 'package:caregiver_hub/shared/models/skill.dart';
 import 'package:flutter/foundation.dart';
 
 class SkillProvider with ChangeNotifier {

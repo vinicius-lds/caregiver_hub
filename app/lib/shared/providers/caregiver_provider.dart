@@ -1,6 +1,6 @@
-import 'package:caregiver_hub/employer/models/caregiver.dart';
-import 'package:caregiver_hub/employer/models/service.dart';
-import 'package:caregiver_hub/employer/models/skill.dart';
+import 'package:caregiver_hub/shared/models/caregiver.dart';
+import 'package:caregiver_hub/shared/models/service.dart';
+import 'package:caregiver_hub/shared/models/skill.dart';
 import 'package:flutter/foundation.dart';
 
 class CaregiverProvider with ChangeNotifier {
@@ -17,15 +17,15 @@ class CaregiverProvider with ChangeNotifier {
   void applyFilter({
     DateTime? startDate,
     DateTime? endDate,
-    List<Service?>? serviceTypes,
-    List<Skill?>? skillTypes,
+    List<Service?>? services,
+    List<Skill?>? skills,
   }) {
     print('''
     applyFilter
     startDate: $startDate;
     endDate: $endDate;
-    serviceTypes: $serviceTypes;
-    skillTypes: $skillTypes.
+    serviceTypes: $services;
+    skillTypes: $skills.
     ''');
   }
 }

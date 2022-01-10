@@ -12,54 +12,92 @@ const List<String> cpfBlacklist = [
   "12345678909"
 ];
 
-String? Function(String?) equalTo(String? other) {
+String? Function(dynamic) after(DateTime? other, {required String message}) {
   return (value) {
-    if (value != other) {
-      return 'Os valores não são iguais';
+    if (value != null &&
+        other != null &&
+        value is DateTime &&
+        value.isAfter(other)) {
+      return message;
     }
     return null;
   };
 }
 
-String? requiredValue(dynamic value) {
-  if (value == null || value == '') {
-    return 'O campo é obrigatório';
-  }
-  return null;
+String? Function(dynamic) atLeast(int minLength, {required String message}) {
+  return (value) {
+    if (value == null || value is! List || value.length < minLength) {
+      return message;
+    }
+    return null;
+  };
 }
 
-String? validCPF(String? cpf) {
-  // CPF must be defined
-  if (cpf == null || cpf.isEmpty) {
-    return 'O CPF é inválido';
-  }
+String? Function(dynamic) equalTo(dynamic other, {required String message}) {
+  return (value) {
+    if (value != other) {
+      return message;
+    }
+    return null;
+  };
+}
 
-  cpf = cpf.replaceAll('.', '').replaceAll('-', '');
+String? Function(dynamic) before(DateTime? other, {required String message}) {
+  return (value) {
+    if (value != null &&
+        other != null &&
+        value is DateTime &&
+        value.isBefore(other)) {
+      return message;
+    }
+    return null;
+  };
+}
 
-  // CPF must have 11 chars
-  if (cpf.length != 11) {
-    return 'O CPF é inválido';
-  }
+String? Function(dynamic) requiredValue({required String message}) {
+  return (value) {
+    if (value == null || value == '') {
+      return message;
+    }
+    return null;
+  };
+}
 
-  // CPF can't be blacklisted
-  if (cpfBlacklist.contains(cpf)) {
-    return 'O CPF é inválido';
-  }
+String? Function(dynamic) validCPF({required String message}) {
+  return (cpf) {
+    // CPF must be defined
+    if (cpf == null || cpf is! String || cpf.isEmpty) {
+      return message;
+    }
 
-  String numbers = cpf.substring(0, 9);
-  numbers += _verifierDigit(numbers).toString();
-  numbers += _verifierDigit(numbers).toString();
+    cpf = cpf.replaceAll('.', '').replaceAll('-', '');
 
-  if (numbers.substring(numbers.length - 2) != cpf.substring(cpf.length - 2)) {
-    return 'O CPF é inválido';
-  }
+    // CPF must have 11 chars
+    if (cpf.length != 11) {
+      return message;
+    }
 
-  return null;
+    // CPF can't be blacklisted
+    if (cpfBlacklist.contains(cpf)) {
+      return message;
+    }
+
+    String numbers = cpf.substring(0, 9);
+    numbers += _verifierDigit(numbers).toString();
+    numbers += _verifierDigit(numbers).toString();
+
+    if (numbers.substring(numbers.length - 2) !=
+        cpf.substring(cpf.length - 2)) {
+      return message;
+    }
+
+    return null;
+  };
 }
 
 int _verifierDigit(String cpf) {
   List<int> numbers =
-      cpf.split("").map((number) => int.parse(number, radix: 10)).toList();
+      cpf.split('').map((number) => int.parse(number, radix: 10)).toList();
 
   int modulus = numbers.length + 1;
 

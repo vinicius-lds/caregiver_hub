@@ -82,7 +82,9 @@ class _LoginScreenState extends State<LoginScreen> {
                       onFieldSubmitted: _focusOn(context, _passwordFocusNode),
                       onSaved: (value) => _email = value,
                       textInputAction: TextInputAction.next,
-                      validator: composeValidators([requiredValue]),
+                      validator: composeValidators([
+                        requiredValue(message: 'O campo é obrigatório'),
+                      ]),
                     ),
                   ),
                   Padding(
@@ -96,7 +98,9 @@ class _LoginScreenState extends State<LoginScreen> {
                       onFieldSubmitted: (_) => _login,
                       onSaved: (value) => _email = value,
                       textInputAction: TextInputAction.next,
-                      validator: composeValidators([requiredValue]),
+                      validator: composeValidators([
+                        requiredValue(message: 'O campo é obrigatório'),
+                      ]),
                     ),
                   ),
                   Padding(

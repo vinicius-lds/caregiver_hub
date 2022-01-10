@@ -1,10 +1,9 @@
-import 'package:caregiver_hub/employer/models/service.dart';
-import 'package:caregiver_hub/employer/models/skill.dart';
-import 'package:caregiver_hub/employer/providers/caregiver_provider.dart';
-import 'package:caregiver_hub/employer/providers/service_provider.dart';
-import 'package:caregiver_hub/employer/providers/skill_provider.dart';
 import 'package:caregiver_hub/shared/constants/routes.dart';
-import 'package:caregiver_hub/shared/validation/validators.dart';
+import 'package:caregiver_hub/shared/models/service.dart';
+import 'package:caregiver_hub/shared/models/skill.dart';
+import 'package:caregiver_hub/shared/providers/caregiver_provider.dart';
+import 'package:caregiver_hub/shared/providers/service_provider.dart';
+import 'package:caregiver_hub/shared/providers/skill_provider.dart';
 import 'package:caregiver_hub/shared/widgets/date_time_picker.dart';
 import 'package:caregiver_hub/shared/widgets/multi_select_chip_field_custom.dart';
 import 'package:flutter/material.dart';
@@ -22,8 +21,8 @@ class _CaregiverFilterScreenState extends State<CaregiverFilterScreen> {
 
   DateTime? _startDate;
   DateTime? _endDate;
-  List<Service?>? _serviceTypes;
-  List<Skill?>? _skillTypes;
+  List<Service?>? _services;
+  List<Skill?>? _skills;
 
   void _applyFilter(BuildContext context) {
     final isValid = _formKey.currentState!.validate();
@@ -34,8 +33,8 @@ class _CaregiverFilterScreenState extends State<CaregiverFilterScreen> {
       caregiverProvider.applyFilter(
         startDate: _startDate,
         endDate: _endDate,
-        serviceTypes: _serviceTypes,
-        skillTypes: _skillTypes,
+        services: _services,
+        skills: _skills,
       );
       Navigator.of(context).pushNamed(Routes.caregiverList);
     }
@@ -44,7 +43,7 @@ class _CaregiverFilterScreenState extends State<CaregiverFilterScreen> {
   @override
   Widget build(BuildContext context) {
     final textScaleFactor = MediaQuery.of(context).textScaleFactor;
-    final serviceTypeProvider = Provider.of<ServiceProvider>(context);
+    final serviceProvider = Provider.of<ServiceProvider>(context);
     final skillTypeProvider = Provider.of<SkillProvider>(context);
     return Scaffold(
       appBar: AppBar(
@@ -67,7 +66,6 @@ class _CaregiverFilterScreenState extends State<CaregiverFilterScreen> {
                   padding: const EdgeInsets.symmetric(vertical: 4),
                   child: DateTimePicker(
                     label: 'Início da atividade',
-                    validator: requiredValue,
                     onSaved: (value) => _startDate = value,
                   ),
                 ),
@@ -75,20 +73,19 @@ class _CaregiverFilterScreenState extends State<CaregiverFilterScreen> {
                   padding: const EdgeInsets.symmetric(vertical: 4),
                   child: DateTimePicker(
                     label: 'Fim da atividade',
-                    validator: requiredValue,
                     onSaved: (value) => _endDate = value,
                   ),
                 ),
                 Padding(
                   padding: const EdgeInsets.symmetric(vertical: 4),
                   child: MultiSelectChipFieldCustom<Service, String>(
-                    stream: serviceTypeProvider.listStream(),
+                    stream: serviceProvider.listStream(),
                     idFn: (serviceType) =>
                         serviceType == null ? '' : serviceType.id,
                     labelFn: (serviceType) =>
                         serviceType == null ? '' : serviceType.description,
                     title: 'Serviços',
-                    onTap: (values) => _serviceTypes = values,
+                    onTap: (values) => _services = values,
                   ),
                 ),
                 Padding(
@@ -99,7 +96,7 @@ class _CaregiverFilterScreenState extends State<CaregiverFilterScreen> {
                     labelFn: (skillType) =>
                         skillType == null ? '' : skillType.description,
                     title: 'Habilidades',
-                    onTap: (values) => _skillTypes = values,
+                    onTap: (values) => _skills = values,
                   ),
                 ),
                 Container(

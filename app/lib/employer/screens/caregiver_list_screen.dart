@@ -1,6 +1,6 @@
-import 'package:caregiver_hub/employer/models/caregiver.dart';
-import 'package:caregiver_hub/employer/providers/caregiver_provider.dart';
 import 'package:caregiver_hub/employer/widgets/caregiver_list_item.dart';
+import 'package:caregiver_hub/shared/models/caregiver.dart';
+import 'package:caregiver_hub/shared/providers/caregiver_provider.dart';
 import 'package:caregiver_hub/shared/widgets/empty_state.dart';
 import 'package:caregiver_hub/shared/widgets/loading.dart';
 import 'package:flutter/material.dart';

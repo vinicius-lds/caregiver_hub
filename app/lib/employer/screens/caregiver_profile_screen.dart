@@ -1,10 +1,10 @@
-import 'package:caregiver_hub/employer/models/caregiver.dart';
-import 'package:caregiver_hub/employer/models/service.dart';
-import 'package:caregiver_hub/employer/models/skill.dart';
 import 'package:caregiver_hub/employer/widgets/caregiver_pricing.dart';
 import 'package:caregiver_hub/employer/widgets/caregiver_recomendation_list.dart';
 import 'package:caregiver_hub/employer/widgets/contact_item.dart';
-import 'package:caregiver_hub/employer/widgets/star_rating.dart';
+import 'package:caregiver_hub/shared/constants/routes.dart';
+import 'package:caregiver_hub/shared/models/caregiver.dart';
+import 'package:caregiver_hub/shared/models/service.dart';
+import 'package:caregiver_hub/shared/models/skill.dart';
 import 'package:caregiver_hub/shared/widgets/multi_select_chip_field_custom.dart';
 import 'package:flutter/material.dart';
 
@@ -23,11 +23,28 @@ class CaregiverProfileScreen extends StatelessWidget {
     print('pushPhone');
   }
 
+  void _pushJobForm(
+    BuildContext context, {
+    required String caregiverId,
+    required List<Service> availableServices,
+    required double? startPrice,
+    required double? endPrice,
+  }) {
+    print('pushJobForm');
+    Navigator.of(context).pushNamed(Routes.jobForm, arguments: {
+      'caregiverId': caregiverId,
+      'availableServices': availableServices,
+      'startPrice': startPrice,
+      'endPrice': endPrice,
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     final args =
         ModalRoute.of(context)!.settings.arguments as Map<String, Object>;
     final caregiver = args['caregiver'] as Caregiver;
+    final textScaleFactor = MediaQuery.of(context).textScaleFactor;
     return LayoutBuilder(
       builder: (bContext, constraints) => Scaffold(
         body: CustomScrollView(
@@ -35,7 +52,6 @@ class CaregiverProfileScreen extends StatelessWidget {
             SliverAppBar(
               expandedHeight: constraints.maxHeight * 0.33,
               pinned: true,
-              automaticallyImplyLeading: false,
               flexibleSpace: FlexibleSpaceBar(
                 title: Text(caregiver.name),
                 background: Hero(
@@ -114,6 +130,39 @@ class CaregiverProfileScreen extends StatelessWidget {
                             title: 'Habilidades',
                           ),
                         ),
+                      Container(
+                        padding: const EdgeInsets.symmetric(vertical: 4),
+                        width: double.infinity,
+                        child: ElevatedButton(
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Icon(
+                                Icons.attach_money,
+                                size: 30 * textScaleFactor,
+                              ),
+                              Text(
+                                'Negociar trabalho',
+                                style: TextStyle(
+                                  fontSize: 25 * textScaleFactor,
+                                ),
+                              ),
+                            ],
+                          ),
+                          style: ButtonStyle(
+                            padding: MaterialStateProperty.all<EdgeInsets>(
+                              const EdgeInsets.symmetric(vertical: 10),
+                            ),
+                          ),
+                          onPressed: () => _pushJobForm(
+                            context,
+                            caregiverId: caregiver.id,
+                            availableServices: caregiver.services,
+                            startPrice: caregiver.startPrice,
+                            endPrice: caregiver.endPrice,
+                          ),
+                        ),
+                      ),
                       Padding(
                         padding: const EdgeInsets.symmetric(vertical: 4),
                         child: CaregiverRecomendationList(

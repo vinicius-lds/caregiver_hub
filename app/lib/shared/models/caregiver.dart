@@ -1,5 +1,5 @@
-import 'package:caregiver_hub/employer/models/service.dart';
-import 'package:caregiver_hub/employer/models/skill.dart';
+import 'package:caregiver_hub/shared/models/service.dart';
+import 'package:caregiver_hub/shared/models/skill.dart';
 
 class Caregiver {
   final String id;

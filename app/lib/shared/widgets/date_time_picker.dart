@@ -5,6 +5,7 @@ class DateTimePicker extends FormField<DateTime?> {
   DateTimePicker({
     String? label,
     FormFieldSetter<DateTime?>? onSaved,
+    FormFieldSetter<DateTime?>? onChange,
     FormFieldValidator<DateTime?>? validator,
     DateTime? initialValue,
     bool autovalidate = false,
@@ -58,6 +59,9 @@ class DateTimePicker extends FormField<DateTime?> {
                             time.minute,
                           );
                           state.didChange(dateTime);
+                          if (onChange != null) {
+                            onChange(dateTime);
+                          }
                         },
                         child: const Text('Escolha uma data'),
                       ),

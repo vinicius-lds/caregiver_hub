@@ -7,7 +7,7 @@ class CaregiverRecomendationProvider with ChangeNotifier {
     int offset = 0,
     int size = 10,
   }) {
-    return Stream.value(_loadMockData(caregiverId: caregiverId));
+    return Stream.value(_loadMockData());
   }
 
   Stream<int> countStream({
@@ -17,7 +17,7 @@ class CaregiverRecomendationProvider with ChangeNotifier {
   }
 }
 
-List<CaregiverRecomendation> _loadMockData({required String caregiverId}) {
+List<CaregiverRecomendation> _loadMockData() {
   return [
     const CaregiverRecomendation(
       rating: 1,

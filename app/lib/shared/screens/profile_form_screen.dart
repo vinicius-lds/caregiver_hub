@@ -124,7 +124,9 @@ class _ProfileFormScreenState extends State<ProfileFormScreen> {
                             onFieldSubmitted: _focusOn(context, _cpfFocusNode),
                             onSaved: (value) => _fullName = value,
                             textInputAction: TextInputAction.next,
-                            validator: composeValidators([requiredValue]),
+                            validator: composeValidators([
+                              requiredValue(message: 'O campo é obrigatório'),
+                            ]),
                           ),
                           TextFormField(
                             decoration: const InputDecoration(
@@ -144,8 +146,10 @@ class _ProfileFormScreenState extends State<ProfileFormScreen> {
                                 _focusOn(context, _phoneFocusNode),
                             onSaved: (value) => _cpf = value,
                             textInputAction: TextInputAction.next,
-                            validator:
-                                composeValidators([requiredValue, validCPF]),
+                            validator: composeValidators([
+                              requiredValue(message: 'O campo é obrigatório'),
+                              validCPF(message: 'O CPF é inválido'),
+                            ]),
                           ),
                           TextFormField(
                             decoration: const InputDecoration(
@@ -165,7 +169,9 @@ class _ProfileFormScreenState extends State<ProfileFormScreen> {
                                 _focusOn(context, _emailFocusNode),
                             onSaved: (value) => _phone = value,
                             textInputAction: TextInputAction.next,
-                            validator: composeValidators([requiredValue]),
+                            validator: composeValidators([
+                              requiredValue(message: 'O campo é obrigatório'),
+                            ]),
                           ),
                           const SizedBox(height: 20),
                           TextFormField(
@@ -180,7 +186,9 @@ class _ProfileFormScreenState extends State<ProfileFormScreen> {
                                 _focusOn(context, _passwordFocusNode),
                             onSaved: (value) => _email = value,
                             textInputAction: TextInputAction.next,
-                            validator: composeValidators([requiredValue]),
+                            validator: composeValidators([
+                              requiredValue(message: 'O campo é obrigatório'),
+                            ]),
                           ),
                           const SizedBox(height: 20),
                           TextFormField(
@@ -195,7 +203,9 @@ class _ProfileFormScreenState extends State<ProfileFormScreen> {
                                 _focusOn(context, _confirmPasswordFocusNode),
                             onSaved: (value) => _password = value,
                             textInputAction: TextInputAction.next,
-                            validator: composeValidators([requiredValue]),
+                            validator: composeValidators([
+                              requiredValue(message: 'O campo é obrigatório'),
+                            ]),
                           ),
                           const SizedBox(height: 20),
                           TextFormField(
@@ -210,8 +220,11 @@ class _ProfileFormScreenState extends State<ProfileFormScreen> {
                             onSaved: (value) => _confirmPassword = value,
                             textInputAction: TextInputAction.next,
                             validator: composeValidators([
-                              requiredValue,
-                              equalTo(_password),
+                              requiredValue(message: 'O campo é obrigatório'),
+                              equalTo(
+                                _password,
+                                message: 'Os valores não são iguais',
+                              ),
                             ]),
                           ),
                           const SizedBox(height: 20),

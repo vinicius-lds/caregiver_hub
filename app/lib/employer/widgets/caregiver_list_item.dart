@@ -1,7 +1,7 @@
-import 'package:caregiver_hub/employer/models/caregiver.dart';
 import 'package:caregiver_hub/employer/widgets/caregiver_pricing.dart';
 import 'package:caregiver_hub/employer/widgets/star_rating.dart';
 import 'package:caregiver_hub/shared/constants/routes.dart';
+import 'package:caregiver_hub/shared/models/caregiver.dart';
 import 'package:flutter/material.dart';
 
 class CaregiverListItem extends StatelessWidget {
