@@ -1,6 +1,7 @@
 import 'package:caregiver_hub/employer/models/caregiver.dart';
 import 'package:caregiver_hub/employer/providers/caregiver_provider.dart';
 import 'package:caregiver_hub/employer/widgets/caregiver_list_item.dart';
+import 'package:caregiver_hub/shared/widgets/empty_state.dart';
 import 'package:caregiver_hub/shared/widgets/loading.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
@@ -25,16 +26,12 @@ class CaregiverListScreen extends StatelessWidget {
               child: Loading(),
             );
           }
+          if (!snapshot.hasData) {
+            return const EmptyState(text: 'Nenhum cuidador encontrado');
+          }
           final data = snapshot.data as List<Caregiver>;
           if (data.isEmpty) {
-            return Center(
-              child: Column(
-                children: [
-                  Image.asset('assets/images/nothing_found.png'),
-                  const Text('Nenhum cuidador encontrado'),
-                ],
-              ),
-            );
+            return const EmptyState(text: 'Nenhum cuidador encontrado');
           }
           return Padding(
             padding: const EdgeInsets.symmetric(horizontal: 4),

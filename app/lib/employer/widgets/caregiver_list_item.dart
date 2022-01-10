@@ -20,7 +20,6 @@ class CaregiverListItem extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Card(
-      elevation: 5,
       child: InkWell(
         onTap: () => _pushCaregiverProfileScreen(context),
         child: ListTile(

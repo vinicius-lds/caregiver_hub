@@ -1,14 +1,12 @@
 import 'package:caregiver_hub/employer/models/caregiver.dart';
 import 'package:caregiver_hub/employer/models/service.dart';
 import 'package:caregiver_hub/employer/models/skill.dart';
-import 'package:caregiver_hub/employer/providers/service_provider.dart';
-import 'package:caregiver_hub/employer/providers/skill_provider.dart';
 import 'package:caregiver_hub/employer/widgets/caregiver_pricing.dart';
+import 'package:caregiver_hub/employer/widgets/caregiver_recomendation_list.dart';
 import 'package:caregiver_hub/employer/widgets/contact_item.dart';
 import 'package:caregiver_hub/employer/widgets/star_rating.dart';
 import 'package:caregiver_hub/shared/widgets/multi_select_chip_field_custom.dart';
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
 
 class CaregiverProfileScreen extends StatelessWidget {
   const CaregiverProfileScreen({Key? key}) : super(key: key);
@@ -17,8 +15,8 @@ class CaregiverProfileScreen extends StatelessWidget {
     print('pushChat');
   }
 
-  void _pushwhatsapp(BuildContext context) {
-    print('pushwhatsapp');
+  void _pushWhatsApp(BuildContext context) {
+    print('pushWhatsApp');
   }
 
   void _pushPhone(BuildContext context) {
@@ -67,7 +65,7 @@ class CaregiverProfileScreen extends StatelessWidget {
                             icon:
                                 const AssetImage('assets/images/whatsapp.png'),
                             size: constraints.maxHeight * 0.1,
-                            onTap: () => _pushwhatsapp(context),
+                            onTap: () => _pushWhatsApp(context),
                           ),
                           ContactItem(
                             icon: const AssetImage('assets/images/phone.png'),
@@ -76,7 +74,6 @@ class CaregiverProfileScreen extends StatelessWidget {
                           ),
                         ],
                       ),
-                      StarRating(rating: caregiver.rating),
                       Container(
                         alignment: Alignment.center,
                         padding: const EdgeInsets.symmetric(vertical: 10),
@@ -117,6 +114,13 @@ class CaregiverProfileScreen extends StatelessWidget {
                             title: 'Habilidades',
                           ),
                         ),
+                      Padding(
+                        padding: const EdgeInsets.symmetric(vertical: 4),
+                        child: CaregiverRecomendationList(
+                          caregiverId: caregiver.id,
+                          rating: caregiver.rating,
+                        ),
+                      ),
                     ],
                   ),
                 )

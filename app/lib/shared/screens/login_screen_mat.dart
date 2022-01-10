@@ -1,7 +1,7 @@
 import 'package:caregiver_hub/shared/constants/routes.dart';
 import 'package:caregiver_hub/shared/validation/functions.dart';
 import 'package:caregiver_hub/shared/validation/validators.dart';
-import 'package:caregiver_hub/shared/widgets/form_button_footer.dart';
+import 'package:caregiver_hub/shared/widgets/button_footer.dart';
 import 'package:caregiver_hub/shared/widgets/google_sign_in_button.dart';
 import 'package:flutter/material.dart';
 
@@ -101,7 +101,7 @@ class _LoginScreenState extends State<LoginScreen> {
                   ),
                   Padding(
                     padding: const EdgeInsets.symmetric(vertical: 4),
-                    child: FormButtonFooter(
+                    child: ButtonFooter(
                       primaryText: 'Entrar',
                       secondaryText: 'Criar conta',
                       onPrimary: _login,

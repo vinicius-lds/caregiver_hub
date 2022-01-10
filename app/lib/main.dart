@@ -5,6 +5,7 @@ import 'package:caregiver_hub/employer/screens/caregiver_filter_screen.dart';
 import 'package:caregiver_hub/employer/screens/caregiver_list_screen.dart';
 import 'package:caregiver_hub/employer/screens/caregiver_profile_screen.dart';
 import 'package:caregiver_hub/shared/constants/routes.dart';
+import 'package:caregiver_hub/shared/providers/caregiver_recomendation_provider.dart';
 import 'package:caregiver_hub/shared/providers/profile_provider.dart';
 import 'package:caregiver_hub/shared/screens/landing_screen.dart';
 import 'package:caregiver_hub/shared/screens/login_screen_mat.dart';
@@ -34,6 +35,9 @@ class MyApp extends StatelessWidget {
         ),
         ChangeNotifierProvider(
           create: (ctx) => SkillProvider(),
+        ),
+        ChangeNotifierProvider(
+          create: (ctx) => CaregiverRecomendationProvider(),
         ),
       ],
       child: MaterialApp(

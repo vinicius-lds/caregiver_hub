@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 
-class FormButtonFooter extends StatelessWidget {
-  const FormButtonFooter({
+class ButtonFooter extends StatelessWidget {
+  const ButtonFooter({
     Key? key,
     required this.primaryText,
     required this.secondaryText,
@@ -12,8 +12,8 @@ class FormButtonFooter extends StatelessWidget {
 
   final String primaryText;
   final String secondaryText;
-  final void Function() onPrimary;
-  final void Function() onSecondary;
+  final void Function()? onPrimary;
+  final void Function()? onSecondary;
 
   @override
   Widget build(BuildContext context) {
