@@ -4,6 +4,7 @@ import 'package:caregiver_hub/shared/models/skill.dart';
 import 'package:caregiver_hub/shared/providers/caregiver_provider.dart';
 import 'package:caregiver_hub/shared/providers/service_provider.dart';
 import 'package:caregiver_hub/shared/providers/skill_provider.dart';
+import 'package:caregiver_hub/shared/widgets/app_bar_popup_menu_button.dart';
 import 'package:caregiver_hub/shared/widgets/date_time_picker.dart';
 import 'package:caregiver_hub/shared/widgets/multi_select_chip_field_custom.dart';
 import 'package:flutter/material.dart';
@@ -48,6 +49,9 @@ class _CaregiverFilterScreenState extends State<CaregiverFilterScreen> {
     return Scaffold(
       appBar: AppBar(
         title: const Text('CaregiverHub'),
+        actions: const [
+          AppBarPopupMenuButton(),
+        ],
       ),
       body: Form(
         key: _formKey,

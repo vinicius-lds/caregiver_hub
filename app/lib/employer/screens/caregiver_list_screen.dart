@@ -1,6 +1,7 @@
 import 'package:caregiver_hub/employer/widgets/caregiver_list_item.dart';
 import 'package:caregiver_hub/shared/models/caregiver.dart';
 import 'package:caregiver_hub/shared/providers/caregiver_provider.dart';
+import 'package:caregiver_hub/shared/widgets/app_bar_popup_menu_button.dart';
 import 'package:caregiver_hub/shared/widgets/empty_state.dart';
 import 'package:caregiver_hub/shared/widgets/loading.dart';
 import 'package:flutter/material.dart';
@@ -16,6 +17,9 @@ class CaregiverListScreen extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         title: const Text('CaregiverHub'),
+        actions: const [
+          AppBarPopupMenuButton(),
+        ],
       ),
       body: StreamBuilder(
         stream: caregiverProvider.listStream(),

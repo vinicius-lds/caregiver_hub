@@ -8,6 +8,7 @@ class Routes {
 
   // job
   static const String jobForm = '/job-form';
+  static const String jobList = '/job-list';
 
   // shared
   static const String landing = '/';

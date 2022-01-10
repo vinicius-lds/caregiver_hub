@@ -5,6 +5,7 @@ import 'package:caregiver_hub/shared/constants/routes.dart';
 import 'package:caregiver_hub/shared/models/caregiver.dart';
 import 'package:caregiver_hub/shared/models/service.dart';
 import 'package:caregiver_hub/shared/models/skill.dart';
+import 'package:caregiver_hub/shared/widgets/app_bar_popup_menu_button.dart';
 import 'package:caregiver_hub/shared/widgets/multi_select_chip_field_custom.dart';
 import 'package:flutter/material.dart';
 
@@ -52,6 +53,9 @@ class CaregiverProfileScreen extends StatelessWidget {
             SliverAppBar(
               expandedHeight: constraints.maxHeight * 0.33,
               pinned: true,
+              actions: const [
+                AppBarPopupMenuButton(),
+              ],
               flexibleSpace: FlexibleSpaceBar(
                 title: Text(caregiver.name),
                 background: Hero(
