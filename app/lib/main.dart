@@ -14,6 +14,8 @@ import 'package:caregiver_hub/shared/providers/skill_provider.dart';
 import 'package:caregiver_hub/shared/screens/landing_screen.dart';
 import 'package:caregiver_hub/shared/screens/login_screen_mat.dart';
 import 'package:caregiver_hub/shared/screens/profile_form_screen.dart';
+import 'package:caregiver_hub/social/providers/chat_message_provider.dart';
+import 'package:caregiver_hub/social/screens/chat_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -46,6 +48,9 @@ class MyApp extends StatelessWidget {
         ChangeNotifierProvider(
           create: (ctx) => JobProvider(),
         ),
+        ChangeNotifierProvider(
+          create: (ctx) => ChatMessageProvider(),
+        ),
       ],
       child: MaterialApp(
         title: 'CaregiverHub',
@@ -69,6 +74,9 @@ class MyApp extends StatelessWidget {
           Routes.landing: (_) => const LandingScreen(),
           Routes.login: (_) => const LoginScreen(),
           Routes.profileForm: (_) => const ProfileFormScreen(),
+
+          // social
+          Routes.chat: (_) => const ChatScreen(),
         },
       ),
     );

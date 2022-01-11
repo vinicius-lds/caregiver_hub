@@ -64,6 +64,8 @@ class CaregiverProfileScreen extends StatelessWidget {
                       ContactsBar(
                         size: constraints.maxHeight * 0.1,
                         otherUserId: caregiver.id,
+                        otherUserImageURL: caregiver.imageURL,
+                        otherUserName: caregiver.name,
                         otherUserPhone: caregiver.phone,
                       ),
                       Container(

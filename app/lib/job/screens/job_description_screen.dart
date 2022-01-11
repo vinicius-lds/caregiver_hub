@@ -84,6 +84,12 @@ class JobDescriptionScreen extends StatelessWidget {
                         otherUserId: profileProvider.isCaregiver
                             ? job.employerId
                             : job.caregiverId,
+                        otherUserImageURL: profileProvider.isCaregiver
+                            ? job.employerImageURL
+                            : job.caregiverImageURL,
+                        otherUserName: profileProvider.isCaregiver
+                            ? job.employerName
+                            : job.caregiverName,
                         otherUserPhone: profileProvider.isCaregiver
                             ? job.employerPhone
                             : job.caregiverPhone,
