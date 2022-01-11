@@ -5,6 +5,7 @@ class Routes {
   static const String caregiverFilter = '/caregiver-list-filter';
   static const String caregiverList = '/caregiver-list';
   static const String caregiverProfile = '/caregiver-profile';
+  static const String caregiverRecomendation = '/caregiver-recomendation';
 
   // job
   static const String jobDescription = '/job-description';

@@ -41,7 +41,8 @@ class CaregiverListItem extends StatelessWidget {
               Container(
                 alignment: Alignment.centerLeft,
                 child: StarRating(
-                  rating: caregiver.rating,
+                  initialValue: caregiver.rating,
+                  displayOnly: true,
                 ),
               ),
             ],

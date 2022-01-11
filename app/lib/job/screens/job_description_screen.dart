@@ -39,6 +39,13 @@ class JobDescriptionScreen extends StatelessWidget {
     Navigator.of(context).pushNamed(Routes.jobForm, arguments: {'job': job});
   }
 
+  void _recomenCaregiver(BuildContext context, Job job) {
+    print('recomenCaregiver');
+    Navigator.of(context).pushNamed(Routes.caregiverRecomendation, arguments: {
+      'caregiverId': job.caregiverId,
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     final args =
@@ -168,6 +175,16 @@ class JobDescriptionScreen extends StatelessWidget {
                             color: Theme.of(context).primaryColor,
                             icon: const Icon(Icons.done),
                             onPressed: () => _accept(context, job),
+                          ),
+                        ),
+                      if (job.jobStatusType == JobStatusType.done)
+                        Padding(
+                          padding: const EdgeInsets.symmetric(vertical: 4),
+                          child: JobDetailActionButton(
+                            text: 'Recomendar cuidador',
+                            color: Theme.of(context).primaryColor,
+                            icon: const Icon(Icons.star_border),
+                            onPressed: () => _recomenCaregiver(context, job),
                           ),
                         ),
                     ],

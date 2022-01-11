@@ -1,7 +1,7 @@
 import 'package:caregiver_hub/employer/providers/caregiver_recomendation_provider.dart';
 import 'package:caregiver_hub/employer/widgets/caregiver_recomendation_item.dart';
 import 'package:caregiver_hub/employer/widgets/star_rating.dart';
-import 'package:caregiver_hub/employer/models/caregiver_recomendation.dart';
+import 'package:caregiver_hub/employer/models/caregiver_recomendation_card_data.dart';
 import 'package:caregiver_hub/shared/widgets/button_footer.dart';
 import 'package:caregiver_hub/shared/widgets/empty_state.dart';
 import 'package:caregiver_hub/shared/widgets/loading.dart';
@@ -76,7 +76,10 @@ class _CaregiverRecomendationListState
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                       children: [
-                        StarRating(rating: widget.rating),
+                        StarRating(
+                          initialValue: widget.rating,
+                          displayOnly: true,
+                        ),
                         Text(
                           '$count avaliações',
                           style: TextStyle(
@@ -85,8 +88,8 @@ class _CaregiverRecomendationListState
                         ),
                       ],
                     ),
-                    StreamBuilder<List<CaregiverRecomendation>>(
-                      stream: caregiverRecomendationProvider.listStream(
+                    StreamBuilder<List<CaregiverRecomendationCardData>>(
+                      stream: caregiverRecomendationProvider.cardDataListStream(
                         caregiverId: widget.caregiverId,
                         offset: _offset,
                         size: _size,
@@ -98,8 +101,8 @@ class _CaregiverRecomendationListState
                         if (!snapshot.hasData) {
                           return const EmptyState(text: 'Nenhuma avaliação');
                         }
-                        final data =
-                            snapshot.data as List<CaregiverRecomendation>;
+                        final data = snapshot.data
+                            as List<CaregiverRecomendationCardData>;
                         if (data.isEmpty) {
                           return const EmptyState(text: 'Nenhuma avaliação');
                         }

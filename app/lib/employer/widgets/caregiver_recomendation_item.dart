@@ -1,9 +1,9 @@
 import 'package:caregiver_hub/employer/widgets/star_rating.dart';
-import 'package:caregiver_hub/employer/models/caregiver_recomendation.dart';
+import 'package:caregiver_hub/employer/models/caregiver_recomendation_card_data.dart';
 import 'package:flutter/material.dart';
 
 class CaregiverRecomendationItem extends StatelessWidget {
-  final CaregiverRecomendation caregiverRecomendation;
+  final CaregiverRecomendationCardData caregiverRecomendation;
 
   const CaregiverRecomendationItem({
     Key? key,
@@ -21,7 +21,10 @@ class CaregiverRecomendationItem extends StatelessWidget {
       subtitle: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          StarRating(rating: caregiverRecomendation.rating.toDouble()),
+          StarRating(
+            initialValue: caregiverRecomendation.rating.toDouble(),
+            displayOnly: true,
+          ),
           Text(
             caregiverRecomendation.recomendation,
             textAlign: TextAlign.justify,
