@@ -1,4 +1,4 @@
-import 'package:caregiver_hub/shared/models/caregiver_recomendation.dart';
+import 'package:caregiver_hub/employer/models/caregiver_recomendation.dart';
 import 'package:flutter/cupertino.dart';
 
 class CaregiverRecomendationProvider with ChangeNotifier {

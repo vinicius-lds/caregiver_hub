@@ -1,9 +1,9 @@
+import 'package:caregiver_hub/employer/providers/service_provider.dart';
+import 'package:caregiver_hub/employer/providers/skill_provider.dart';
 import 'package:caregiver_hub/shared/constants/routes.dart';
 import 'package:caregiver_hub/shared/models/service.dart';
 import 'package:caregiver_hub/shared/models/skill.dart';
 import 'package:caregiver_hub/shared/providers/caregiver_provider.dart';
-import 'package:caregiver_hub/shared/providers/service_provider.dart';
-import 'package:caregiver_hub/shared/providers/skill_provider.dart';
 import 'package:caregiver_hub/shared/widgets/app_bar_popup_menu_button.dart';
 import 'package:caregiver_hub/shared/widgets/date_time_picker.dart';
 import 'package:caregiver_hub/shared/widgets/multi_select_chip_field_custom.dart';
