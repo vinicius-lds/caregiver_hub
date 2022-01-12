@@ -53,35 +53,58 @@ class MyApp extends StatelessWidget {
           create: (ctx) => ChatMessageProvider(),
         ),
       ],
-      child: MaterialApp(
-        title: 'CaregiverHub',
-        theme: ThemeData(
-          primarySwatch: Colors.blue,
-        ),
-        routes: {
-          // caregiver
+      child: const _MyHomePage(),
+    );
+  }
+}
 
-          // employer
-          Routes.caregiverFilter: (_) => const CaregiverFilterScreen(),
-          Routes.caregiverList: (_) => const CaregiverListScreen(),
-          Routes.caregiverProfile: (_) => const CaregiverProfileScreen(),
-          Routes.caregiverRecomendation: (_) =>
-              const CaregiverRecomendationScreen(),
+class _MyHomePage extends StatelessWidget {
+  const _MyHomePage({
+    Key? key,
+  }) : super(key: key);
 
-          // job
-          Routes.jobDescription: (_) => const JobDescriptionScreen(),
-          Routes.jobForm: (_) => const JobProposalScreen(),
-          Routes.jobList: (_) => const JobList(),
+  @override
+  Widget build(BuildContext context) {
+    final profileProvider = Provider.of<ProfileProvider>(context);
 
-          // shared
-          Routes.landing: (_) => const LandingScreen(),
-          Routes.login: (_) => const LoginScreen(),
-          Routes.profileForm: (_) => const ProfileFormScreen(),
+    Widget homeWidget;
+    if (profileProvider.id.isEmpty) {
+      homeWidget = const LandingScreen();
+    } else if (profileProvider.isCaregiver) {
+      homeWidget = const JobListScreen();
+    } else {
+      homeWidget = const CaregiverFilterScreen();
+    }
 
-          // social
-          Routes.chat: (_) => const ChatScreen(),
-        },
+    return MaterialApp(
+      title: 'CaregiverHub',
+      theme: ThemeData(
+        primarySwatch: Colors.blue,
       ),
+      home: homeWidget,
+      routes: {
+        // caregiver
+
+        // employer
+        Routes.caregiverFilter: (_) => const CaregiverFilterScreen(),
+        Routes.caregiverList: (_) => const CaregiverListScreen(),
+        Routes.caregiverProfile: (_) => const CaregiverProfileScreen(),
+        Routes.caregiverRecomendation: (_) =>
+            const CaregiverRecomendationScreen(),
+
+        // job
+        Routes.jobDescription: (_) => const JobDescriptionScreen(),
+        Routes.jobForm: (_) => const JobProposalScreen(),
+        Routes.jobList: (_) => const JobListScreen(),
+
+        // shared
+        Routes.landing: (_) => const LandingScreen(),
+        Routes.login: (_) => const LoginScreen(),
+        Routes.profileForm: (_) => const ProfileFormScreen(),
+
+        // social
+        Routes.chat: (_) => const ChatScreen(),
+      },
     );
   }
 }

@@ -10,14 +10,14 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:rxdart/rxdart.dart';
 
-class JobList extends StatefulWidget {
-  const JobList({Key? key}) : super(key: key);
+class JobListScreen extends StatefulWidget {
+  const JobListScreen({Key? key}) : super(key: key);
 
   @override
-  State<JobList> createState() => _JobListState();
+  State<JobListScreen> createState() => _JobListScreenState();
 }
 
-class _JobListState extends State<JobList> {
+class _JobListScreenState extends State<JobListScreen> {
   int _offset = 0;
   final int _size = 15;
 

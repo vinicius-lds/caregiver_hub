@@ -1,9 +1,11 @@
 import 'package:caregiver_hub/shared/constants/routes.dart';
+import 'package:caregiver_hub/shared/providers/profile_provider.dart';
 import 'package:caregiver_hub/shared/validation/functions.dart';
 import 'package:caregiver_hub/shared/validation/validators.dart';
 import 'package:caregiver_hub/shared/widgets/button_footer.dart';
 import 'package:caregiver_hub/shared/widgets/google_sign_in_button.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({Key? key}) : super(key: key);
@@ -34,7 +36,13 @@ class _LoginScreenState extends State<LoginScreen> {
 
   void _login() {
     print('login');
-    Navigator.pushNamed(context, Routes.caregiverFilter);
+    final profileProvider =
+        Provider.of<ProfileProvider>(context, listen: false);
+    profileProvider.id = '1';
+    Navigator.of(context).pushNamedAndRemoveUntil(
+      Routes.caregiverFilter,
+      (route) => false, // Remove todas as telas do stack
+    );
   }
 
   void _signIn() {
@@ -44,7 +52,10 @@ class _LoginScreenState extends State<LoginScreen> {
 
   void _signInWithGoogle() {
     print('signInWithGoogle');
-    Navigator.pushNamed(context, Routes.caregiverFilter);
+    Navigator.of(context).pushNamedAndRemoveUntil(
+      Routes.caregiverFilter,
+      (route) => false, // Remove todas as telas do stack
+    );
   }
 
   @override

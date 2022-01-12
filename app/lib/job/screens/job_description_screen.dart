@@ -4,7 +4,6 @@ import 'package:caregiver_hub/shared/constants/routes.dart';
 import 'package:caregiver_hub/shared/models/service.dart';
 import 'package:caregiver_hub/shared/providers/profile_provider.dart';
 import 'package:caregiver_hub/shared/widgets/app_bar_popup_menu_button.dart';
-import 'package:caregiver_hub/shared/widgets/button_footer.dart';
 import 'package:caregiver_hub/shared/widgets/contacts_bar.dart';
 import 'package:caregiver_hub/shared/widgets/multi_select_chip_field_custom.dart';
 import 'package:flutter/material.dart';
