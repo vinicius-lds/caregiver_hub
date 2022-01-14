@@ -176,7 +176,8 @@ class JobDescriptionScreen extends StatelessWidget {
                             onPressed: () => _accept(context, job),
                           ),
                         ),
-                      if (job.jobStatusType == JobStatusType.done)
+                      if (job.jobStatusType == JobStatusType.done &&
+                          !profileProvider.isCaregiver)
                         Padding(
                           padding: const EdgeInsets.symmetric(vertical: 4),
                           child: JobDetailActionButton(

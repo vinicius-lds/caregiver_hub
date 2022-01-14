@@ -12,9 +12,10 @@ import 'package:caregiver_hub/job/screens/job_list_screen.dart';
 import 'package:caregiver_hub/shared/constants/routes.dart';
 import 'package:caregiver_hub/shared/providers/caregiver_provider.dart';
 import 'package:caregiver_hub/shared/providers/profile_provider.dart';
-import 'package:caregiver_hub/shared/screens/landing_screen.dart';
-import 'package:caregiver_hub/shared/screens/login_screen_mat.dart';
-import 'package:caregiver_hub/shared/screens/profile_form_screen.dart';
+import 'package:caregiver_hub/user/providers/user_provider.dart';
+import 'package:caregiver_hub/user/screens/landing_screen.dart';
+import 'package:caregiver_hub/user/screens/login_screen.dart';
+import 'package:caregiver_hub/user/screens/profile_form_screen.dart';
 import 'package:caregiver_hub/social/providers/chat_message_provider.dart';
 import 'package:caregiver_hub/social/screens/chat_screen.dart';
 import 'package:flutter/material.dart';
@@ -52,6 +53,9 @@ class MyApp extends StatelessWidget {
         ChangeNotifierProvider(
           create: (ctx) => ChatMessageProvider(),
         ),
+        ChangeNotifierProvider(
+          create: (ctx) => UserProvider(),
+        ),
       ],
       child: const _MyHomePage(),
     );
@@ -84,8 +88,6 @@ class _MyHomePage extends StatelessWidget {
       home: homeWidget,
       routes: {
         // caregiver
-
-        // employer
         Routes.caregiverFilter: (_) => const CaregiverFilterScreen(),
         Routes.caregiverList: (_) => const CaregiverListScreen(),
         Routes.caregiverProfile: (_) => const CaregiverProfileScreen(),
@@ -100,7 +102,7 @@ class _MyHomePage extends StatelessWidget {
         // shared
         Routes.landing: (_) => const LandingScreen(),
         Routes.login: (_) => const LoginScreen(),
-        Routes.profileForm: (_) => const ProfileFormScreen(),
+        Routes.profile: (_) => const ProfileScreen(),
 
         // social
         Routes.chat: (_) => const ChatScreen(),

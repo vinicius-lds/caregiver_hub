@@ -15,7 +15,7 @@ class Routes {
   // shared
   static const String landing = '/landing';
   static const String login = '/login';
-  static const String profileForm = '/profile-form';
+  static const String profile = '/profile-form';
 
   // social
   static const String chat = '/chat';

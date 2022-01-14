@@ -8,6 +8,8 @@ enum ActionType {
   caregiverList,
   invert,
   jobList,
+  logout,
+  profile,
 }
 
 class InvalidActionTypeException implements Exception {
@@ -25,6 +27,19 @@ class AppBarPopupMenuButton extends StatelessWidget {
       profileProvider.isCaregiver = !profileProvider.isCaregiver;
       Navigator.of(context).pushNamedAndRemoveUntil(
         '/',
+        (route) => false, // Remove todas as telas do stack
+      );
+      return;
+    }
+    if (actionType == ActionType.profile) {
+      Navigator.of(context)
+          .pushNamed(Routes.profile, arguments: {'isEdit': true});
+      return;
+    }
+    if (actionType == ActionType.logout) {
+      print('logout');
+      Navigator.of(context).pushNamedAndRemoveUntil(
+        Routes.landing,
         (route) => false, // Remove todas as telas do stack
       );
       return;
@@ -52,7 +67,7 @@ class AppBarPopupMenuButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final profileProvider = Provider.of<ProfileProvider>(context);
-    final inverse = profileProvider.isCaregiver ? 'Empregador' : 'Cuidador';
+    final inverse = profileProvider.isCaregiver ? 'empregador' : 'cuidador';
     return PopupMenuButton(
       onSelected: (value) => _onSelected(context, value as ActionType),
       itemBuilder: (bContext) {
@@ -60,6 +75,10 @@ class AppBarPopupMenuButton extends StatelessWidget {
           PopupMenuItem<ActionType>(
             value: ActionType.invert,
             child: Text('Visão de $inverse'),
+          ),
+          const PopupMenuItem<ActionType>(
+            value: ActionType.profile,
+            child: Text('Perfil'),
           ),
           if (!profileProvider.isCaregiver)
             const PopupMenuItem<ActionType>(
@@ -74,6 +93,10 @@ class AppBarPopupMenuButton extends StatelessWidget {
           const PopupMenuItem<ActionType>(
             value: ActionType.jobList,
             child: Text('Trabalhos'),
+          ),
+          const PopupMenuItem<ActionType>(
+            value: ActionType.logout,
+            child: Text('Sair'),
           ),
         ];
       },

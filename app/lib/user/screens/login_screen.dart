@@ -3,7 +3,7 @@ import 'package:caregiver_hub/shared/providers/profile_provider.dart';
 import 'package:caregiver_hub/shared/validation/functions.dart';
 import 'package:caregiver_hub/shared/validation/validators.dart';
 import 'package:caregiver_hub/shared/widgets/button_footer.dart';
-import 'package:caregiver_hub/shared/widgets/google_sign_in_button.dart';
+import 'package:caregiver_hub/user/widgets/google_sign_in_button.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -47,7 +47,7 @@ class _LoginScreenState extends State<LoginScreen> {
 
   void _signIn() {
     print('signIn');
-    Navigator.pushNamed(context, Routes.profileForm);
+    Navigator.pushNamed(context, Routes.profile, arguments: {'isEdit': false});
   }
 
   void _signInWithGoogle() {

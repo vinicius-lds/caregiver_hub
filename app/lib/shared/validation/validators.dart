@@ -35,6 +35,7 @@ String? Function(dynamic) atLeast(int minLength, {required String message}) {
 
 String? Function(dynamic) equalTo(dynamic other, {required String message}) {
   return (value) {
+    print('value: $value; other: $other;');
     if (value != other) {
       return message;
     }
