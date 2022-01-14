@@ -6,8 +6,12 @@ import 'package:flutter/foundation.dart';
 class CaregiverProvider with ChangeNotifier {
   final List<Caregiver> _caregivers = _loadMockData();
 
-  Stream<List<Caregiver>> listStream() {
+  Stream<List<Caregiver>> listStream({int offset = 0, int size = 15}) {
     return Stream.value(_caregivers);
+  }
+
+  Stream<int> count() {
+    return Stream.value(16);
   }
 
   Stream<Caregiver> byId(String id) {
