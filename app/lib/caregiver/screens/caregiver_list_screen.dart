@@ -26,7 +26,7 @@ class _CaregiverListScreenState extends State<CaregiverListScreen> {
     final caregiverProvider = Provider.of<CaregiverProvider>(context);
     return Scaffold(
       appBar: AppBar(
-        title: const Text('CaregiverHub'),
+        title: const Text('Cuidadores'),
         actions: const [
           AppBarPopupMenuButton(),
         ],

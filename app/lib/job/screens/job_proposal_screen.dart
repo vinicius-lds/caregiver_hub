@@ -33,7 +33,7 @@ class _JobProposalScreenState extends State<JobProposalScreen> {
     final caregiverProvider = Provider.of<CaregiverProvider>(context);
     return Scaffold(
       appBar: AppBar(
-        title: const Text('CaregiverHub'),
+        title: const Text('Proposta de trabalho'),
         actions: const [
           AppBarPopupMenuButton(),
         ],

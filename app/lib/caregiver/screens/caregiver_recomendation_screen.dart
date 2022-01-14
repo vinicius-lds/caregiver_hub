@@ -2,7 +2,6 @@ import 'package:caregiver_hub/caregiver/models/caregiver_recomendation_form_data
 import 'package:caregiver_hub/caregiver/providers/caregiver_recomendation_provider.dart';
 import 'package:caregiver_hub/caregiver/widgets/caregiver_recomendation_form.dart';
 import 'package:caregiver_hub/shared/providers/profile_provider.dart';
-import 'package:caregiver_hub/shared/widgets/app_bar_popup_menu_button.dart';
 import 'package:caregiver_hub/shared/widgets/error_state.dart';
 import 'package:caregiver_hub/shared/widgets/loading.dart';
 import 'package:flutter/material.dart';
@@ -21,10 +20,7 @@ class CaregiverRecomendationScreen extends StatelessWidget {
     final caregiverId = args['caregiverId'] as String;
     return Scaffold(
       appBar: AppBar(
-        title: const Text('CaregiverHub'),
-        actions: const [
-          AppBarPopupMenuButton(),
-        ],
+        title: const Text('Recomendar cuidador'),
       ),
       body: SingleChildScrollView(
         child: StreamBuilder<CaregiverRecomendationFormData>(

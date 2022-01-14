@@ -27,7 +27,7 @@ class _JobListScreenState extends State<JobListScreen> {
     final profileProvider = Provider.of<ProfileProvider>(context);
     return Scaffold(
       appBar: AppBar(
-        title: const Text('CaregiverHub'),
+        title: const Text('Trabalhos'),
         actions: const [
           AppBarPopupMenuButton(),
         ],

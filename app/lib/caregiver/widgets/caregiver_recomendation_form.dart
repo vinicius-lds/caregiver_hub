@@ -31,6 +31,7 @@ class _CaregiverRecomendationFormState
       _formKey.currentState!.save();
       print('rating $_rating');
     }
+    Navigator.of(context).pop();
   }
 
   @override
