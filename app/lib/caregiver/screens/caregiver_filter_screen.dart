@@ -68,20 +68,6 @@ class _CaregiverFilterScreenState extends State<CaregiverFilterScreen> {
                 ),
                 Padding(
                   padding: const EdgeInsets.symmetric(vertical: 4),
-                  child: DateTimePicker(
-                    label: 'Início da atividade',
-                    onSaved: (value) => _startDate = value,
-                  ),
-                ),
-                Padding(
-                  padding: const EdgeInsets.symmetric(vertical: 4),
-                  child: DateTimePicker(
-                    label: 'Fim da atividade',
-                    onSaved: (value) => _endDate = value,
-                  ),
-                ),
-                Padding(
-                  padding: const EdgeInsets.symmetric(vertical: 4),
                   child: MultiSelectChipFieldCustom<Service, String>(
                     stream: serviceProvider.listStream(),
                     idFn: (serviceType) =>

@@ -41,7 +41,7 @@ class CaregiverRecomendationScreen extends StatelessWidget {
             }
             final data = snapshot.data as CaregiverRecomendationFormData;
             return Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
+              padding: const EdgeInsets.all(10),
               child: CaregiverRecomendationForm(data: data),
             );
           },

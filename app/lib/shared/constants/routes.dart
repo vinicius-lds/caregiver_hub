@@ -12,11 +12,12 @@ class Routes {
   static const String jobForm = '/job-form';
   static const String jobList = '/job-list';
 
-  // shared
+  // social
+  static const String chat = '/chat';
+
+  // user
+  static const String caregiverForm = '/caregiver-form';
   static const String landing = '/landing';
   static const String login = '/login';
   static const String profile = '/profile-form';
-
-  // social
-  static const String chat = '/chat';
 }

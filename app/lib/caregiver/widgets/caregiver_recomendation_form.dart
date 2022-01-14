@@ -76,15 +76,18 @@ class _CaregiverRecomendationFormState
                   ]),
                 ),
               ),
-              TextFormField(
-                decoration: const InputDecoration(
-                  labelText: 'Recomendação',
+              Padding(
+                padding: const EdgeInsets.symmetric(vertical: 10),
+                child: TextFormField(
+                  decoration: const InputDecoration(
+                    labelText: 'Recomendação',
+                  ),
+                  minLines: 5,
+                  maxLines: 20,
+                  initialValue: widget.data.recomendation,
+                  onFieldSubmitted: (_) => _submit(context),
+                  onSaved: (value) => _recomendation = value,
                 ),
-                minLines: 5,
-                maxLines: 20,
-                initialValue: widget.data.recomendation,
-                onFieldSubmitted: (_) => _submit(context),
-                onSaved: (value) => _recomendation = value,
               ),
               Container(
                 padding: const EdgeInsets.symmetric(vertical: 4),

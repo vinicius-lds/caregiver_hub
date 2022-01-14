@@ -13,9 +13,10 @@ import 'package:caregiver_hub/shared/constants/routes.dart';
 import 'package:caregiver_hub/shared/providers/caregiver_provider.dart';
 import 'package:caregiver_hub/shared/providers/profile_provider.dart';
 import 'package:caregiver_hub/user/providers/user_provider.dart';
+import 'package:caregiver_hub/user/screens/carregiver_form_screen.dart';
 import 'package:caregiver_hub/user/screens/landing_screen.dart';
 import 'package:caregiver_hub/user/screens/login_screen.dart';
-import 'package:caregiver_hub/user/screens/profile_form_screen.dart';
+import 'package:caregiver_hub/user/screens/profile_screen.dart';
 import 'package:caregiver_hub/social/providers/chat_message_provider.dart';
 import 'package:caregiver_hub/social/screens/chat_screen.dart';
 import 'package:flutter/material.dart';
@@ -99,7 +100,8 @@ class _MyHomePage extends StatelessWidget {
         Routes.jobForm: (_) => const JobProposalScreen(),
         Routes.jobList: (_) => const JobListScreen(),
 
-        // shared
+        // user
+        Routes.caregiverForm: (_) => const CaregiverFormScreen(),
         Routes.landing: (_) => const LandingScreen(),
         Routes.login: (_) => const LoginScreen(),
         Routes.profile: (_) => const ProfileScreen(),

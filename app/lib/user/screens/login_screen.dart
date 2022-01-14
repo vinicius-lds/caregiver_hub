@@ -40,7 +40,7 @@ class _LoginScreenState extends State<LoginScreen> {
         Provider.of<ProfileProvider>(context, listen: false);
     profileProvider.id = '1';
     Navigator.of(context).pushNamedAndRemoveUntil(
-      Routes.caregiverFilter,
+      profileProvider.isCaregiver ? Routes.jobList : Routes.caregiverFilter,
       (route) => false, // Remove todas as telas do stack
     );
   }

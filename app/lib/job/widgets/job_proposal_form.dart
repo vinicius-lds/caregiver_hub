@@ -48,7 +48,10 @@ class _JobProposalFormState extends State<JobProposalForm> {
     $price
     ''');
 
-    Navigator.of(context).pushNamed(Routes.jobList);
+    Navigator.of(context).pushNamedAndRemoveUntil(
+      Routes.jobList,
+      (route) => false, // Remove todas as telas do stack
+    );
   }
 
   double _formattedPriceToDouble(String formattedPrice) {
@@ -107,7 +110,10 @@ class _JobProposalFormState extends State<JobProposalForm> {
     $price
     ''');
 
-    Navigator.of(context).pushNamed(Routes.jobList);
+    Navigator.of(context).pushNamedAndRemoveUntil(
+      Routes.jobList,
+      (route) => false, // Remove todas as telas do stack
+    );
   }
 
   @override

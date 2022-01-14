@@ -6,6 +6,7 @@ import 'package:provider/provider.dart';
 enum ActionType {
   caregiverFilter,
   caregiverList,
+  caregiverProfile,
   invert,
   jobList,
   logout,
@@ -34,6 +35,10 @@ class AppBarPopupMenuButton extends StatelessWidget {
     if (actionType == ActionType.profile) {
       Navigator.of(context)
           .pushNamed(Routes.profile, arguments: {'isEdit': true});
+      return;
+    }
+    if (actionType == ActionType.caregiverProfile) {
+      Navigator.of(context).pushNamed(Routes.caregiverForm);
       return;
     }
     if (actionType == ActionType.logout) {
@@ -80,6 +85,11 @@ class AppBarPopupMenuButton extends StatelessWidget {
             value: ActionType.profile,
             child: Text('Perfil'),
           ),
+          if (profileProvider.isCaregiver)
+            const PopupMenuItem<ActionType>(
+              value: ActionType.caregiverProfile,
+              child: Text('Perfil de cuidador'),
+            ),
           if (!profileProvider.isCaregiver)
             const PopupMenuItem<ActionType>(
               value: ActionType.caregiverFilter,
