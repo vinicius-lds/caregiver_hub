@@ -1,5 +1,5 @@
-import 'package:caregiver_hub/employer/widgets/star_rating.dart';
-import 'package:caregiver_hub/employer/models/caregiver_recomendation_card_data.dart';
+import 'package:caregiver_hub/caregiver/widgets/star_rating.dart';
+import 'package:caregiver_hub/caregiver/models/caregiver_recomendation_card_data.dart';
 import 'package:flutter/material.dart';
 
 class CaregiverRecomendationItem extends StatelessWidget {

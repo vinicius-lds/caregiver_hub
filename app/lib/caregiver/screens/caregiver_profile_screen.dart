@@ -1,5 +1,5 @@
-import 'package:caregiver_hub/employer/widgets/caregiver_pricing.dart';
-import 'package:caregiver_hub/employer/widgets/caregiver_recomendation_list.dart';
+import 'package:caregiver_hub/caregiver/widgets/caregiver_pricing.dart';
+import 'package:caregiver_hub/caregiver/widgets/caregiver_recomendation_list.dart';
 import 'package:caregiver_hub/shared/constants/routes.dart';
 import 'package:caregiver_hub/shared/models/caregiver.dart';
 import 'package:caregiver_hub/shared/models/service.dart';

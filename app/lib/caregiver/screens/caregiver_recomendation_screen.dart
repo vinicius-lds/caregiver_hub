@@ -1,6 +1,6 @@
-import 'package:caregiver_hub/employer/models/caregiver_recomendation_form_data.dart';
-import 'package:caregiver_hub/employer/providers/caregiver_recomendation_provider.dart';
-import 'package:caregiver_hub/employer/widgets/caregiver_recomendation_form.dart';
+import 'package:caregiver_hub/caregiver/models/caregiver_recomendation_form_data.dart';
+import 'package:caregiver_hub/caregiver/providers/caregiver_recomendation_provider.dart';
+import 'package:caregiver_hub/caregiver/widgets/caregiver_recomendation_form.dart';
 import 'package:caregiver_hub/shared/providers/profile_provider.dart';
 import 'package:caregiver_hub/shared/widgets/app_bar_popup_menu_button.dart';
 import 'package:caregiver_hub/shared/widgets/error_state.dart';

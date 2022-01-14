@@ -1,4 +1,4 @@
-import 'package:caregiver_hub/employer/widgets/caregiver_list_item.dart';
+import 'package:caregiver_hub/caregiver/widgets/caregiver_list_item.dart';
 import 'package:caregiver_hub/shared/models/caregiver.dart';
 import 'package:caregiver_hub/shared/providers/caregiver_provider.dart';
 import 'package:caregiver_hub/shared/widgets/app_bar_popup_menu_button.dart';

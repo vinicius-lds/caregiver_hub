@@ -1,7 +1,7 @@
-import 'package:caregiver_hub/employer/providers/caregiver_recomendation_provider.dart';
-import 'package:caregiver_hub/employer/widgets/caregiver_recomendation_item.dart';
-import 'package:caregiver_hub/employer/widgets/star_rating.dart';
-import 'package:caregiver_hub/employer/models/caregiver_recomendation_card_data.dart';
+import 'package:caregiver_hub/caregiver/providers/caregiver_recomendation_provider.dart';
+import 'package:caregiver_hub/caregiver/widgets/caregiver_recomendation_item.dart';
+import 'package:caregiver_hub/caregiver/widgets/star_rating.dart';
+import 'package:caregiver_hub/caregiver/models/caregiver_recomendation_card_data.dart';
 import 'package:caregiver_hub/shared/widgets/button_footer.dart';
 import 'package:caregiver_hub/shared/widgets/empty_state.dart';
 import 'package:caregiver_hub/shared/widgets/loading.dart';

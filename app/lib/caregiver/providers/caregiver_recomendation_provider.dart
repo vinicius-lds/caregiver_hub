@@ -1,5 +1,5 @@
-import 'package:caregiver_hub/employer/models/caregiver_recomendation_card_data.dart';
-import 'package:caregiver_hub/employer/models/caregiver_recomendation_form_data.dart';
+import 'package:caregiver_hub/caregiver/models/caregiver_recomendation_card_data.dart';
+import 'package:caregiver_hub/caregiver/models/caregiver_recomendation_form_data.dart';
 import 'package:flutter/cupertino.dart';
 
 class CaregiverRecomendationProvider with ChangeNotifier {

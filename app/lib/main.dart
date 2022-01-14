@@ -1,10 +1,10 @@
-import 'package:caregiver_hub/employer/providers/caregiver_recomendation_provider.dart';
-import 'package:caregiver_hub/employer/providers/service_provider.dart';
-import 'package:caregiver_hub/employer/providers/skill_provider.dart';
-import 'package:caregiver_hub/employer/screens/caregiver_filter_screen.dart';
-import 'package:caregiver_hub/employer/screens/caregiver_list_screen.dart';
-import 'package:caregiver_hub/employer/screens/caregiver_profile_screen.dart';
-import 'package:caregiver_hub/employer/screens/caregiver_recomendation_screen.dart';
+import 'package:caregiver_hub/caregiver/providers/caregiver_recomendation_provider.dart';
+import 'package:caregiver_hub/caregiver/providers/service_provider.dart';
+import 'package:caregiver_hub/caregiver/providers/skill_provider.dart';
+import 'package:caregiver_hub/caregiver/screens/caregiver_filter_screen.dart';
+import 'package:caregiver_hub/caregiver/screens/caregiver_list_screen.dart';
+import 'package:caregiver_hub/caregiver/screens/caregiver_profile_screen.dart';
+import 'package:caregiver_hub/caregiver/screens/caregiver_recomendation_screen.dart';
 import 'package:caregiver_hub/job/providers/job_provider.dart';
 import 'package:caregiver_hub/job/screens/job_description_screen.dart';
 import 'package:caregiver_hub/job/screens/job_proposal_screen.dart';

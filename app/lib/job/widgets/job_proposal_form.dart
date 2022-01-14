@@ -196,9 +196,10 @@ class _JobProposalFormState extends State<JobProposalForm> {
                 decoration: const InputDecoration(
                   labelText: 'Valor',
                 ),
-                initialValue: currencyTextInputFormatter.format(
-                  widget.job?.price.toStringAsFixed(2) ?? '',
-                ),
+                initialValue: widget.job != null
+                    ? currencyTextInputFormatter
+                        .format(widget.job!.price.toStringAsFixed(2))
+                    : null,
                 autovalidateMode: AutovalidateMode.onUserInteraction,
                 inputFormatters: [currencyTextInputFormatter],
                 keyboardType: TextInputType.number,

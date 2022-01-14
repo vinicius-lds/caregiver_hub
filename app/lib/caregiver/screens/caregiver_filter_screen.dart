@@ -1,5 +1,5 @@
-import 'package:caregiver_hub/employer/providers/service_provider.dart';
-import 'package:caregiver_hub/employer/providers/skill_provider.dart';
+import 'package:caregiver_hub/caregiver/providers/service_provider.dart';
+import 'package:caregiver_hub/caregiver/providers/skill_provider.dart';
 import 'package:caregiver_hub/shared/constants/routes.dart';
 import 'package:caregiver_hub/shared/models/service.dart';
 import 'package:caregiver_hub/shared/models/skill.dart';

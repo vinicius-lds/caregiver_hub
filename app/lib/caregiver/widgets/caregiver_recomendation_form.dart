@@ -1,5 +1,5 @@
-import 'package:caregiver_hub/employer/models/caregiver_recomendation_form_data.dart';
-import 'package:caregiver_hub/employer/widgets/star_rating.dart';
+import 'package:caregiver_hub/caregiver/models/caregiver_recomendation_form_data.dart';
+import 'package:caregiver_hub/caregiver/widgets/star_rating.dart';
 import 'package:caregiver_hub/shared/validation/functions.dart';
 import 'package:caregiver_hub/shared/validation/validators.dart';
 import 'package:flutter/material.dart';
