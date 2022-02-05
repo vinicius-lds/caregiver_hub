@@ -9,6 +9,8 @@ import 'package:caregiver_hub/job/providers/job_provider.dart';
 import 'package:caregiver_hub/job/screens/job_description_screen.dart';
 import 'package:caregiver_hub/job/screens/job_proposal_screen.dart';
 import 'package:caregiver_hub/job/screens/job_list_screen.dart';
+import 'package:caregiver_hub/location/providers/place_provider.dart';
+import 'package:caregiver_hub/location/screens/place_picker_screen.dart';
 import 'package:caregiver_hub/shared/constants/routes.dart';
 import 'package:caregiver_hub/shared/providers/caregiver_provider.dart';
 import 'package:caregiver_hub/shared/providers/profile_provider.dart';
@@ -57,6 +59,9 @@ class MyApp extends StatelessWidget {
         ChangeNotifierProvider(
           create: (ctx) => UserProvider(),
         ),
+        ChangeNotifierProvider(
+          create: (ctx) => PlaceProvider(),
+        ),
       ],
       child: const _MyHomePage(),
     );
@@ -81,6 +86,9 @@ class _MyHomePage extends StatelessWidget {
       homeWidget = const CaregiverFilterScreen();
     }
 
+    // TODO - remover
+    homeWidget = const PlacePickerScreen();
+
     return MaterialApp(
       title: 'CaregiverHub',
       theme: ThemeData(
@@ -99,6 +107,9 @@ class _MyHomePage extends StatelessWidget {
         Routes.jobDescription: (_) => const JobDescriptionScreen(),
         Routes.jobForm: (_) => const JobProposalScreen(),
         Routes.jobList: (_) => const JobListScreen(),
+
+        // location
+        Routes.placePicker: (_) => const PlacePickerScreen(),
 
         // user
         Routes.caregiverForm: (_) => const CaregiverFormScreen(),
