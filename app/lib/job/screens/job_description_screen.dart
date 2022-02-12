@@ -6,6 +6,7 @@ import 'package:caregiver_hub/shared/providers/profile_provider.dart';
 import 'package:caregiver_hub/shared/widgets/app_bar_popup_menu_button.dart';
 import 'package:caregiver_hub/shared/widgets/contacts_bar.dart';
 import 'package:caregiver_hub/shared/widgets/multi_select_chip_field_custom.dart';
+import 'package:caregiver_hub/shared/widgets/place_coordinates_field.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
@@ -103,7 +104,13 @@ class JobDescriptionScreen extends StatelessWidget {
                       Container(
                         alignment: Alignment.center,
                         padding: const EdgeInsets.symmetric(vertical: 10),
-                        child: const Text('Localização'),
+                        child: PlaceCoordinatesField(
+                          readOnly: true,
+                          initialValue: job.placeCoordinates,
+                          decoration: const InputDecoration(
+                            label: Text('Localização'),
+                          ),
+                        ),
                       ),
                       Container(
                         alignment: Alignment.center,

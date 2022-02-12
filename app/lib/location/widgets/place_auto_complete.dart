@@ -1,22 +1,28 @@
-import 'dart:convert';
-
-import 'package:caregiver_hub/location/models/place.dart';
-import 'package:caregiver_hub/location/providers/place_provider.dart';
+import 'package:caregiver_hub/shared/models/place.dart';
+import 'package:caregiver_hub/shared/models/place_coordinates.dart';
+import 'package:caregiver_hub/location/services/location_service.dart';
+import 'package:caregiver_hub/location/widgets/place_auto_complete_button.dart';
+import 'package:caregiver_hub/location/widgets/place_auto_complete_item.dart';
 import 'package:caregiver_hub/location/widgets/text_field_custom.dart';
+import 'package:caregiver_hub/main.dart';
 import 'package:caregiver_hub/shared/widgets/empty_state.dart';
 import 'package:caregiver_hub/shared/widgets/loading.dart';
 import 'package:flutter/material.dart';
-import 'package:http/http.dart' as http;
-import 'package:provider/provider.dart';
 
 class PlaceAutoComplete extends StatefulWidget {
-  Place? initialPlace;
-  VoidCallback onCancel;
-  VoidCallback onConfirm;
+  final bool readOnly;
+  final Place? initialPlace;
+  final void Function(PlaceCoordinates) onSelectedPlaceCoordinates;
+  final VoidCallback onClear;
+  final VoidCallback onCancel;
+  final VoidCallback onConfirm;
 
-  PlaceAutoComplete({
+  const PlaceAutoComplete({
     Key? key,
-    this.initialPlace,
+    required this.readOnly,
+    required this.initialPlace,
+    required this.onSelectedPlaceCoordinates,
+    required this.onClear,
     required this.onCancel,
     required this.onConfirm,
   }) : super(key: key);
@@ -26,6 +32,8 @@ class PlaceAutoComplete extends StatefulWidget {
 }
 
 class _PlaceAutoCompleteState extends State<PlaceAutoComplete> {
+  final PlaceService placeService = getIt<PlaceService>();
+
   final TextEditingController _controller = TextEditingController();
   final FocusNode _focusNode = FocusNode();
   final _formKey = GlobalKey<FormState>();
@@ -51,14 +59,15 @@ class _PlaceAutoCompleteState extends State<PlaceAutoComplete> {
     }
   }
 
-  void _onPlaceSelected(BuildContext context, Place place) {
+  void _onPlaceSelected(BuildContext context, Place place) async {
     _controller.text = place.description;
     _focusNode.unfocus();
     setState(() {
       _showResults = false;
       _selectedPlace = place;
     });
-    Provider.of<PlaceProvider>(context, listen: false).selectedPlace = place;
+    final placeCoordinates = await placeService.toPlaceCoordinates(place);
+    widget.onSelectedPlaceCoordinates(placeCoordinates);
   }
 
   void _onSearchValueChanged(String? input) {
@@ -72,29 +81,7 @@ class _PlaceAutoCompleteState extends State<PlaceAutoComplete> {
         _showResults = false;
       } else {
         _showResults = true;
-        _placeStream = Stream.fromFuture(
-          http.get(
-            Uri.https(
-              'maps.googleapis.com',
-              '/maps/api/place/autocomplete/json',
-              {
-                'input': input,
-                'language': 'pt_BR',
-                'types': 'address',
-                'key': 'AIzaSyCmw_go04MwX36WMZDOb6XsvXGZLWTIda0',
-              },
-            ),
-          ),
-        ).map(
-          (response) => (jsonDecode(response.body)['predictions'] as List)
-              .map(
-                (item) => Place(
-                  description: item['description'],
-                  id: item['place_id'],
-                ),
-              )
-              .toList(),
-        );
+        _placeStream = placeService.placeAutoCompleteStream(input);
       }
     });
   }
@@ -121,6 +108,7 @@ class _PlaceAutoCompleteState extends State<PlaceAutoComplete> {
             child: Form(
               key: _formKey,
               child: TextFieldCustom(
+                readOnly: widget.readOnly,
                 decoration: const InputDecoration(
                   hintText: 'Pesquise no Google Maps',
                   border: InputBorder.none,
@@ -172,17 +160,10 @@ class _PlaceAutoCompleteState extends State<PlaceAutoComplete> {
                     child: Column(
                       children: data
                           .map(
-                            (place) => InkWell(
-                              onTap: () => _onPlaceSelected(context, place),
-                              child: Padding(
-                                padding: const EdgeInsets.all(8),
-                                child: Text(
-                                  place.description,
-                                  style: const TextStyle(
-                                    color: Colors.white,
-                                  ),
-                                ),
-                              ),
+                            (place) => PlaceAutoCompleteItem(
+                              place: place,
+                              onSelected: (place) =>
+                                  _onPlaceSelected(context, place),
                             ),
                           )
                           .toList(),
@@ -199,53 +180,29 @@ class _PlaceAutoCompleteState extends State<PlaceAutoComplete> {
                   Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      _IconButtonCustom(
-                        color: Colors.red,
-                        icon: Icons.close,
+                      PlaceAutoCompleteButton(
+                        color: Theme.of(context).primaryColor,
+                        icon: Icons.arrow_back_rounded,
                         onPressed: widget.onCancel,
                       ),
-                      _IconButtonCustom(
+                      if (!widget.readOnly)
+                        PlaceAutoCompleteButton(
+                          color: Colors.red,
+                          icon: Icons.close,
+                          onPressed: widget.onClear,
+                        ),
+                      if (!widget.readOnly)
+                        PlaceAutoCompleteButton(
                           color: Colors.green,
                           icon: Icons.check,
-                          onPressed: widget.onConfirm),
+                          onPressed: widget.onConfirm,
+                        ),
                     ],
                   )
                 ],
               ),
             ),
         ],
-      ),
-    );
-  }
-}
-
-class _IconButtonCustom extends StatelessWidget {
-  final Color color;
-  final IconData icon;
-  final VoidCallback onPressed;
-
-  const _IconButtonCustom({
-    Key? key,
-    required this.color,
-    required this.icon,
-    required this.onPressed,
-  }) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.all(8),
-      child: Container(
-        decoration: BoxDecoration(
-          color: color,
-          borderRadius: const BorderRadius.all(
-            Radius.circular(25),
-          ),
-        ),
-        child: IconButton(
-          onPressed: onPressed,
-          icon: Icon(icon, color: Colors.white),
-        ),
       ),
     );
   }

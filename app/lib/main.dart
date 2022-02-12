@@ -9,8 +9,9 @@ import 'package:caregiver_hub/job/providers/job_provider.dart';
 import 'package:caregiver_hub/job/screens/job_description_screen.dart';
 import 'package:caregiver_hub/job/screens/job_proposal_screen.dart';
 import 'package:caregiver_hub/job/screens/job_list_screen.dart';
-import 'package:caregiver_hub/location/providers/place_provider.dart';
+import 'package:caregiver_hub/shared/models/place_coordinates.dart';
 import 'package:caregiver_hub/location/screens/place_picker_screen.dart';
+import 'package:caregiver_hub/location/services/location_service.dart';
 import 'package:caregiver_hub/shared/constants/routes.dart';
 import 'package:caregiver_hub/shared/providers/caregiver_provider.dart';
 import 'package:caregiver_hub/shared/providers/profile_provider.dart';
@@ -22,9 +23,13 @@ import 'package:caregiver_hub/user/screens/profile_screen.dart';
 import 'package:caregiver_hub/social/providers/chat_message_provider.dart';
 import 'package:caregiver_hub/social/screens/chat_screen.dart';
 import 'package:flutter/material.dart';
+import 'package:get_it/get_it.dart';
 import 'package:provider/provider.dart';
 
+GetIt getIt = GetIt.instance;
+
 void main() {
+  getIt.registerLazySingleton<PlaceService>(() => PlaceService());
   runApp(const MyApp());
 }
 
@@ -59,9 +64,6 @@ class MyApp extends StatelessWidget {
         ChangeNotifierProvider(
           create: (ctx) => UserProvider(),
         ),
-        ChangeNotifierProvider(
-          create: (ctx) => PlaceProvider(),
-        ),
       ],
       child: const _MyHomePage(),
     );
@@ -87,7 +89,9 @@ class _MyHomePage extends StatelessWidget {
     }
 
     // TODO - remover
-    homeWidget = PlacePickerScreen();
+    // homeWidget = const PlacePickerScreen(
+    //   args: null,
+    // );
 
     return MaterialApp(
       title: 'CaregiverHub',
@@ -109,7 +113,10 @@ class _MyHomePage extends StatelessWidget {
         Routes.jobList: (_) => const JobListScreen(),
 
         // location
-        Routes.placePicker: (_) => PlacePickerScreen(),
+        Routes.placePicker: (context) => PlacePickerScreen(
+              args: ModalRoute.of(context)!.settings.arguments
+                  as Map<String, dynamic>?,
+            ),
 
         // user
         Routes.caregiverForm: (_) => const CaregiverFormScreen(),

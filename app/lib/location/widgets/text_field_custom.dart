@@ -11,6 +11,7 @@ class TextFieldCustom extends StatelessWidget {
   InputDecoration? decoration;
   TextEditingController? controller;
   FocusNode? focusNode;
+  bool readOnly;
 
   TextFieldCustom({
     Key? key,
@@ -19,6 +20,7 @@ class TextFieldCustom extends StatelessWidget {
     this.onChanged,
     this.controller,
     this.focusNode,
+    this.readOnly = false,
   }) : super(key: key);
 
   void _scheduleDebounce(String? value) {
@@ -40,6 +42,7 @@ class TextFieldCustom extends StatelessWidget {
       controller: controller,
       decoration: decoration,
       focusNode: focusNode,
+      readOnly: readOnly,
       onChanged: _scheduleDebounce,
     );
   }

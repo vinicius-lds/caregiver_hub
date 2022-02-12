@@ -1,4 +1,4 @@
-import 'package:caregiver_hub/location/models/place.dart';
+import 'package:caregiver_hub/shared/models/place.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 
 class PlaceCoordinates extends Place {

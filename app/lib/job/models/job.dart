@@ -1,4 +1,5 @@
 import 'package:caregiver_hub/job/expections/invalid_job_status_type_exception.dart';
+import 'package:caregiver_hub/shared/models/place_coordinates.dart';
 import 'package:caregiver_hub/shared/models/service.dart';
 
 class Job {
@@ -18,6 +19,7 @@ class Job {
   final bool isCanceled;
   final bool isApprovedByEmployer;
   final bool isApprovedByCaregiver;
+  final PlaceCoordinates placeCoordinates;
 
   const Job({
     required this.id,
@@ -36,6 +38,7 @@ class Job {
     required this.isCanceled,
     required this.isApprovedByEmployer,
     required this.isApprovedByCaregiver,
+    required this.placeCoordinates,
   });
 
   get jobStatusType {

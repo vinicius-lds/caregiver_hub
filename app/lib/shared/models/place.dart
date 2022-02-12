@@ -1,4 +1,4 @@
-import 'package:caregiver_hub/location/models/place_coordinates.dart';
+import 'package:caregiver_hub/shared/models/place_coordinates.dart';
 
 class Place {
   final String id;
