@@ -1,4 +1,5 @@
 import 'package:caregiver_hub/shared/models/caregiver.dart';
+import 'package:caregiver_hub/shared/models/place_coordinates.dart';
 import 'package:caregiver_hub/shared/models/service.dart';
 import 'package:caregiver_hub/shared/models/skill.dart';
 import 'package:flutter/foundation.dart';
@@ -19,6 +20,7 @@ class CaregiverProvider with ChangeNotifier {
   }
 
   void applyFilter({
+    PlaceCoordinates? placeCoordinates,
     DateTime? startDate,
     DateTime? endDate,
     List<Service?>? services,
@@ -26,6 +28,7 @@ class CaregiverProvider with ChangeNotifier {
   }) {
     print('''
     applyFilter
+    placeCoordinates: $placeCoordinates;
     startDate: $startDate;
     endDate: $endDate;
     serviceTypes: $services;

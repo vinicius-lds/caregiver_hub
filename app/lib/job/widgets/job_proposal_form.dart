@@ -1,11 +1,13 @@
 import 'package:caregiver_hub/job/models/job.dart';
 import 'package:caregiver_hub/shared/constants/routes.dart';
 import 'package:caregiver_hub/shared/models/caregiver.dart';
+import 'package:caregiver_hub/shared/models/place_coordinates.dart';
 import 'package:caregiver_hub/shared/models/service.dart';
 import 'package:caregiver_hub/shared/validation/functions.dart';
 import 'package:caregiver_hub/shared/validation/validators.dart';
 import 'package:caregiver_hub/shared/widgets/date_time_picker.dart';
 import 'package:caregiver_hub/shared/widgets/multi_select_chip_field_custom.dart';
+import 'package:caregiver_hub/shared/widgets/place_coordinates_field.dart';
 import 'package:currency_text_input_formatter/currency_text_input_formatter.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
@@ -27,6 +29,7 @@ class JobProposalForm extends StatefulWidget {
 class _JobProposalFormState extends State<JobProposalForm> {
   final _formKey = GlobalKey<FormState>();
 
+  PlaceCoordinates? _placeCoordinates;
   DateTime? _startDate;
   DateTime? _endDate;
   List<Service?>? _services;
@@ -42,6 +45,7 @@ class _JobProposalFormState extends State<JobProposalForm> {
     final price = _formattedPriceToDouble(_price!);
     print('''
     editProposal
+    $_placeCoordinates
     $_startDate
     $_endDate
     $_services
@@ -104,6 +108,7 @@ class _JobProposalFormState extends State<JobProposalForm> {
     final price = _formattedPriceToDouble(_price!);
     print('''
     makeProposal
+    $_placeCoordinates
     $_startDate
     $_endDate
     $_services
@@ -141,9 +146,15 @@ class _JobProposalFormState extends State<JobProposalForm> {
           alignment: Alignment.center,
           child: Column(
             children: [
-              const Padding(
-                padding: EdgeInsets.symmetric(vertical: 4),
-                child: Text('Localização'),
+              Padding(
+                padding: const EdgeInsets.symmetric(vertical: 4),
+                child: PlaceCoordinatesField(
+                  initialValue: widget.job?.placeCoordinates,
+                  decoration: const InputDecoration(
+                    label: Text('Localização'),
+                  ),
+                  onSaved: (value) => _placeCoordinates = value,
+                ),
               ),
               Padding(
                 padding: const EdgeInsets.symmetric(vertical: 4),

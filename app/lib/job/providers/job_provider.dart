@@ -1,6 +1,8 @@
 import 'package:caregiver_hub/job/models/job.dart';
+import 'package:caregiver_hub/shared/models/place_coordinates.dart';
 import 'package:caregiver_hub/shared/models/service.dart';
 import 'package:flutter/foundation.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
 
 class JobProvider with ChangeNotifier {
   Stream<List<Job>> listStream({
@@ -47,6 +49,11 @@ List<Job> _loadMockData(int i) {
       isCanceled: false,
       isApprovedByCaregiver: false,
       isApprovedByEmployer: true,
+      placeCoordinates: const PlaceCoordinates(
+        id: '1',
+        description: 'FURB',
+        coordinates: LatLng(-26.904855945456372, -49.07916968582165),
+      ),
     ),
     Job(
       id: (2 + (i * 6)).toString(),
@@ -67,6 +74,11 @@ List<Job> _loadMockData(int i) {
       isCanceled: true,
       isApprovedByCaregiver: false,
       isApprovedByEmployer: false,
+      placeCoordinates: const PlaceCoordinates(
+        id: '1',
+        description: 'FURB',
+        coordinates: LatLng(-26.904855945456372, -49.07916968582165),
+      ),
     ),
     Job(
       id: (3 + (i * 6)).toString(),
@@ -89,6 +101,11 @@ List<Job> _loadMockData(int i) {
       isCanceled: false,
       isApprovedByCaregiver: true,
       isApprovedByEmployer: false,
+      placeCoordinates: const PlaceCoordinates(
+        id: '1',
+        description: 'FURB',
+        coordinates: LatLng(-26.904855945456372, -49.07916968582165),
+      ),
     ),
     Job(
       id: (4 + (i * 6)).toString(),
@@ -109,6 +126,11 @@ List<Job> _loadMockData(int i) {
       isCanceled: false,
       isApprovedByCaregiver: true,
       isApprovedByEmployer: true,
+      placeCoordinates: const PlaceCoordinates(
+        id: '1',
+        description: 'FURB',
+        coordinates: LatLng(-26.904855945456372, -49.07916968582165),
+      ),
     ),
     Job(
       id: (5 + (i * 6)).toString(),
@@ -131,6 +153,11 @@ List<Job> _loadMockData(int i) {
       isCanceled: false,
       isApprovedByCaregiver: true,
       isApprovedByEmployer: true,
+      placeCoordinates: const PlaceCoordinates(
+        id: '1',
+        description: 'FURB',
+        coordinates: LatLng(-26.904855945456372, -49.07916968582165),
+      ),
     ),
     Job(
       id: (6 + (i * 6)).toString(),
@@ -151,6 +178,11 @@ List<Job> _loadMockData(int i) {
       isCanceled: false,
       isApprovedByCaregiver: true,
       isApprovedByEmployer: true,
+      placeCoordinates: const PlaceCoordinates(
+        id: '1',
+        description: 'FURB',
+        coordinates: LatLng(-26.904855945456372, -49.07916968582165),
+      ),
     ),
   ];
 }

@@ -1,11 +1,13 @@
 import 'package:caregiver_hub/caregiver/providers/service_provider.dart';
 import 'package:caregiver_hub/caregiver/providers/skill_provider.dart';
 import 'package:caregiver_hub/shared/constants/routes.dart';
+import 'package:caregiver_hub/shared/models/place_coordinates.dart';
 import 'package:caregiver_hub/shared/models/service.dart';
 import 'package:caregiver_hub/shared/models/skill.dart';
 import 'package:caregiver_hub/shared/providers/caregiver_provider.dart';
 import 'package:caregiver_hub/shared/widgets/app_bar_popup_menu_button.dart';
 import 'package:caregiver_hub/shared/widgets/multi_select_chip_field_custom.dart';
+import 'package:caregiver_hub/shared/widgets/place_coordinates_field.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -19,6 +21,7 @@ class CaregiverFilterScreen extends StatefulWidget {
 class _CaregiverFilterScreenState extends State<CaregiverFilterScreen> {
   final _formKey = GlobalKey<FormState>();
 
+  PlaceCoordinates? _placeCoordinates;
   DateTime? _startDate;
   DateTime? _endDate;
   List<Service?>? _services;
@@ -31,6 +34,7 @@ class _CaregiverFilterScreenState extends State<CaregiverFilterScreen> {
       final caregiverProvider =
           Provider.of<CaregiverProvider>(context, listen: false);
       caregiverProvider.applyFilter(
+        placeCoordinates: _placeCoordinates,
         startDate: _startDate,
         endDate: _endDate,
         services: _services,
@@ -61,9 +65,14 @@ class _CaregiverFilterScreenState extends State<CaregiverFilterScreen> {
             alignment: Alignment.center,
             child: Column(
               children: [
-                const Padding(
-                  padding: EdgeInsets.symmetric(vertical: 4),
-                  child: Text('Localização'),
+                Padding(
+                  padding: const EdgeInsets.symmetric(vertical: 4),
+                  child: PlaceCoordinatesField(
+                    decoration: const InputDecoration(
+                      label: Text('Localização'),
+                    ),
+                    onSaved: (value) => _placeCoordinates = value,
+                  ),
                 ),
                 Padding(
                   padding: const EdgeInsets.symmetric(vertical: 4),

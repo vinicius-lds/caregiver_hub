@@ -12,6 +12,9 @@ class Routes {
   static const String jobForm = '/job-form';
   static const String jobList = '/job-list';
 
+  // location
+  static const String placePicker = '/place-picker';
+
   // social
   static const String chat = '/chat';
 
