@@ -1,82 +1,54 @@
-import 'package:caregiver_hub/location/models/place.dart';
-import 'package:flutter/foundation.dart';
-import 'package:http/http.dart' as http;
+import 'dart:async';
 import 'dart:convert';
 
+import 'package:caregiver_hub/location/models/place.dart';
+import 'package:caregiver_hub/location/models/place_coordinates.dart';
+import 'package:flutter/foundation.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:http/http.dart' as http;
+import 'package:rxdart/rxdart.dart';
+
 class PlaceProvider with ChangeNotifier {
-  Stream<List<Place>> _placeStream = const Stream.empty();
-  bool _showingResults = false;
-  String? _lastSearch;
+  Place? _selectedPlace;
+  final StreamController<PlaceCoordinates?>
+      _selectedPlaceCoordinatesStreamController = BehaviorSubject();
 
-  Stream<List<Place>> placeStream() {
-    return _placeStream;
+  Place? get selectedPlace {
+    return _selectedPlace;
   }
 
-  bool showingResults() {
-    return _showingResults;
-  }
-
-  void showResults() {
-    _showingResults = true;
+  set selectedPlace(Place? value) {
+    _selectedPlace = value;
     notifyListeners();
+    _updateSelectedPlaceCoordinates();
   }
 
-  void hideResults() {
-    _showingResults = false;
-    notifyListeners();
+  StreamController<PlaceCoordinates?>
+      get selectedPlaceCoordinatesStreamController {
+    return _selectedPlaceCoordinatesStreamController;
   }
 
-  void _teste(String? input) async {
-    final result = await http.get(
-      Uri.https(
-        'maps.googleapis.com',
-        '/maps/api/place/autocomplete/json',
-        {
-          'input': input,
-          'language': 'pt_BR',
-          'types': 'geocode',
-          'key': 'AIzaSyCmw_go04MwX36WMZDOb6XsvXGZLWTIda0',
-        },
-      ),
+  _updateSelectedPlaceCoordinates() async {
+    final uri = Uri.https(
+      'maps.googleapis.com',
+      '/maps/api/place/details/json',
+      {
+        'fields': 'geometry',
+        'place_id': _selectedPlace!.id,
+        'key': 'AIzaSyCmw_go04MwX36WMZDOb6XsvXGZLWTIda0',
+      },
     );
-    print('result');
-    print(result.body);
-  }
-
-  void placeSearch(String input) {
-    if (_lastSearch == input) {
-      return;
+    final response = await http.get(uri);
+    final body = jsonDecode(response.body);
+    final location = body['result']['geometry']['location'];
+    final coordinates = LatLng(location['lat'], location['lng']);
+    if (_selectedPlace != null) {
+      final placeCoordinates = PlaceCoordinates(
+        id: _selectedPlace!.id,
+        description: _selectedPlace!.description,
+        coordinates: coordinates,
+      );
+      _selectedPlaceCoordinatesStreamController.add(placeCoordinates);
     }
-    _lastSearch = input;
-
-    print('Making request');
-
-    // _teste(input);
-
-    // https://maps.googleapis.com/maps/api/place/autocomplete/json?input=INPUT&language=pt_BR&types=geocode&key=API_KEY
-    _placeStream = Stream.fromFuture(
-      http.get(
-        Uri.https(
-          'maps.googleapis.com',
-          '/maps/api/place/autocomplete/json',
-          {
-            'input': input,
-            'language': 'pt_BR',
-            'types': 'geocode',
-            'key': 'AIzaSyCmw_go04MwX36WMZDOb6XsvXGZLWTIda0',
-          },
-        ),
-      ),
-    ).map(
-      (response) => (jsonDecode(response.body)['predictions'] as List)
-          .map(
-            (e) => Place(
-              description: e['description'],
-              id: e['place_id'],
-            ),
-          )
-          .toList(),
-    );
-    // notifyListeners();
   }
 }

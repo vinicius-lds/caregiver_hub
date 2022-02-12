@@ -87,7 +87,7 @@ class _MyHomePage extends StatelessWidget {
     }
 
     // TODO - remover
-    homeWidget = const PlacePickerScreen();
+    homeWidget = PlacePickerScreen();
 
     return MaterialApp(
       title: 'CaregiverHub',
@@ -109,7 +109,7 @@ class _MyHomePage extends StatelessWidget {
         Routes.jobList: (_) => const JobListScreen(),
 
         // location
-        Routes.placePicker: (_) => const PlacePickerScreen(),
+        Routes.placePicker: (_) => PlacePickerScreen(),
 
         // user
         Routes.caregiverForm: (_) => const CaregiverFormScreen(),

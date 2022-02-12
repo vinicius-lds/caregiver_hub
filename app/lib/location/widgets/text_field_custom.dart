@@ -3,31 +3,33 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 
 class TextFieldCustom extends StatelessWidget {
-  final FormFieldSetter<String?>? onChange;
+  final FormFieldSetter<String?>? onChanged;
 
   int debounce;
   Timer? _debouncedOnChange;
 
   InputDecoration? decoration;
   TextEditingController? controller;
+  FocusNode? focusNode;
 
   TextFieldCustom({
     Key? key,
     required this.debounce,
     this.decoration,
-    this.onChange,
+    this.onChanged,
     this.controller,
+    this.focusNode,
   }) : super(key: key);
 
   void _scheduleDebounce(String? value) {
-    if (onChange != null) {
+    if (onChanged != null) {
       if (_debouncedOnChange != null) {
         _debouncedOnChange!.cancel();
         _debouncedOnChange = null;
       }
       _debouncedOnChange = Timer(
         Duration(milliseconds: debounce),
-        () => onChange!(value),
+        () => onChanged!(value),
       );
     }
   }
@@ -37,6 +39,7 @@ class TextFieldCustom extends StatelessWidget {
     return TextField(
       controller: controller,
       decoration: decoration,
+      focusNode: focusNode,
       onChanged: _scheduleDebounce,
     );
   }
