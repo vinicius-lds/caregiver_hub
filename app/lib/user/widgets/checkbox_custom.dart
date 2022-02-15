@@ -7,6 +7,7 @@ class CheckboxCustom extends FormField<bool?> {
     FormFieldValidator<bool?>? validator,
     String trueLabel = 'True',
     String falseLabel = 'False',
+    bool readOnly = false,
     bool autovalidate = false,
     bool initialValue = false,
   }) : super(
@@ -20,7 +21,7 @@ class CheckboxCustom extends FormField<bool?> {
               children: [
                 Checkbox(
                   value: (state.value ?? initialValue),
-                  onChanged: state.didChange,
+                  onChanged: readOnly ? null : state.didChange,
                 ),
                 Text((state.value ?? false) ? trueLabel : falseLabel),
               ],

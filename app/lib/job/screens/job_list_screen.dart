@@ -28,7 +28,7 @@ class _JobListScreenState extends State<JobListScreen> {
     return Scaffold(
       appBar: AppBar(
         title: const Text('Trabalhos'),
-        actions: const [
+        actions: [
           AppBarPopupMenuButton(),
         ],
       ),

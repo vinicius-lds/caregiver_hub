@@ -9,14 +9,15 @@ import 'package:caregiver_hub/job/providers/job_provider.dart';
 import 'package:caregiver_hub/job/screens/job_description_screen.dart';
 import 'package:caregiver_hub/job/screens/job_proposal_screen.dart';
 import 'package:caregiver_hub/job/screens/job_list_screen.dart';
-import 'package:caregiver_hub/shared/models/place_coordinates.dart';
 import 'package:caregiver_hub/location/screens/place_picker_screen.dart';
 import 'package:caregiver_hub/location/services/location_service.dart';
 import 'package:caregiver_hub/shared/constants/routes.dart';
 import 'package:caregiver_hub/shared/providers/caregiver_provider.dart';
 import 'package:caregiver_hub/shared/providers/profile_provider.dart';
-import 'package:caregiver_hub/user/providers/user_provider.dart';
-import 'package:caregiver_hub/shared/services/user_service.dart';
+import 'package:caregiver_hub/shared/services/auth_service.dart';
+import 'package:caregiver_hub/shared/services/service_service.dart';
+import 'package:caregiver_hub/shared/services/skill_service.dart';
+import 'package:caregiver_hub/user/services/user_service.dart';
 import 'package:caregiver_hub/user/screens/carregiver_form_screen.dart';
 import 'package:caregiver_hub/user/screens/landing_screen.dart';
 import 'package:caregiver_hub/user/screens/login_screen.dart';
@@ -35,6 +36,9 @@ void main() async {
   await Firebase.initializeApp();
   getIt.registerLazySingleton<PlaceService>(() => PlaceService());
   getIt.registerLazySingleton<UserService>(() => UserService());
+  getIt.registerLazySingleton<AuthService>(() => AuthService());
+  getIt.registerLazySingleton<ServiceService>(() => ServiceService());
+  getIt.registerLazySingleton<SkillService>(() => SkillService());
   runApp(const MyApp());
 }
 
@@ -65,9 +69,6 @@ class MyApp extends StatelessWidget {
         ),
         ChangeNotifierProvider(
           create: (ctx) => ChatMessageProvider(),
-        ),
-        ChangeNotifierProvider(
-          create: (ctx) => UserProvider(),
         ),
       ],
       child: const _MyHomePage(),
@@ -119,7 +120,7 @@ class _MyHomePage extends StatelessWidget {
             ),
 
         // user
-        Routes.caregiverForm: (_) => const CaregiverFormScreen(),
+        Routes.caregiverForm: (_) => CaregiverFormScreen(),
         Routes.landing: (_) => const LandingScreen(),
         Routes.login: (_) => const LoginScreen(),
         Routes.profile: (_) => ProfileScreen(),

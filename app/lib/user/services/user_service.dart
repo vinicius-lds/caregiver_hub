@@ -1,6 +1,9 @@
 import 'dart:io';
 
 import 'package:caregiver_hub/shared/exceptions/service_exception.dart';
+import 'package:caregiver_hub/shared/models/service.dart';
+import 'package:caregiver_hub/shared/models/skill.dart';
+import 'package:caregiver_hub/user/models/caregiver_form_data.dart';
 import 'package:caregiver_hub/user/models/user_form_data.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -20,6 +23,7 @@ class UserService {
         .map((snapshot) {
       final docs = snapshot.data() as Map<String, dynamic>;
       return UserFormData(
+        id: userId,
         imageURL: docs['imageURL'],
         name: docs['fullName'],
         cpf: docs['cpf'],
@@ -29,18 +33,34 @@ class UserService {
     });
   }
 
-  Future<void> logout() async {
-    await _auth.signOut();
-  }
-
-  Future<UserCredential> login({
-    required String email,
-    required String password,
-  }) async {
-    return await _safe(() {
-      return _auth.signInWithEmailAndPassword(
-        email: email,
-        password: password,
+  Stream<CaregiverFormData> fetchCaregiverFormData(String userId) {
+    return _firestore
+        .collection('users')
+        .doc(userId)
+        .get()
+        .asStream()
+        .map((snapshot) {
+      final doc = snapshot.data() as Map<String, dynamic>;
+      return CaregiverFormData(
+        id: userId,
+        showAsCaregiver: doc['showAsCaregiver'] ?? false,
+        bio: doc['bio'],
+        services: ((doc['services'] as List?) ?? [])
+            .map(
+              (item) => Service(
+                id: item['id'],
+                description: item['description'],
+              ),
+            )
+            .toList(),
+        skills: ((doc['skills'] as List?) ?? [])
+            .map(
+              (item) => Skill(
+                id: item['id'],
+                description: item['description'],
+              ),
+            )
+            .toList(),
       );
     });
   }
@@ -68,12 +88,43 @@ class UserService {
           ? null
           : await uploadImage(_auth.currentUser!.uid, imagePath);
 
-      await _firestore.collection('users').doc(_auth.currentUser!.uid).set({
+      await _firestore.collection('users').doc(_auth.currentUser!.uid).update({
         'fullName': fullName,
         'cpf': cpf,
         'phone': phone,
         'email': email,
         'imageURL': imageURL,
+      });
+    });
+  }
+
+  Future<void> updateCaregiverData({
+    required String userId,
+    required bool showAsCaregiver,
+    required String? bio,
+    required List<Service> services,
+    required List<Skill> skills,
+  }) async {
+    return await _safe(() async {
+      await _firestore.collection('users').doc(_auth.currentUser!.uid).update({
+        'showAsCaregiver': showAsCaregiver,
+        'bio': bio,
+        'services': services
+            .map(
+              (item) => {
+                'id': item.id,
+                'description': item.description,
+              },
+            )
+            .toList(),
+        'skills': skills
+            .map(
+              (item) => {
+                'id': item.id,
+                'description': item.description,
+              },
+            )
+            .toList(),
       });
     });
   }
@@ -128,18 +179,6 @@ class UserService {
       }
       if (e.code == 'weak-password') {
         throw ServiceException('A senha é muito fraca.');
-      }
-      if (e.code == 'invalid-email') {
-        throw ServiceException('O e-mail não é válido.');
-      }
-      if (e.code == 'user-disabled') {
-        throw ServiceException('O usuário está desabilitado.');
-      }
-      if (e.code == 'user-not-found') {
-        throw ServiceException('O e-mail não pertence a nenhum usuário.');
-      }
-      if (e.code == 'wrong-password') {
-        throw ServiceException('A senha digitada está incorreta.');
       }
       throw ServiceException('Ocorreu um erro na comunicação com o servidor.');
     } on ServiceException catch (_) {

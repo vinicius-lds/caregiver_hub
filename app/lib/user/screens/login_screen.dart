@@ -5,7 +5,7 @@ import 'package:caregiver_hub/shared/providers/profile_provider.dart';
 import 'package:caregiver_hub/shared/validation/functions.dart';
 import 'package:caregiver_hub/shared/validation/validators.dart';
 import 'package:caregiver_hub/shared/widgets/button_footer.dart';
-import 'package:caregiver_hub/shared/services/user_service.dart';
+import 'package:caregiver_hub/shared/services/auth_service.dart';
 import 'package:caregiver_hub/user/widgets/google_sign_in_button.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -18,7 +18,7 @@ class LoginScreen extends StatefulWidget {
 }
 
 class _LoginScreenState extends State<LoginScreen> {
-  final _userService = getIt<UserService>();
+  final _authService = getIt<AuthService>();
 
   final _formKey = GlobalKey<FormState>();
 
@@ -49,7 +49,7 @@ class _LoginScreenState extends State<LoginScreen> {
     if (isValid) {
       _formKey.currentState!.save();
       try {
-        final userCredential = await _userService.login(
+        final userCredential = await _authService.login(
           email: _email!,
           password: _password!,
         );

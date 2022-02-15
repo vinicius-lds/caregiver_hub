@@ -41,7 +41,7 @@ class CaregiverProfileScreen extends StatelessWidget {
             SliverAppBar(
               expandedHeight: constraints.maxHeight * 0.33,
               pinned: true,
-              actions: const [
+              actions: [
                 AppBarPopupMenuButton(),
               ],
               flexibleSpace: FlexibleSpaceBar(

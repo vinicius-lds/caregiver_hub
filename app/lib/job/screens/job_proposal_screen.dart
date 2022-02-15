@@ -34,7 +34,7 @@ class _JobProposalScreenState extends State<JobProposalScreen> {
     return Scaffold(
       appBar: AppBar(
         title: const Text('Proposta de trabalho'),
-        actions: const [
+        actions: [
           AppBarPopupMenuButton(),
         ],
       ),

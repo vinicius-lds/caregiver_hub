@@ -13,6 +13,7 @@ class MultiSelectChipFieldCustom<T, K> extends StatelessWidget {
   final String Function(T?) labelFn;
   final K Function(T?) idFn;
   final Function(List<T?>)? onTap;
+  final FormFieldSetter<List<T?>>? onSaved;
 
   const MultiSelectChipFieldCustom({
     Key? key,
@@ -25,6 +26,7 @@ class MultiSelectChipFieldCustom<T, K> extends StatelessWidget {
     required this.labelFn,
     required this.idFn,
     this.onTap,
+    this.onSaved,
   }) : super(key: key);
 
   List<K> _buildInitialValue(List<T?> data) {
@@ -49,6 +51,18 @@ class MultiSelectChipFieldCustom<T, K> extends StatelessWidget {
     final selectedItems =
         data.where((item) => selectedIds.contains(idFn(item))).toList();
     return onTap!(selectedItems);
+  }
+
+  dynamic _onSaved(List<T?> data, List<K?>? selectedIds) {
+    if (onSaved == null) {
+      return null;
+    }
+    if (selectedIds == null) {
+      return onSaved!([]);
+    }
+    final selectedItems =
+        data.where((item) => selectedIds.contains(idFn(item))).toList();
+    return onSaved!(selectedItems);
   }
 
   String? _onValidator(List<T?> data, List<K?>? selectedIds) {
@@ -85,6 +99,7 @@ class MultiSelectChipFieldCustom<T, K> extends StatelessWidget {
         validator: (selectedIds) => _onValidator(data, selectedIds),
         initialValue: _buildInitialValue(data),
         onTap: (selectedIds) => _onTap(data, selectedIds),
+        onSaved: (selectedIds) => _onSaved(data, selectedIds),
       ),
     );
   }

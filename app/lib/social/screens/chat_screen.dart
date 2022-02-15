@@ -25,7 +25,7 @@ class ChatScreen extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         title: ChatAppBarTitle(imageURL: imageURL, name: name),
-        actions: const [
+        actions: [
           AppBarPopupMenuButton(),
         ],
       ),

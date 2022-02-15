@@ -52,7 +52,7 @@ class _CaregiverFilterScreenState extends State<CaregiverFilterScreen> {
     return Scaffold(
       appBar: AppBar(
         title: const Text('Filtro de cuidadores'),
-        actions: const [
+        actions: [
           AppBarPopupMenuButton(),
         ],
       ),

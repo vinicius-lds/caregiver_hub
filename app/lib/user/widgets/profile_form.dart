@@ -5,7 +5,7 @@ import 'package:caregiver_hub/shared/providers/profile_provider.dart';
 import 'package:caregiver_hub/shared/validation/functions.dart';
 import 'package:caregiver_hub/shared/validation/validators.dart';
 import 'package:caregiver_hub/user/models/user_form_data.dart';
-import 'package:caregiver_hub/shared/services/user_service.dart';
+import 'package:caregiver_hub/user/services/user_service.dart';
 import 'package:caregiver_hub/user/widgets/image_input.dart';
 import 'package:flutter/material.dart';
 import 'package:intl_phone_number_input/intl_phone_number_input.dart';

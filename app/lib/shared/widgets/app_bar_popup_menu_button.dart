@@ -1,8 +1,7 @@
 import 'package:caregiver_hub/main.dart';
 import 'package:caregiver_hub/shared/constants/routes.dart';
 import 'package:caregiver_hub/shared/providers/profile_provider.dart';
-import 'package:caregiver_hub/shared/services/user_service.dart';
-import 'package:caregiver_hub/user/providers/user_provider.dart';
+import 'package:caregiver_hub/shared/services/auth_service.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -22,7 +21,7 @@ class InvalidActionTypeException implements Exception {
 }
 
 class AppBarPopupMenuButton extends StatelessWidget {
-  final _userService = getIt<UserService>();
+  final _authService = getIt<AuthService>();
 
   AppBarPopupMenuButton({Key? key}) : super(key: key);
 
@@ -47,7 +46,7 @@ class AppBarPopupMenuButton extends StatelessWidget {
       return;
     }
     if (actionType == ActionType.logout) {
-      await _userService.logout();
+      await _authService.logout();
       Provider.of<ProfileProvider>(context).id = '';
       Navigator.of(context).pushNamedAndRemoveUntil(
         Routes.landing,
