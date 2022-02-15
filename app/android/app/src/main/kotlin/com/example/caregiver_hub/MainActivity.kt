@@ -1,4 +1,4 @@
-package com.example.caregiver_hub
+package com.furb.caregiver_hub
 
 import io.flutter.embedding.android.FlutterActivity
 

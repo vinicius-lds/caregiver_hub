@@ -9,6 +9,7 @@ class ImageInput extends FormField<String?> {
     FormFieldSetter<String?>? onSaved,
     FormFieldValidator<String?>? validator,
     bool autovalidate = false,
+    bool readOnly = false,
     String? initialValue,
     double? size = 0,
   }) : super(
@@ -66,11 +67,11 @@ class ImageInput extends FormField<String?> {
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     IconButton(
-                      onPressed: _takePicture,
+                      onPressed: readOnly ? null : _takePicture,
                       icon: const Icon(Icons.camera_alt),
                     ),
                     IconButton(
-                      onPressed: _findPicture,
+                      onPressed: readOnly ? null : _findPicture,
                       icon: const Icon(Icons.file_present),
                     ),
                   ],

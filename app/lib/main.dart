@@ -16,20 +16,25 @@ import 'package:caregiver_hub/shared/constants/routes.dart';
 import 'package:caregiver_hub/shared/providers/caregiver_provider.dart';
 import 'package:caregiver_hub/shared/providers/profile_provider.dart';
 import 'package:caregiver_hub/user/providers/user_provider.dart';
+import 'package:caregiver_hub/shared/services/user_service.dart';
 import 'package:caregiver_hub/user/screens/carregiver_form_screen.dart';
 import 'package:caregiver_hub/user/screens/landing_screen.dart';
 import 'package:caregiver_hub/user/screens/login_screen.dart';
 import 'package:caregiver_hub/user/screens/profile_screen.dart';
 import 'package:caregiver_hub/social/providers/chat_message_provider.dart';
 import 'package:caregiver_hub/social/screens/chat_screen.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
 import 'package:provider/provider.dart';
 
 GetIt getIt = GetIt.instance;
 
-void main() {
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp();
   getIt.registerLazySingleton<PlaceService>(() => PlaceService());
+  getIt.registerLazySingleton<UserService>(() => UserService());
   runApp(const MyApp());
 }
 
@@ -88,11 +93,6 @@ class _MyHomePage extends StatelessWidget {
       homeWidget = const CaregiverFilterScreen();
     }
 
-    // TODO - remover
-    // homeWidget = const PlacePickerScreen(
-    //   args: null,
-    // );
-
     return MaterialApp(
       title: 'CaregiverHub',
       theme: ThemeData(
@@ -122,7 +122,7 @@ class _MyHomePage extends StatelessWidget {
         Routes.caregiverForm: (_) => const CaregiverFormScreen(),
         Routes.landing: (_) => const LandingScreen(),
         Routes.login: (_) => const LoginScreen(),
-        Routes.profile: (_) => const ProfileScreen(),
+        Routes.profile: (_) => ProfileScreen(),
 
         // social
         Routes.chat: (_) => const ChatScreen(),

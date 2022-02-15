@@ -1,5 +1,8 @@
+import 'package:caregiver_hub/main.dart';
 import 'package:caregiver_hub/shared/constants/routes.dart';
 import 'package:caregiver_hub/shared/providers/profile_provider.dart';
+import 'package:caregiver_hub/shared/services/user_service.dart';
+import 'package:caregiver_hub/user/providers/user_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -19,9 +22,11 @@ class InvalidActionTypeException implements Exception {
 }
 
 class AppBarPopupMenuButton extends StatelessWidget {
-  const AppBarPopupMenuButton({Key? key}) : super(key: key);
+  final _userService = getIt<UserService>();
 
-  void _onSelected(BuildContext context, ActionType actionType) {
+  AppBarPopupMenuButton({Key? key}) : super(key: key);
+
+  void _onSelected(BuildContext context, ActionType actionType) async {
     if (actionType == ActionType.invert) {
       final profileProvider =
           Provider.of<ProfileProvider>(context, listen: false);
@@ -42,7 +47,8 @@ class AppBarPopupMenuButton extends StatelessWidget {
       return;
     }
     if (actionType == ActionType.logout) {
-      print('logout');
+      await _userService.logout();
+      Provider.of<ProfileProvider>(context).id = '';
       Navigator.of(context).pushNamedAndRemoveUntil(
         Routes.landing,
         (route) => false, // Remove todas as telas do stack

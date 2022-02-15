@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "261539607375",
+    "project_id": "caregiver-hub",
+    "storage_bucket": "caregiver-hub.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:261539607375:android:a5618d6ed77b417bd5cb3a",
+        "android_client_info": {
+          "package_name": "com.furb.caregiver_hub"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "261539607375-n3pfp3bk7g2k6dh1m4q9sgse72hhn57l.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAk9t-QElHj9Oo74RLEIpcJKoHkSfBLaYU"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "261539607375-n3pfp3bk7g2k6dh1m4q9sgse72hhn57l.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

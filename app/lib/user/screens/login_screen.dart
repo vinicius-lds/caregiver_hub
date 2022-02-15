@@ -1,8 +1,11 @@
+import 'package:caregiver_hub/main.dart';
 import 'package:caregiver_hub/shared/constants/routes.dart';
+import 'package:caregiver_hub/shared/exceptions/service_exception.dart';
 import 'package:caregiver_hub/shared/providers/profile_provider.dart';
 import 'package:caregiver_hub/shared/validation/functions.dart';
 import 'package:caregiver_hub/shared/validation/validators.dart';
 import 'package:caregiver_hub/shared/widgets/button_footer.dart';
+import 'package:caregiver_hub/shared/services/user_service.dart';
 import 'package:caregiver_hub/user/widgets/google_sign_in_button.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -15,7 +18,11 @@ class LoginScreen extends StatefulWidget {
 }
 
 class _LoginScreenState extends State<LoginScreen> {
+  final _userService = getIt<UserService>();
+
   final _formKey = GlobalKey<FormState>();
+
+  bool _disabled = false;
 
   String? _email;
   String? _password;
@@ -34,19 +41,31 @@ class _LoginScreenState extends State<LoginScreen> {
     return (_) => FocusScope.of(context).requestFocus(focusNode);
   }
 
-  void _login() {
-    print('login');
+  void _login(BuildContext context) async {
+    setState(() => _disabled = true);
     final profileProvider =
         Provider.of<ProfileProvider>(context, listen: false);
-    profileProvider.id = '1';
-    Navigator.of(context).pushNamedAndRemoveUntil(
-      profileProvider.isCaregiver ? Routes.jobList : Routes.caregiverFilter,
-      (route) => false, // Remove todas as telas do stack
-    );
+    final isValid = _formKey.currentState!.validate();
+    if (isValid) {
+      _formKey.currentState!.save();
+      try {
+        final userCredential = await _userService.login(
+          email: _email!,
+          password: _password!,
+        );
+        profileProvider.id = userCredential.user!.uid;
+        Navigator.of(context).pushNamedAndRemoveUntil(
+          profileProvider.isCaregiver ? Routes.jobList : Routes.caregiverFilter,
+          (route) => false, // Remove todas as telas do stack
+        );
+      } on ServiceException catch (e) {
+        _showSnackBar(context, e.message);
+      }
+    }
+    setState(() => _disabled = false);
   }
 
   void _signIn() {
-    print('signIn');
     Navigator.pushNamed(context, Routes.profile, arguments: {'isEdit': false});
   }
 
@@ -56,6 +75,13 @@ class _LoginScreenState extends State<LoginScreen> {
       Routes.caregiverFilter,
       (route) => false, // Remove todas as telas do stack
     );
+  }
+
+  void _showSnackBar(BuildContext context, String message) {
+    final snackBar = SnackBar(
+      content: Text(message),
+    );
+    ScaffoldMessenger.of(context).showSnackBar(snackBar);
   }
 
   @override
@@ -107,7 +133,8 @@ class _LoginScreenState extends State<LoginScreen> {
                       autovalidateMode: AutovalidateMode.onUserInteraction,
                       focusNode: _passwordFocusNode,
                       onFieldSubmitted: (_) => _login,
-                      onSaved: (value) => _email = value,
+                      obscureText: true,
+                      onSaved: (value) => _password = value,
                       textInputAction: TextInputAction.next,
                       validator: composeValidators([
                         requiredValue(message: 'O campo é obrigatório'),
@@ -119,7 +146,7 @@ class _LoginScreenState extends State<LoginScreen> {
                     child: ButtonFooter(
                       primaryText: 'Entrar',
                       secondaryText: 'Criar conta',
-                      onPrimary: _login,
+                      onPrimary: () => _login(context),
                       onSecondary: _signIn,
                     ),
                   ),

@@ -1,10 +1,16 @@
+import 'package:caregiver_hub/main.dart';
+import 'package:caregiver_hub/shared/constants/routes.dart';
+import 'package:caregiver_hub/shared/exceptions/service_exception.dart';
+import 'package:caregiver_hub/shared/providers/profile_provider.dart';
 import 'package:caregiver_hub/shared/validation/functions.dart';
 import 'package:caregiver_hub/shared/validation/validators.dart';
 import 'package:caregiver_hub/user/models/user_form_data.dart';
+import 'package:caregiver_hub/shared/services/user_service.dart';
 import 'package:caregiver_hub/user/widgets/image_input.dart';
 import 'package:flutter/material.dart';
 import 'package:intl_phone_number_input/intl_phone_number_input.dart';
 import 'package:mask_text_input_formatter/mask_text_input_formatter.dart';
+import 'package:provider/provider.dart';
 
 class ProfileForm extends StatefulWidget {
   final UserFormData? data;
@@ -16,7 +22,11 @@ class ProfileForm extends StatefulWidget {
 }
 
 class _ProfileFormState extends State<ProfileForm> {
+  final _userService = getIt<UserService>();
+
   final _formKey = GlobalKey<FormState>();
+
+  final _phoneTextEditingController = TextEditingController();
 
   final _fullNameFocusNode = FocusNode();
   final _cpfFocusNode = FocusNode();
@@ -25,7 +35,9 @@ class _ProfileFormState extends State<ProfileForm> {
   final _passwordFocusNode = FocusNode();
   final _confirmPasswordFocusNode = FocusNode();
 
-  String? _image;
+  bool _disabled = false;
+
+  String? _imagePath;
   String? _fullName;
   String? _cpf;
   String? _phone;
@@ -48,16 +60,54 @@ class _ProfileFormState extends State<ProfileForm> {
   }
 
   void _setImage(String? image) {
-    print('setImage $image');
+    _imagePath = image;
   }
 
-  void _submit() {
+  void _submit(BuildContext context) async {
     final isValid = _formKey.currentState!.validate();
     if (!isValid) {
       return;
     }
     _formKey.currentState!.save();
-    print('submit $_phone');
+    setState(() => _disabled = true);
+    try {
+      if (widget.data == null) {
+        final userCredential = await _userService.createUser(
+          imagePath: _imagePath,
+          fullName: _fullName!,
+          cpf: _cpf!,
+          phone: _phone!,
+          email: _email!,
+          password: _password!,
+        );
+        Provider.of<ProfileProvider>(context, listen: false).id =
+            userCredential.user!.uid;
+        Navigator.of(context).pushNamedAndRemoveUntil(
+          Routes.caregiverFilter,
+          (route) => false, // Remove todas as telas do stack
+        );
+      } else {
+        await _userService.updateUser(
+          imagePath: _imagePath,
+          fullName: _fullName!,
+          cpf: _cpf!,
+          phone: _phone!,
+          email: _email!,
+          password: _password,
+        );
+        Navigator.of(context).pop();
+      }
+    } on ServiceException catch (e) {
+      _showSnackBar(context, e.message);
+    }
+    setState(() => _disabled = false);
+  }
+
+  void _showSnackBar(BuildContext context, String message) {
+    final snackBar = SnackBar(
+      content: Text(message),
+    );
+    ScaffoldMessenger.of(context).showSnackBar(snackBar);
   }
 
   MaskTextInputFormatter get _cpfMask {
@@ -70,6 +120,11 @@ class _ProfileFormState extends State<ProfileForm> {
   @override
   Widget build(BuildContext context) {
     final textScaleFactor = MediaQuery.of(context).textScaleFactor;
+    if (widget.data != null) {
+      PhoneNumber.getRegionInfoFromPhoneNumber(widget.data!.phone, 'BR').then(
+        (value) => _phoneTextEditingController.text = value.phoneNumber ?? '',
+      );
+    }
     return Form(
       key: _formKey,
       child: SingleChildScrollView(
@@ -82,6 +137,7 @@ class _ProfileFormState extends State<ProfileForm> {
                   padding: const EdgeInsets.symmetric(vertical: 4),
                   child: ImageInput(
                     onSaved: _setImage,
+                    readOnly: _disabled,
                     size: constraints.maxWidth * 0.5,
                     initialValue: widget.data?.imageURL,
                   ),
@@ -95,6 +151,7 @@ class _ProfileFormState extends State<ProfileForm> {
                     initialValue: widget.data?.name,
                     autovalidateMode: AutovalidateMode.onUserInteraction,
                     focusNode: _fullNameFocusNode,
+                    readOnly: _disabled,
                     onFieldSubmitted: _focusOn(context, _cpfFocusNode),
                     onSaved: (value) => _fullName = value,
                     textInputAction: TextInputAction.next,
@@ -116,8 +173,10 @@ class _ProfileFormState extends State<ProfileForm> {
                     focusNode: _cpfFocusNode,
                     inputFormatters: [_cpfMask],
                     keyboardType: TextInputType.number,
+                    readOnly: _disabled,
                     onFieldSubmitted: _focusOn(context, _phoneFocusNode),
-                    onSaved: (value) => _cpf = value,
+                    onSaved: (value) =>
+                        _cpf = value?.replaceAll('.', '').replaceAll('-', ''),
                     textInputAction: TextInputAction.next,
                     validator: composeValidators([
                       requiredValue(message: 'O campo é obrigatório'),
@@ -133,13 +192,9 @@ class _ProfileFormState extends State<ProfileForm> {
                     hintText: 'Telefone',
                     errorMessage: 'Telefone inválido',
                     onSaved: (value) => _phone = value.phoneNumber,
-                    initialValue: widget.data != null
-                        ? PhoneNumber(
-                            phoneNumber: widget.data!.phone,
-                            isoCode: 'BR',
-                          )
-                        : null,
+                    textFieldController: _phoneTextEditingController,
                     focusNode: _phoneFocusNode,
+                    isEnabled: !_disabled,
                     onFieldSubmitted: _focusOn(context, _emailFocusNode),
                     keyboardAction: TextInputAction.next,
                     validator: composeValidators([
@@ -156,6 +211,7 @@ class _ProfileFormState extends State<ProfileForm> {
                     initialValue: widget.data?.email,
                     autovalidateMode: AutovalidateMode.onUserInteraction,
                     focusNode: _emailFocusNode,
+                    readOnly: _disabled,
                     keyboardType: TextInputType.emailAddress,
                     onFieldSubmitted: _focusOn(context, _passwordFocusNode),
                     onSaved: (value) => _email = value,
@@ -174,6 +230,7 @@ class _ProfileFormState extends State<ProfileForm> {
                     autovalidateMode: AutovalidateMode.onUserInteraction,
                     focusNode: _passwordFocusNode,
                     obscureText: true,
+                    readOnly: _disabled,
                     onFieldSubmitted:
                         _focusOn(context, _confirmPasswordFocusNode),
                     onChanged: (value) => setState(() => _password = value),
@@ -194,7 +251,8 @@ class _ProfileFormState extends State<ProfileForm> {
                     autovalidateMode: AutovalidateMode.onUserInteraction,
                     focusNode: _confirmPasswordFocusNode,
                     obscureText: true,
-                    onFieldSubmitted: (_) => _submit(),
+                    readOnly: _disabled,
+                    onFieldSubmitted: (_) => _submit(context),
                     onSaved: (value) => _confirmPassword = value,
                     textInputAction: TextInputAction.done,
                     validator: composeValidators([
@@ -223,7 +281,7 @@ class _ProfileFormState extends State<ProfileForm> {
                         const EdgeInsets.symmetric(vertical: 10),
                       ),
                     ),
-                    onPressed: _submit,
+                    onPressed: _disabled ? null : () => _submit(context),
                   ),
                 ),
               ],

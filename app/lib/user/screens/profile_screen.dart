@@ -1,21 +1,23 @@
+import 'package:caregiver_hub/main.dart';
 import 'package:caregiver_hub/shared/providers/profile_provider.dart';
 import 'package:caregiver_hub/shared/widgets/error_state.dart';
 import 'package:caregiver_hub/shared/widgets/loading.dart';
 import 'package:caregiver_hub/user/models/user_form_data.dart';
-import 'package:caregiver_hub/user/providers/user_provider.dart';
+import 'package:caregiver_hub/shared/services/user_service.dart';
 import 'package:caregiver_hub/user/widgets/profile_form.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 class ProfileScreen extends StatelessWidget {
-  const ProfileScreen({Key? key}) : super(key: key);
+  final _userService = getIt<UserService>();
+
+  ProfileScreen({Key? key}) : super(key: key);
 
   Widget _buildBody(BuildContext context, {required bool isEdit}) {
     if (isEdit) {
-      final userProvider = Provider.of<UserProvider>(context);
       final profileProvider = Provider.of<ProfileProvider>(context);
       return StreamBuilder(
-        stream: userProvider.userFormDataStream(id: profileProvider.id),
+        stream: _userService.fetchUserFormData(profileProvider.id),
         builder: (bContext, snapshot) {
           if (snapshot.connectionState != ConnectionState.done) {
             return const Loading();
