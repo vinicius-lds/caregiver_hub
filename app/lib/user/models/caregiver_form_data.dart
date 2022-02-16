@@ -7,11 +7,15 @@ class CaregiverFormData {
   final String? bio;
   final List<Service> services;
   final List<Skill> skills;
+  final double startPrice;
+  final double endPrice;
   const CaregiverFormData({
     required this.id,
     required this.showAsCaregiver,
     required this.bio,
     required this.services,
     required this.skills,
+    required this.startPrice,
+    required this.endPrice,
   });
 }

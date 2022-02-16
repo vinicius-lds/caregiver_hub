@@ -12,6 +12,7 @@ import 'package:caregiver_hub/shared/services/skill_service.dart';
 import 'package:caregiver_hub/user/models/caregiver_form_data.dart';
 import 'package:caregiver_hub/user/services/user_service.dart';
 import 'package:caregiver_hub/user/widgets/checkbox_custom.dart';
+import 'package:extended_masked_text/extended_masked_text.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -31,12 +32,17 @@ class _CaregiverFormState extends State<CaregiverForm> {
 
   final _formKey = GlobalKey<FormState>();
 
+  final _startPriceController = MoneyMaskedTextController(leftSymbol: 'R\$ ');
+  final _endPriceController = MoneyMaskedTextController(leftSymbol: 'R\$ ');
+
   bool _disabled = false;
 
   bool? _showAsCaregiver;
   String? _bio;
   List<Service?>? _services;
   List<Skill?>? _skills;
+  double? _startPrice;
+  double? _endPrice;
 
   void _submit(BuildContext context) async {
     final isValid = _formKey.currentState!.validate();
@@ -56,6 +62,8 @@ class _CaregiverFormState extends State<CaregiverForm> {
               .where((element) => element != null)
               .map((element) => element!)
               .toList(),
+          startPrice: _startPriceController.numberValue,
+          endPrice: _endPriceController.numberValue,
         );
         Navigator.of(context).pushNamedAndRemoveUntil(
           Routes.jobList,
@@ -78,6 +86,8 @@ class _CaregiverFormState extends State<CaregiverForm> {
   @override
   Widget build(BuildContext context) {
     final textScaleFactor = MediaQuery.of(context).textScaleFactor;
+    _startPriceController.text = widget.data.startPrice.toString();
+    _endPriceController.text = widget.data.endPrice.toString();
     return Form(
       key: _formKey,
       child: SingleChildScrollView(
@@ -144,6 +154,51 @@ class _CaregiverFormState extends State<CaregiverForm> {
                       1,
                       message:
                           'É necessário selecionar pelo menos uma habilidade',
+                    ),
+                  ]),
+                ),
+              ),
+              Padding(
+                padding: const EdgeInsets.symmetric(vertical: 4),
+                child: TextFormField(
+                  decoration: const InputDecoration(
+                    labelText: 'Preço inicial',
+                  ),
+                  autovalidateMode: AutovalidateMode.onUserInteraction,
+                  readOnly: _disabled,
+                  keyboardType: TextInputType.number,
+                  textInputAction: TextInputAction.next,
+                  controller: _startPriceController,
+                  validator: composeValidators([
+                    requiredValue(message: 'O campo é obrigatório'),
+                    lessThan(
+                      () => _endPriceController.numberValue,
+                      message:
+                          'O valor inicial deve ser inferior ao valor final',
+                      doubleParser: (value) =>
+                          _startPriceController.numberValue,
+                    ),
+                  ]),
+                ),
+              ),
+              Padding(
+                padding: const EdgeInsets.symmetric(vertical: 4),
+                child: TextFormField(
+                  decoration: const InputDecoration(
+                    labelText: 'Preço final',
+                  ),
+                  autovalidateMode: AutovalidateMode.onUserInteraction,
+                  readOnly: _disabled,
+                  textInputAction: TextInputAction.next,
+                  keyboardType: TextInputType.number,
+                  controller: _endPriceController,
+                  validator: composeValidators([
+                    requiredValue(message: 'O campo é obrigatório'),
+                    greaterThan(
+                      () => _startPriceController.numberValue,
+                      message:
+                          'O valor final deve ser superior ao valor inicial',
+                      doubleParser: (value) => _endPriceController.numberValue,
                     ),
                   ]),
                 ),

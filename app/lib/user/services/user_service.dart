@@ -61,6 +61,8 @@ class UserService {
               ),
             )
             .toList(),
+        startPrice: doc['startPrice'] ?? 0,
+        endPrice: doc['endPrice'] ?? 0,
       );
     });
   }
@@ -104,6 +106,8 @@ class UserService {
     required String? bio,
     required List<Service> services,
     required List<Skill> skills,
+    required double startPrice,
+    required double endPrice,
   }) async {
     return await _safe(() async {
       await _firestore.collection('users').doc(_auth.currentUser!.uid).update({
@@ -125,6 +129,8 @@ class UserService {
               },
             )
             .toList(),
+        'startPrice': startPrice,
+        'endPrice': endPrice,
       });
     });
   }

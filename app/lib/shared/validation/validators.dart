@@ -64,6 +64,32 @@ String? Function(dynamic) requiredValue({required String message}) {
   };
 }
 
+String? Function(dynamic) greaterThan(
+  double Function() other, {
+  required String message,
+  double Function(String?)? doubleParser,
+}) {
+  return (value) {
+    if (doubleParser != null && doubleParser(value) <= other()) {
+      return message;
+    }
+    return null;
+  };
+}
+
+String? Function(dynamic) lessThan(
+  double Function() other, {
+  required String message,
+  double Function(String?)? doubleParser,
+}) {
+  return (value) {
+    if (doubleParser != null && doubleParser(value) >= other()) {
+      return message;
+    }
+    return null;
+  };
+}
+
 String? Function(dynamic) validCPF({required String message}) {
   return (cpf) {
     // CPF must be defined

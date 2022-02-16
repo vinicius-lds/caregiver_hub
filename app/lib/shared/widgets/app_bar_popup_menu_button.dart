@@ -47,7 +47,7 @@ class AppBarPopupMenuButton extends StatelessWidget {
     }
     if (actionType == ActionType.logout) {
       await _authService.logout();
-      Provider.of<ProfileProvider>(context).id = '';
+      Provider.of<ProfileProvider>(context, listen: false).id = '';
       Navigator.of(context).pushNamedAndRemoveUntil(
         Routes.landing,
         (route) => false, // Remove todas as telas do stack
