@@ -1,24 +1,49 @@
+import 'package:caregiver_hub/main.dart';
+import 'package:caregiver_hub/shared/providers/profile_provider.dart';
+import 'package:caregiver_hub/social/services/chat_service.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 class MessageInput extends StatefulWidget {
-  const MessageInput({Key? key}) : super(key: key);
+  final String otherUserId;
+  final VoidCallback onSend;
+
+  const MessageInput({
+    Key? key,
+    required this.otherUserId,
+    required this.onSend,
+  }) : super(key: key);
 
   @override
   _MessageInputState createState() => _MessageInputState();
 }
 
 class _MessageInputState extends State<MessageInput> {
+  final _chatService = getIt<ChatService>();
+
   final _formKey = GlobalKey<FormState>();
 
   final _focusNode = FocusNode();
 
   String? _message;
 
-  void _send() {
+  void _send() async {
     _formKey.currentState!.save();
-    print('send $_message');
+    if (_message == null || _message!.trim() == '') {
+      return;
+    }
+    final profileProvider =
+        Provider.of<ProfileProvider>(context, listen: false);
     _formKey.currentState!.reset();
     _focusNode.requestFocus();
+    await _chatService.pushMessage(
+      _message!,
+      caregiverId:
+          profileProvider.isCaregiver ? profileProvider.id : widget.otherUserId,
+      employerId:
+          profileProvider.isCaregiver ? widget.otherUserId : profileProvider.id,
+    );
+    widget.onSend();
   }
 
   @override

@@ -16,12 +16,12 @@ import 'package:caregiver_hub/shared/services/auth_service.dart';
 import 'package:caregiver_hub/shared/services/caregiver_service.dart';
 import 'package:caregiver_hub/shared/services/service_service.dart';
 import 'package:caregiver_hub/shared/services/skill_service.dart';
+import 'package:caregiver_hub/social/services/chat_service.dart';
 import 'package:caregiver_hub/user/services/user_service.dart';
 import 'package:caregiver_hub/user/screens/carregiver_form_screen.dart';
 import 'package:caregiver_hub/user/screens/landing_screen.dart';
 import 'package:caregiver_hub/user/screens/login_screen.dart';
 import 'package:caregiver_hub/user/screens/profile_screen.dart';
-import 'package:caregiver_hub/social/providers/chat_message_provider.dart';
 import 'package:caregiver_hub/social/screens/chat_screen.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
@@ -39,6 +39,7 @@ void main() async {
   getIt.registerLazySingleton<ServiceService>(() => ServiceService());
   getIt.registerLazySingleton<SkillService>(() => SkillService());
   getIt.registerLazySingleton<CaregiverService>(() => CaregiverService());
+  getIt.registerLazySingleton<ChatService>(() => ChatService());
   runApp(const MyApp());
 }
 
@@ -60,9 +61,6 @@ class MyApp extends StatelessWidget {
         ),
         ChangeNotifierProvider(
           create: (ctx) => JobProvider(),
-        ),
-        ChangeNotifierProvider(
-          create: (ctx) => ChatMessageProvider(),
         ),
       ],
       child: const _MyHomePage(),
@@ -120,7 +118,7 @@ class _MyHomePage extends StatelessWidget {
         Routes.profile: (_) => ProfileScreen(),
 
         // social
-        Routes.chat: (_) => const ChatScreen(),
+        Routes.chat: (_) => ChatScreen(),
       },
     );
   }

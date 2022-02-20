@@ -21,9 +21,9 @@ class ContactsBar extends StatelessWidget {
   void _pushChat(BuildContext context) {
     print('pushChat');
     Navigator.of(context).pushNamed(Routes.chat, arguments: {
-      'userId': otherUserId,
-      'name': otherUserName,
-      'imageURL': otherUserImageURL,
+      'otherUserId': otherUserId,
+      'otherUserName': otherUserName,
+      'otherUserImageURL': otherUserImageURL,
     });
   }
 
