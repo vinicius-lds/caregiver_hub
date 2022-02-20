@@ -1,6 +1,4 @@
 import 'package:caregiver_hub/caregiver/providers/caregiver_recomendation_provider.dart';
-import 'package:caregiver_hub/caregiver/providers/service_provider.dart';
-import 'package:caregiver_hub/caregiver/providers/skill_provider.dart';
 import 'package:caregiver_hub/caregiver/screens/caregiver_filter_screen.dart';
 import 'package:caregiver_hub/caregiver/screens/caregiver_list_screen.dart';
 import 'package:caregiver_hub/caregiver/screens/caregiver_profile_screen.dart';
@@ -15,6 +13,7 @@ import 'package:caregiver_hub/shared/constants/routes.dart';
 import 'package:caregiver_hub/shared/providers/caregiver_provider.dart';
 import 'package:caregiver_hub/shared/providers/profile_provider.dart';
 import 'package:caregiver_hub/shared/services/auth_service.dart';
+import 'package:caregiver_hub/shared/services/caregiver_service.dart';
 import 'package:caregiver_hub/shared/services/service_service.dart';
 import 'package:caregiver_hub/shared/services/skill_service.dart';
 import 'package:caregiver_hub/user/services/user_service.dart';
@@ -39,6 +38,7 @@ void main() async {
   getIt.registerLazySingleton<AuthService>(() => AuthService());
   getIt.registerLazySingleton<ServiceService>(() => ServiceService());
   getIt.registerLazySingleton<SkillService>(() => SkillService());
+  getIt.registerLazySingleton<CaregiverService>(() => CaregiverService());
   runApp(const MyApp());
 }
 
@@ -54,12 +54,6 @@ class MyApp extends StatelessWidget {
         ),
         ChangeNotifierProvider(
           create: (ctx) => CaregiverProvider(),
-        ),
-        ChangeNotifierProvider(
-          create: (ctx) => ServiceProvider(),
-        ),
-        ChangeNotifierProvider(
-          create: (ctx) => SkillProvider(),
         ),
         ChangeNotifierProvider(
           create: (ctx) => CaregiverRecomendationProvider(),

@@ -8,18 +8,16 @@ class ServiceService {
     return _firestore
         .collection('services')
         .orderBy('description')
-        .get()
-        .asStream()
-        .map((snapshot) {
-      final docs = snapshot.docs;
-      return docs
-          .map(
-            (item) => Service(
-              id: item.id,
-              description: item.data()['description'],
-            ),
-          )
-          .toList();
-    });
+        .snapshots()
+        .map(
+          (snapshot) => snapshot.docs
+              .map(
+                (item) => Service(
+                  id: item.id,
+                  description: item.data()['description'],
+                ),
+              )
+              .toList(),
+        );
   }
 }

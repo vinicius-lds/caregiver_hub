@@ -18,7 +18,7 @@ class ChatScreen extends StatelessWidget {
     final chatMessageProvider = Provider.of<ChatMessageProvider>(context);
     final args =
         ModalRoute.of(context)!.settings.arguments as Map<String, dynamic>;
-    final imageURL = args['imageURL'] as String;
+    final imageURL = args['imageURL'] as String?;
     final name = args['name'] as String;
     final userId = args['userId'] as String;
 

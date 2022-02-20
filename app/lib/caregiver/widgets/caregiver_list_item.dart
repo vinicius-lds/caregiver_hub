@@ -27,7 +27,11 @@ class CaregiverListItem extends StatelessWidget {
             tag: caregiver.id,
             child: CircleAvatar(
               radius: 30,
-              backgroundImage: NetworkImage(caregiver.imageURL),
+              backgroundImage: caregiver.imageURL == null
+                  ? const AssetImage(
+                      'assets/images/user_profile_placeholder.png',
+                    )
+                  : NetworkImage(caregiver.imageURL!) as ImageProvider<Object>,
             ),
           ),
           title: Text(caregiver.name),

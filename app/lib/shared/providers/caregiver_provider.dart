@@ -1,18 +1,19 @@
+import 'package:caregiver_hub/caregiver/screens/caregiver_list_screen.dart';
+import 'package:caregiver_hub/main.dart';
+import 'package:caregiver_hub/shared/constants/pagination.dart';
 import 'package:caregiver_hub/shared/models/caregiver.dart';
 import 'package:caregiver_hub/shared/models/place_coordinates.dart';
 import 'package:caregiver_hub/shared/models/service.dart';
 import 'package:caregiver_hub/shared/models/skill.dart';
+import 'package:caregiver_hub/shared/services/caregiver_service.dart';
 import 'package:flutter/foundation.dart';
 
 class CaregiverProvider with ChangeNotifier {
   final List<Caregiver> _caregivers = _loadMockData();
+  final CaregiverService _caregiverService = getIt<CaregiverService>();
 
-  Stream<List<Caregiver>> listStream({int offset = 0, int size = 15}) {
-    return Stream.value(_caregivers);
-  }
-
-  Stream<int> count() {
-    return Stream.value(16);
+  Stream<List<Caregiver>> listStream({int size = pageSize}) {
+    return _caregiverService.fetchCaregivers(size: size);
   }
 
   Stream<Caregiver> byId(String id) {

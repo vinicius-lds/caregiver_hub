@@ -131,6 +131,7 @@ class UserService {
             .toList(),
         'startPrice': startPrice,
         'endPrice': endPrice,
+        'rating': 0,
       });
     });
   }

@@ -110,7 +110,7 @@ class MultiSelectChipFieldCustom<T, K> extends StatelessWidget {
       return StreamBuilder<List<T?>>(
         stream: stream,
         builder: (context, snapshot) {
-          if (snapshot.connectionState != ConnectionState.done) {
+          if (snapshot.connectionState == ConnectionState.waiting) {
             return const Loading();
           }
           final List<T?> data = snapshot.data ?? [];

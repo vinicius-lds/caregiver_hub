@@ -4,9 +4,9 @@ import 'package:caregiver_hub/shared/models/skill.dart';
 class Caregiver {
   final String id;
   final String name;
-  final String imageURL;
+  final String? imageURL;
   final String phone;
-  final String bio;
+  final String? bio;
   final double? startPrice;
   final double? endPrice;
   final double rating;

@@ -20,6 +20,10 @@ class AuthService {
     });
   }
 
+  String? currentUserId() {
+    return _auth.currentUser?.uid;
+  }
+
   Future<dynamic> _safe(Function fn) async {
     try {
       return await fn();

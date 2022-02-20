@@ -5,7 +5,7 @@ import 'package:flutter/material.dart';
 class ContactsBar extends StatelessWidget {
   final double size;
   final String otherUserId;
-  final String otherUserImageURL;
+  final String? otherUserImageURL;
   final String otherUserName;
   final String otherUserPhone;
 

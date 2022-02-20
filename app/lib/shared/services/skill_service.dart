@@ -8,18 +8,16 @@ class SkillService {
     return _firestore
         .collection('skills')
         .orderBy('description')
-        .get()
-        .asStream()
-        .map((snapshot) {
-      final docs = snapshot.docs;
-      return docs
-          .map(
-            (item) => Skill(
-              id: item.id,
-              description: item.data()['description'],
-            ),
-          )
-          .toList();
-    });
+        .snapshots()
+        .map(
+          (snapshot) => snapshot.docs
+              .map(
+                (item) => Skill(
+                  id: item.id,
+                  description: item.data()['description'],
+                ),
+              )
+              .toList(),
+        );
   }
 }

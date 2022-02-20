@@ -48,10 +48,14 @@ class CaregiverProfileScreen extends StatelessWidget {
                 title: Text(caregiver.name),
                 background: Hero(
                   tag: caregiver.id,
-                  child: Image.network(
-                    caregiver.imageURL,
-                    fit: BoxFit.cover,
-                  ),
+                  child: caregiver.imageURL == null
+                      ? Image.asset(
+                          'assets/images/user_profile_placeholder.png',
+                        )
+                      : Image.network(
+                          caregiver.imageURL!,
+                          fit: BoxFit.cover,
+                        ),
                 ),
               ),
             ),
@@ -77,7 +81,7 @@ class CaregiverProfileScreen extends StatelessWidget {
                         ),
                       ),
                       Text(
-                        caregiver.bio,
+                        caregiver.bio ?? '',
                         textAlign: TextAlign.justify,
                       ),
                       if (caregiver.services.isNotEmpty)

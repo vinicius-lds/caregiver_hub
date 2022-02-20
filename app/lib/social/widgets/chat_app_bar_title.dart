@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 class ChatAppBarTitle extends StatelessWidget {
-  final String imageURL;
+  final String? imageURL;
   final String name;
 
   const ChatAppBarTitle({
@@ -35,7 +35,11 @@ class ChatAppBarTitle extends StatelessWidget {
             height: _appBarHeight(multiplyFactor: 0.8),
             child: CircleAvatar(
               radius: 30,
-              backgroundImage: NetworkImage(imageURL),
+              backgroundImage: imageURL == null
+                  ? const AssetImage(
+                      'assets/images/user_profile_placeholder.png',
+                    )
+                  : NetworkImage(imageURL!) as ImageProvider<Object>,
             ),
           ),
           Container(

@@ -77,14 +77,15 @@ class AppBarPopupMenuButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final profileProvider = Provider.of<ProfileProvider>(context);
-    final inverse = profileProvider.isCaregiver ? 'empregador' : 'cuidador';
+    final inverseUserType =
+        profileProvider.isCaregiver ? 'empregador' : 'cuidador';
     return PopupMenuButton(
       onSelected: (value) => _onSelected(context, value as ActionType),
       itemBuilder: (bContext) {
         return [
           PopupMenuItem<ActionType>(
             value: ActionType.invert,
-            child: Text('Visão de $inverse'),
+            child: Text('Visão de $inverseUserType'),
           ),
           const PopupMenuItem<ActionType>(
             value: ActionType.profile,

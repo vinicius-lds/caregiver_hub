@@ -1,10 +1,11 @@
-import 'package:caregiver_hub/caregiver/providers/service_provider.dart';
-import 'package:caregiver_hub/caregiver/providers/skill_provider.dart';
+import 'package:caregiver_hub/main.dart';
 import 'package:caregiver_hub/shared/constants/routes.dart';
 import 'package:caregiver_hub/shared/models/place_coordinates.dart';
 import 'package:caregiver_hub/shared/models/service.dart';
 import 'package:caregiver_hub/shared/models/skill.dart';
 import 'package:caregiver_hub/shared/providers/caregiver_provider.dart';
+import 'package:caregiver_hub/shared/services/service_service.dart';
+import 'package:caregiver_hub/shared/services/skill_service.dart';
 import 'package:caregiver_hub/shared/widgets/app_bar_popup_menu_button.dart';
 import 'package:caregiver_hub/shared/widgets/multi_select_chip_field_custom.dart';
 import 'package:caregiver_hub/shared/widgets/place_coordinates_field.dart';
@@ -19,6 +20,9 @@ class CaregiverFilterScreen extends StatefulWidget {
 }
 
 class _CaregiverFilterScreenState extends State<CaregiverFilterScreen> {
+  final _serviceService = getIt<ServiceService>();
+  final _skillService = getIt<SkillService>();
+
   final _formKey = GlobalKey<FormState>();
 
   PlaceCoordinates? _placeCoordinates;
@@ -47,8 +51,6 @@ class _CaregiverFilterScreenState extends State<CaregiverFilterScreen> {
   @override
   Widget build(BuildContext context) {
     final textScaleFactor = MediaQuery.of(context).textScaleFactor;
-    final serviceProvider = Provider.of<ServiceProvider>(context);
-    final skillTypeProvider = Provider.of<SkillProvider>(context);
     return Scaffold(
       appBar: AppBar(
         title: const Text('Filtro de cuidadores'),
@@ -77,7 +79,7 @@ class _CaregiverFilterScreenState extends State<CaregiverFilterScreen> {
                 Padding(
                   padding: const EdgeInsets.symmetric(vertical: 4),
                   child: MultiSelectChipFieldCustom<Service, String>(
-                    stream: serviceProvider.listStream(),
+                    stream: _serviceService.fetchServices(),
                     idFn: (serviceType) =>
                         serviceType == null ? '' : serviceType.id,
                     labelFn: (serviceType) =>
@@ -89,7 +91,7 @@ class _CaregiverFilterScreenState extends State<CaregiverFilterScreen> {
                 Padding(
                   padding: const EdgeInsets.symmetric(vertical: 4),
                   child: MultiSelectChipFieldCustom<Skill, String>(
-                    stream: skillTypeProvider.listStream(),
+                    stream: _skillService.fetchSkills(),
                     idFn: (skillType) => skillType == null ? '' : skillType.id,
                     labelFn: (skillType) =>
                         skillType == null ? '' : skillType.description,
