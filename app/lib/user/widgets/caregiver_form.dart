@@ -9,8 +9,8 @@ import 'package:caregiver_hub/shared/validation/validators.dart';
 import 'package:caregiver_hub/shared/widgets/multi_select_chip_field_custom.dart';
 import 'package:caregiver_hub/shared/services/service_service.dart';
 import 'package:caregiver_hub/shared/services/skill_service.dart';
-import 'package:caregiver_hub/user/models/caregiver_form_data.dart';
-import 'package:caregiver_hub/user/services/user_service.dart';
+import 'package:caregiver_hub/shared/models/caregiver_form_data.dart';
+import 'package:caregiver_hub/shared/services/user_service.dart';
 import 'package:caregiver_hub/user/widgets/checkbox_custom.dart';
 import 'package:extended_masked_text/extended_masked_text.dart';
 import 'package:flutter/material.dart';
@@ -41,8 +41,6 @@ class _CaregiverFormState extends State<CaregiverForm> {
   String? _bio;
   List<Service?>? _services;
   List<Skill?>? _skills;
-  double? _startPrice;
-  double? _endPrice;
 
   void _submit(BuildContext context) async {
     final isValid = _formKey.currentState!.validate();
@@ -131,7 +129,7 @@ class _CaregiverFormState extends State<CaregiverForm> {
                   onSaved: (values) => _services = values,
                   validator: composeValidators([
                     atLeast(
-                      1,
+                      () => 1,
                       message: 'É necessário selecionar pelo menos um serviço',
                     )
                   ]),
@@ -151,7 +149,7 @@ class _CaregiverFormState extends State<CaregiverForm> {
                   onSaved: (values) => _skills = values,
                   validator: composeValidators([
                     atLeast(
-                      1,
+                      () => 1,
                       message:
                           'É necessário selecionar pelo menos uma habilidade',
                     ),
@@ -171,7 +169,7 @@ class _CaregiverFormState extends State<CaregiverForm> {
                   controller: _startPriceController,
                   validator: composeValidators([
                     requiredValue(message: 'O campo é obrigatório'),
-                    lessThan(
+                    greaterThan(
                       () => _endPriceController.numberValue,
                       message:
                           'O valor inicial deve ser inferior ao valor final',
@@ -194,7 +192,7 @@ class _CaregiverFormState extends State<CaregiverForm> {
                   controller: _endPriceController,
                   validator: composeValidators([
                     requiredValue(message: 'O campo é obrigatório'),
-                    greaterThan(
+                    lessThan(
                       () => _startPriceController.numberValue,
                       message:
                           'O valor final deve ser superior ao valor inicial',

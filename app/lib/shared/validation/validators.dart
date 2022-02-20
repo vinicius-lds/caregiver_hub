@@ -12,43 +12,57 @@ const List<String> cpfBlacklist = [
   "12345678909"
 ];
 
-String? Function(dynamic) after(DateTime? other, {required String message}) {
+String? Function(dynamic) after(
+  DateTime? Function() other, {
+  required String message,
+}) {
   return (value) {
+    final otherValue = other();
     if (value != null &&
-        other != null &&
+        otherValue != null &&
         value is DateTime &&
-        value.isAfter(other)) {
+        value.isAfter(otherValue)) {
       return message;
     }
     return null;
   };
 }
 
-String? Function(dynamic) atLeast(int minLength, {required String message}) {
+String? Function(dynamic) atLeast(
+  int Function() minLength, {
+  required String message,
+}) {
   return (value) {
-    if (value == null || value is! List || value.length < minLength) {
+    final minLengthValue = minLength();
+    if (value == null || value is! List || value.length < minLengthValue) {
       return message;
     }
     return null;
   };
 }
 
-String? Function(dynamic) equalTo(dynamic other, {required String message}) {
+String? Function(dynamic) equalTo(
+  dynamic Function() other, {
+  required String message,
+}) {
   return (value) {
-    print('value: $value; other: $other;');
-    if (value != other) {
+    if (value != other()) {
       return message;
     }
     return null;
   };
 }
 
-String? Function(dynamic) before(DateTime? other, {required String message}) {
+String? Function(dynamic) before(
+  DateTime? Function() other, {
+  required String message,
+}) {
   return (value) {
+    final otherValue = other();
     if (value != null &&
-        other != null &&
+        otherValue != null &&
         value is DateTime &&
-        value.isBefore(other)) {
+        value.isBefore(otherValue)) {
       return message;
     }
     return null;
@@ -64,26 +78,28 @@ String? Function(dynamic) requiredValue({required String message}) {
   };
 }
 
-String? Function(dynamic) greaterThan(
-  double Function() other, {
-  required String message,
-  double Function(String?)? doubleParser,
-}) {
-  return (value) {
-    if (doubleParser != null && doubleParser(value) <= other()) {
-      return message;
-    }
-    return null;
-  };
-}
-
 String? Function(dynamic) lessThan(
   double Function() other, {
   required String message,
   double Function(String?)? doubleParser,
 }) {
   return (value) {
-    if (doubleParser != null && doubleParser(value) >= other()) {
+    final otherValue = other();
+    if (doubleParser != null && doubleParser(value) < otherValue) {
+      return message;
+    }
+    return null;
+  };
+}
+
+String? Function(dynamic) greaterThan(
+  double Function() other, {
+  required String message,
+  double Function(String?)? doubleParser,
+}) {
+  return (value) {
+    final otherValue = other();
+    if (doubleParser != null && doubleParser(value) > otherValue) {
       return message;
     }
     return null;

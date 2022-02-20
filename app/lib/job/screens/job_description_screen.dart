@@ -1,6 +1,10 @@
 import 'package:caregiver_hub/job/models/job.dart';
+import 'package:caregiver_hub/job/services/job_service.dart';
 import 'package:caregiver_hub/job/widgets/job_detail_action_button.dart';
+import 'package:caregiver_hub/main.dart';
 import 'package:caregiver_hub/shared/constants/routes.dart';
+import 'package:caregiver_hub/shared/exceptions/service_exception.dart';
+import 'package:caregiver_hub/shared/models/job_user_data.dart';
 import 'package:caregiver_hub/shared/models/service.dart';
 import 'package:caregiver_hub/shared/providers/profile_provider.dart';
 import 'package:caregiver_hub/shared/widgets/app_bar_popup_menu_button.dart';
@@ -11,12 +15,39 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 
-class JobDescriptionScreen extends StatelessWidget {
+class JobDescriptionScreen extends StatefulWidget {
   const JobDescriptionScreen({Key? key}) : super(key: key);
 
-  void _accept(BuildContext context, Job job) {
-    print('accept');
-    Navigator.of(context).pop();
+  @override
+  State<JobDescriptionScreen> createState() => _JobDescriptionScreenState();
+}
+
+class _JobDescriptionScreenState extends State<JobDescriptionScreen> {
+  final _jobService = getIt<JobService>();
+
+  bool _disabled = false;
+
+  void _accept(BuildContext context, Job job) async {
+    setState(() => _disabled = true);
+    try {
+      final profileProvider = Provider.of<ProfileProvider>(context);
+      final now = DateTime.now();
+      if (job.startDate.isBefore(now) || job.endDate.isBefore(now)) {
+        _showSnackBar(
+          context,
+          'Não é possível aprovar um trabalho com data anterior a atual.',
+        );
+      } else {
+        await _jobService.accept(
+          jobId: job.id,
+          isCaregiver: profileProvider.isCaregiver,
+        );
+      }
+      Navigator.of(context).pop();
+    } on ServiceException catch (e) {
+      _showSnackBar(context, e.message);
+    }
+    setState(() => _disabled = false);
   }
 
   String _buildJobPeriodString({
@@ -29,13 +60,18 @@ class JobDescriptionScreen extends StatelessWidget {
     return '$startDateString até $endDateString';
   }
 
-  void _cancel(BuildContext context, Job job) {
-    print('cancel');
-    Navigator.of(context).pop();
+  void _cancel(BuildContext context, Job job) async {
+    setState(() => _disabled = true);
+    try {
+      await _jobService.cancel(jobId: job.id);
+      Navigator.of(context).pop();
+    } on ServiceException catch (e) {
+      _showSnackBar(context, e.message);
+    }
+    setState(() => _disabled = false);
   }
 
   void _edit(BuildContext context, Job job) {
-    print('edit');
     Navigator.of(context).pushNamed(Routes.jobForm, arguments: {'job': job});
   }
 
@@ -46,11 +82,19 @@ class JobDescriptionScreen extends StatelessWidget {
     });
   }
 
+  void _showSnackBar(BuildContext context, String message) {
+    final snackBar = SnackBar(
+      content: Text(message),
+    );
+    ScaffoldMessenger.of(context).showSnackBar(snackBar);
+  }
+
   @override
   Widget build(BuildContext context) {
     final args =
         ModalRoute.of(context)!.settings.arguments as Map<String, dynamic>;
     final job = args['job'] as Job;
+    final jobUserData = args['jobUserData'] as JobUserData;
     final profileProvider = Provider.of<ProfileProvider>(context);
     final textScaleFactor = MediaQuery.of(context).textScaleFactor;
     return LayoutBuilder(
@@ -65,18 +109,18 @@ class JobDescriptionScreen extends StatelessWidget {
               ],
               flexibleSpace: FlexibleSpaceBar(
                 title: Text(
-                  profileProvider.isCaregiver
-                      ? job.employerName
-                      : job.caregiverName,
+                  jobUserData.name,
                 ),
                 background: Hero(
                   tag: job.id,
-                  child: Image.network(
-                    profileProvider.isCaregiver
-                        ? job.employerImageURL
-                        : job.caregiverImageURL,
-                    fit: BoxFit.cover,
-                  ),
+                  child: jobUserData.imageURL == null
+                      ? Image.asset(
+                          'assets/images/user_profile_placeholder.png',
+                        )
+                      : Image.network(
+                          jobUserData.imageURL!,
+                          fit: BoxFit.cover,
+                        ),
                 ),
               ),
             ),
@@ -88,18 +132,10 @@ class JobDescriptionScreen extends StatelessWidget {
                     children: [
                       ContactsBar(
                         size: constraints.maxHeight * 0.1,
-                        otherUserId: profileProvider.isCaregiver
-                            ? job.employerId
-                            : job.caregiverId,
-                        otherUserImageURL: profileProvider.isCaregiver
-                            ? job.employerImageURL
-                            : job.caregiverImageURL,
-                        otherUserName: profileProvider.isCaregiver
-                            ? job.employerName
-                            : job.caregiverName,
-                        otherUserPhone: profileProvider.isCaregiver
-                            ? job.employerPhone
-                            : job.caregiverPhone,
+                        otherUserId: jobUserData.id,
+                        otherUserImageURL: jobUserData.imageURL,
+                        otherUserName: jobUserData.name,
+                        otherUserPhone: jobUserData.phone,
                       ),
                       Container(
                         alignment: Alignment.center,
@@ -153,6 +189,7 @@ class JobDescriptionScreen extends StatelessWidget {
                         Padding(
                           padding: const EdgeInsets.symmetric(vertical: 4),
                           child: JobDetailActionButton(
+                            disabled: _disabled,
                             text: 'Editar termos',
                             color: Colors.grey,
                             icon: const Icon(Icons.edit),
@@ -163,6 +200,7 @@ class JobDescriptionScreen extends StatelessWidget {
                         Padding(
                           padding: const EdgeInsets.symmetric(vertical: 4),
                           child: JobDetailActionButton(
+                            disabled: _disabled,
                             text: 'Cancelar',
                             color: Colors.red,
                             icon: const Icon(Icons.cancel),
@@ -177,6 +215,7 @@ class JobDescriptionScreen extends StatelessWidget {
                         Padding(
                           padding: const EdgeInsets.symmetric(vertical: 4),
                           child: JobDetailActionButton(
+                            disabled: _disabled,
                             text: 'Aceitar termos',
                             color: Theme.of(context).primaryColor,
                             icon: const Icon(Icons.done),
@@ -188,6 +227,7 @@ class JobDescriptionScreen extends StatelessWidget {
                         Padding(
                           padding: const EdgeInsets.symmetric(vertical: 4),
                           child: JobDetailActionButton(
+                            disabled: _disabled,
                             text: 'Recomendar cuidador',
                             color: Theme.of(context).primaryColor,
                             icon: const Icon(Icons.star_border),

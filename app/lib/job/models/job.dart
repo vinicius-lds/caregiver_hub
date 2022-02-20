@@ -5,13 +5,7 @@ import 'package:caregiver_hub/shared/models/service.dart';
 class Job {
   final String id;
   final String caregiverId;
-  final String caregiverName;
-  final String caregiverImageURL;
-  final String caregiverPhone;
   final String employerId;
-  final String employerName;
-  final String employerImageURL;
-  final String employerPhone;
   final DateTime startDate;
   final DateTime endDate;
   final List<Service> services;
@@ -24,13 +18,7 @@ class Job {
   const Job({
     required this.id,
     required this.caregiverId,
-    required this.caregiverName,
-    required this.caregiverImageURL,
-    required this.caregiverPhone,
     required this.employerId,
-    required this.employerName,
-    required this.employerImageURL,
-    required this.employerPhone,
     required this.startDate,
     required this.endDate,
     required this.services,

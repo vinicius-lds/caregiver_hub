@@ -4,8 +4,8 @@ import 'package:caregiver_hub/shared/exceptions/service_exception.dart';
 import 'package:caregiver_hub/shared/providers/profile_provider.dart';
 import 'package:caregiver_hub/shared/validation/functions.dart';
 import 'package:caregiver_hub/shared/validation/validators.dart';
-import 'package:caregiver_hub/user/models/user_form_data.dart';
-import 'package:caregiver_hub/user/services/user_service.dart';
+import 'package:caregiver_hub/shared/models/user_form_data.dart';
+import 'package:caregiver_hub/shared/services/user_service.dart';
 import 'package:caregiver_hub/user/widgets/image_input.dart';
 import 'package:flutter/material.dart';
 import 'package:intl_phone_number_input/intl_phone_number_input.dart';
@@ -233,7 +233,6 @@ class _ProfileFormState extends State<ProfileForm> {
                     readOnly: _disabled,
                     onFieldSubmitted:
                         _focusOn(context, _confirmPasswordFocusNode),
-                    onChanged: (value) => setState(() => _password = value),
                     onSaved: (value) => _password = value,
                     textInputAction: TextInputAction.next,
                     validator: composeValidators([
@@ -260,7 +259,7 @@ class _ProfileFormState extends State<ProfileForm> {
                         requiredValue(message: 'O campo é obrigatório'),
                       if (widget.data == null)
                         equalTo(
-                          _password,
+                          () => _password,
                           message: 'Os valores não são iguais',
                         ),
                     ]),

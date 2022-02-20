@@ -1,10 +1,11 @@
 import 'dart:io';
 
 import 'package:caregiver_hub/shared/exceptions/service_exception.dart';
+import 'package:caregiver_hub/shared/models/job_user_data.dart';
 import 'package:caregiver_hub/shared/models/service.dart';
 import 'package:caregiver_hub/shared/models/skill.dart';
-import 'package:caregiver_hub/user/models/caregiver_form_data.dart';
-import 'package:caregiver_hub/user/models/user_form_data.dart';
+import 'package:caregiver_hub/shared/models/caregiver_form_data.dart';
+import 'package:caregiver_hub/shared/models/user_form_data.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
@@ -169,6 +170,17 @@ class UserService {
   Future<String> uploadImage(String userId, String imagePath) async {
     final ref = _storage.ref().child('userImage').child(userId + '.jpg');
     return await (await ref.putFile(File(imagePath))).ref.getDownloadURL();
+  }
+
+  Stream<JobUserData> fetchJobUserData({required String userId}) {
+    return _firestore.collection('users').doc(userId).snapshots().map(
+          (snapshot) => JobUserData(
+            id: snapshot.id,
+            imageURL: snapshot['imageURL'],
+            name: snapshot['fullName'],
+            phone: snapshot['phone'],
+          ),
+        );
   }
 
   Future<dynamic> _safe(Function fn) async {

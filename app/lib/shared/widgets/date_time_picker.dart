@@ -9,6 +9,7 @@ class DateTimePicker extends FormField<DateTime?> {
     FormFieldValidator<DateTime?>? validator,
     DateTime? initialValue,
     bool autovalidate = false,
+    bool disabled = false,
   }) : super(
           onSaved: onSaved,
           validator: validator,
@@ -34,35 +35,37 @@ class DateTimePicker extends FormField<DateTime?> {
                       ),
                     Expanded(
                       child: ElevatedButton(
-                        onPressed: () async {
-                          final date = await showDatePicker(
-                            context: state.context,
-                            initialDate: DateTime.now(),
-                            firstDate: DateTime.now(),
-                            lastDate: DateTime(3000),
-                          );
-                          if (date == null) {
-                            return;
-                          }
-                          final time = await showTimePicker(
-                            context: state.context,
-                            initialTime: TimeOfDay.now(),
-                          );
-                          if (time == null) {
-                            return;
-                          }
-                          final dateTime = DateTime(
-                            date.year,
-                            date.month,
-                            date.day,
-                            time.hour,
-                            time.minute,
-                          );
-                          state.didChange(dateTime);
-                          if (onChange != null) {
-                            onChange(dateTime);
-                          }
-                        },
+                        onPressed: disabled
+                            ? null
+                            : () async {
+                                final date = await showDatePicker(
+                                  context: state.context,
+                                  initialDate: DateTime.now(),
+                                  firstDate: DateTime.now(),
+                                  lastDate: DateTime(3000),
+                                );
+                                if (date == null) {
+                                  return;
+                                }
+                                final time = await showTimePicker(
+                                  context: state.context,
+                                  initialTime: TimeOfDay.now(),
+                                );
+                                if (time == null) {
+                                  return;
+                                }
+                                final dateTime = DateTime(
+                                  date.year,
+                                  date.month,
+                                  date.day,
+                                  time.hour,
+                                  time.minute,
+                                );
+                                state.didChange(dateTime);
+                                if (onChange != null) {
+                                  onChange(dateTime);
+                                }
+                              },
                         child: const Text('Escolha uma data'),
                       ),
                     ),

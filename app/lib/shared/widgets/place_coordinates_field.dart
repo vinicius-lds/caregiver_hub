@@ -10,6 +10,7 @@ class PlaceCoordinatesField extends FormField<PlaceCoordinates?> {
     FormFieldValidator<PlaceCoordinates?>? validator,
     PlaceCoordinates? initialValue,
     bool readOnly = false,
+    bool disabled = false,
     bool autovalidate = false,
   }) : super(
           onSaved: onSaved,
@@ -19,24 +20,29 @@ class PlaceCoordinatesField extends FormField<PlaceCoordinates?> {
           builder: (FormFieldState<PlaceCoordinates?> state) {
             final controller = TextEditingController();
             controller.text = state.value?.description ?? '';
-            return InkWell(
-              onTap: () async {
-                final args = {
-                  'initialPlaceCoordinates': state.value,
-                  'readOnly': readOnly,
-                };
-                final placeCoordinates = await Navigator.of(state.context)
-                    .pushNamed(Routes.placePicker, arguments: args);
-                if (state.value != placeCoordinates) {
-                  state.didChange(placeCoordinates as PlaceCoordinates?);
-                  controller.text = placeCoordinates?.description ?? '';
-                }
-              },
-              child: IgnorePointer(
-                child: TextFormField(
-                  decoration: decoration,
-                  controller: controller,
-                  readOnly: true,
+            return IgnorePointer(
+              ignoring: disabled,
+              child: InkWell(
+                onTap: () async {
+                  final args = {
+                    'initialPlaceCoordinates': state.value,
+                    'readOnly': readOnly,
+                  };
+                  final placeCoordinates = await Navigator.of(state.context)
+                      .pushNamed(Routes.placePicker, arguments: args);
+                  if (state.value != placeCoordinates) {
+                    state.didChange(placeCoordinates as PlaceCoordinates?);
+                    controller.text = placeCoordinates?.description ?? '';
+                  }
+                },
+                child: IgnorePointer(
+                  child: TextFormField(
+                    decoration: decoration,
+                    controller: controller,
+                    validator: (value) =>
+                        validator == null ? null : validator(state.value),
+                    readOnly: true,
+                  ),
                 ),
               ),
             );

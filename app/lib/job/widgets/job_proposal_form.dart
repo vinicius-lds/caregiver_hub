@@ -1,16 +1,21 @@
 import 'package:caregiver_hub/job/models/job.dart';
+import 'package:caregiver_hub/job/services/job_service.dart';
+import 'package:caregiver_hub/main.dart';
 import 'package:caregiver_hub/shared/constants/routes.dart';
+import 'package:caregiver_hub/shared/exceptions/service_exception.dart';
 import 'package:caregiver_hub/shared/models/caregiver.dart';
 import 'package:caregiver_hub/shared/models/place_coordinates.dart';
 import 'package:caregiver_hub/shared/models/service.dart';
+import 'package:caregiver_hub/shared/providers/profile_provider.dart';
 import 'package:caregiver_hub/shared/validation/functions.dart';
 import 'package:caregiver_hub/shared/validation/validators.dart';
 import 'package:caregiver_hub/shared/widgets/date_time_picker.dart';
 import 'package:caregiver_hub/shared/widgets/multi_select_chip_field_custom.dart';
 import 'package:caregiver_hub/shared/widgets/place_coordinates_field.dart';
-import 'package:currency_text_input_formatter/currency_text_input_formatter.dart';
+import 'package:extended_masked_text/extended_masked_text.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:provider/provider.dart';
 
 class JobProposalForm extends StatefulWidget {
   final Caregiver caregiver;
@@ -27,75 +32,53 @@ class JobProposalForm extends StatefulWidget {
 }
 
 class _JobProposalFormState extends State<JobProposalForm> {
+  final _jobService = getIt<JobService>();
+
   final _formKey = GlobalKey<FormState>();
+
+  final _priceController = MoneyMaskedTextController(leftSymbol: 'R\$ ');
+
+  bool _disabled = false;
 
   PlaceCoordinates? _placeCoordinates;
   DateTime? _startDate;
   DateTime? _endDate;
   List<Service?>? _services;
-  String? _price;
 
-  void _editProposal(BuildContext context, {required Job job}) {
+  void _editProposal(BuildContext context, {required Job job}) async {
     final isValid = _formKey.currentState!.validate();
     if (!isValid) {
       return;
     }
     _formKey.currentState!.save();
 
-    final price = _formattedPriceToDouble(_price!);
-    print('''
-    editProposal
-    $_placeCoordinates
-    $_startDate
-    $_endDate
-    $_services
-    $price
-    ''');
+    setState(() => _disabled = true);
+    final profileProvider =
+        Provider.of<ProfileProvider>(context, listen: false);
+    try {
+      await _jobService.editProposal(
+        jobId: widget.job!.id,
+        caregiverId: job.employerId,
+        employerId: job.employerId,
+        placeCoordinates: _placeCoordinates!,
+        startDate: _startDate!,
+        endDate: _endDate!,
+        services: (_services ?? [])
+            .where((item) => item != null)
+            .map((item) => item!)
+            .toList(),
+        price: _priceController.numberValue,
+        isCaregiver: profileProvider.isCaregiver,
+      );
+    } on ServiceException catch (e) {
+      _showSnackBar(context, e.message);
+    }
+    setState(() => _disabled = false);
 
     Navigator.of(context).pushNamedAndRemoveUntil(
       Routes.jobList,
       (route) => false, // Remove todas as telas do stack
     );
-  }
-
-  double _formattedPriceToDouble(String formattedPrice) {
-    return double.parse(
-      formattedPrice
-          .replaceAll('R\$', '')
-          .replaceAll(' ', '')
-          .replaceAll('.', '')
-          .replaceAll(',', '.'),
-    );
-  }
-
-  String? Function(dynamic) _greaterThan(
-    double? other, {
-    required String message,
-  }) {
-    return (value) {
-      if (value != null &&
-          other != null &&
-          value is String &&
-          _formattedPriceToDouble(value) > other) {
-        return message;
-      }
-      return null;
-    };
-  }
-
-  String? Function(dynamic) _lowerThan(
-    double? other, {
-    required String message,
-  }) {
-    return (value) {
-      if (value != null &&
-          other != null &&
-          value is String &&
-          _formattedPriceToDouble(value) < other) {
-        return message;
-      }
-      return null;
-    };
   }
 
   void _makeProposal(BuildContext context, {required String caregiverId}) {
@@ -105,20 +88,38 @@ class _JobProposalFormState extends State<JobProposalForm> {
     }
     _formKey.currentState!.save();
 
-    final price = _formattedPriceToDouble(_price!);
-    print('''
-    makeProposal
-    $_placeCoordinates
-    $_startDate
-    $_endDate
-    $_services
-    $price
-    ''');
+    setState(() => _disabled = true);
+    try {
+      final profileProvider =
+          Provider.of<ProfileProvider>(context, listen: false);
+      _jobService.makeProposal(
+        caregiverId: widget.caregiver.id,
+        employerId: profileProvider.id,
+        placeCoordinates: _placeCoordinates!,
+        startDate: _startDate!,
+        endDate: _endDate!,
+        services: (_services ?? [])
+            .where((item) => item != null)
+            .map((item) => item!)
+            .toList(),
+        price: _priceController.numberValue,
+      );
+    } on ServiceException catch (e) {
+      _showSnackBar(context, e.message);
+    }
+    setState(() => _disabled = false);
 
     Navigator.of(context).pushNamedAndRemoveUntil(
       Routes.jobList,
       (route) => false, // Remove todas as telas do stack
     );
+  }
+
+  void _showSnackBar(BuildContext context, String message) {
+    final snackBar = SnackBar(
+      content: Text(message),
+    );
+    ScaffoldMessenger.of(context).showSnackBar(snackBar);
   }
 
   @override
@@ -132,11 +133,7 @@ class _JobProposalFormState extends State<JobProposalForm> {
     final endPriceString = widget.caregiver.endPrice != null
         ? formatter.format(widget.caregiver.endPrice)
         : null;
-    final currencyTextInputFormatter = CurrencyTextInputFormatter(
-      decimalDigits: 2,
-      locale: 'pt_BR',
-      symbol: 'R\$',
-    );
+    _priceController.text = widget.job?.price.toStringAsFixed(2) ?? '';
     return Form(
       key: _formKey,
       child: SingleChildScrollView(
@@ -150,50 +147,63 @@ class _JobProposalFormState extends State<JobProposalForm> {
                 padding: const EdgeInsets.symmetric(vertical: 4),
                 child: PlaceCoordinatesField(
                   initialValue: widget.job?.placeCoordinates,
+                  disabled: _disabled,
                   decoration: const InputDecoration(
                     label: Text('Localização'),
                   ),
                   onSaved: (value) => _placeCoordinates = value,
+                  validator: requiredValue(message: 'O campo é obrigatório'),
                 ),
               ),
               Padding(
                 padding: const EdgeInsets.symmetric(vertical: 4),
                 child: DateTimePicker(
                   label: 'Início da atividade',
+                  disabled: _disabled,
                   initialValue: widget.job?.startDate,
                   validator: composeValidators([
                     requiredValue(message: 'O campo é obrigatório'),
                     after(
-                      _endDate,
+                      () => _endDate,
                       message:
                           'O início não pode ser igual ou superior ao fim da atividade',
                     ),
+                    after(
+                      () => DateTime.now(),
+                      message:
+                          'O início não pode ser igual ou anterior ao horário atual',
+                    ),
                   ]),
-                  onChange: (value) => setState(() => _startDate = value),
-                  onSaved: (value) => setState(() => _startDate = value),
+                  onSaved: (value) => _startDate = value,
                 ),
               ),
               Padding(
                 padding: const EdgeInsets.symmetric(vertical: 4),
                 child: DateTimePicker(
                   label: 'Fim da atividade',
+                  disabled: _disabled,
                   initialValue: widget.job?.endDate,
                   validator: composeValidators([
                     requiredValue(message: 'O campo é obrigatório'),
                     before(
-                      _startDate,
+                      () => _startDate,
                       message:
                           'O fim não pode ser igual ou inferior ao início da atividade',
                     ),
+                    after(
+                      () => DateTime.now(),
+                      message:
+                          'O fim não pode ser igual ou anterior ao horário atual',
+                    ),
                   ]),
-                  onChange: (value) => setState(() => _endDate = value),
-                  onSaved: (value) => setState(() => _endDate = value),
+                  onSaved: (value) => _endDate = value,
                 ),
               ),
               Padding(
                 padding: const EdgeInsets.symmetric(vertical: 4),
                 child: MultiSelectChipFieldCustom<Service, String>(
                   items: widget.caregiver.services,
+                  displayOnly: _disabled,
                   initialValue: widget.job?.services,
                   idFn: (serviceType) =>
                       serviceType == null ? '' : serviceType.id,
@@ -202,7 +212,7 @@ class _JobProposalFormState extends State<JobProposalForm> {
                   title: 'Serviços',
                   validator: composeValidators([
                     atLeast(
-                      1,
+                      () => 1,
                       message: 'É necessário selecionar pelo menos um serviço',
                     )
                   ]),
@@ -213,25 +223,23 @@ class _JobProposalFormState extends State<JobProposalForm> {
                 decoration: const InputDecoration(
                   labelText: 'Valor',
                 ),
-                initialValue: widget.job != null
-                    ? currencyTextInputFormatter
-                        .format(widget.job!.price.toStringAsFixed(2))
-                    : null,
+                readOnly: _disabled,
+                controller: _priceController,
                 autovalidateMode: AutovalidateMode.onUserInteraction,
-                inputFormatters: [currencyTextInputFormatter],
                 keyboardType: TextInputType.number,
-                onSaved: (value) => _price = value,
                 textInputAction: TextInputAction.next,
                 validator: composeValidators([
                   requiredValue(message: 'O campo é obrigatório'),
-                  _greaterThan(
-                    widget.caregiver.endPrice,
+                  greaterThan(
+                    () => widget.caregiver.endPrice ?? 0,
                     message: 'O valor não pode ser superior a $endPriceString',
+                    doubleParser: (value) => _priceController.numberValue,
                   ),
-                  _lowerThan(
-                    widget.caregiver.startPrice,
+                  lessThan(
+                    () => widget.caregiver.startPrice ?? 0,
                     message:
                         'O valor não pode ser inferior a $startPriceString',
+                    doubleParser: (value) => _priceController.numberValue,
                   ),
                 ]),
               ),
@@ -250,9 +258,12 @@ class _JobProposalFormState extends State<JobProposalForm> {
                       const EdgeInsets.symmetric(vertical: 10),
                     ),
                   ),
-                  onPressed: () => widget.job == null
-                      ? _makeProposal(context, caregiverId: widget.caregiver.id)
-                      : _editProposal(context, job: widget.job!),
+                  onPressed: _disabled
+                      ? null
+                      : () => widget.job == null
+                          ? _makeProposal(context,
+                              caregiverId: widget.caregiver.id)
+                          : _editProposal(context, job: widget.job!),
                 ),
               ),
             ],

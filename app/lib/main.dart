@@ -7,6 +7,7 @@ import 'package:caregiver_hub/job/providers/job_provider.dart';
 import 'package:caregiver_hub/job/screens/job_description_screen.dart';
 import 'package:caregiver_hub/job/screens/job_proposal_screen.dart';
 import 'package:caregiver_hub/job/screens/job_list_screen.dart';
+import 'package:caregiver_hub/job/services/job_service.dart';
 import 'package:caregiver_hub/location/screens/place_picker_screen.dart';
 import 'package:caregiver_hub/location/services/location_service.dart';
 import 'package:caregiver_hub/shared/constants/routes.dart';
@@ -17,7 +18,7 @@ import 'package:caregiver_hub/shared/services/caregiver_service.dart';
 import 'package:caregiver_hub/shared/services/service_service.dart';
 import 'package:caregiver_hub/shared/services/skill_service.dart';
 import 'package:caregiver_hub/social/services/chat_service.dart';
-import 'package:caregiver_hub/user/services/user_service.dart';
+import 'package:caregiver_hub/shared/services/user_service.dart';
 import 'package:caregiver_hub/user/screens/carregiver_form_screen.dart';
 import 'package:caregiver_hub/user/screens/landing_screen.dart';
 import 'package:caregiver_hub/user/screens/login_screen.dart';
@@ -40,6 +41,7 @@ void main() async {
   getIt.registerLazySingleton<SkillService>(() => SkillService());
   getIt.registerLazySingleton<CaregiverService>(() => CaregiverService());
   getIt.registerLazySingleton<ChatService>(() => ChatService());
+  getIt.registerLazySingleton<JobService>(() => JobService());
   runApp(const MyApp());
 }
 
@@ -101,7 +103,7 @@ class _MyHomePage extends StatelessWidget {
             const CaregiverRecomendationScreen(),
 
         // job
-        Routes.jobDescription: (_) => const JobDescriptionScreen(),
+        Routes.jobDescription: (_) => JobDescriptionScreen(),
         Routes.jobForm: (_) => const JobProposalScreen(),
         Routes.jobList: (_) => const JobListScreen(),
 

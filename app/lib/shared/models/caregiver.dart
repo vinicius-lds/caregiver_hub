@@ -1,5 +1,6 @@
 import 'package:caregiver_hub/shared/models/service.dart';
 import 'package:caregiver_hub/shared/models/skill.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 
 class Caregiver {
   final String id;
@@ -25,4 +26,35 @@ class Caregiver {
     required this.services,
     required this.skills,
   });
+
+  factory Caregiver.fromDocumentSnapshot(
+    DocumentSnapshot<Map<String, dynamic>> snapshot,
+  ) {
+    return Caregiver(
+      id: snapshot.id,
+      name: snapshot['fullName'],
+      imageURL: snapshot['imageURL'],
+      phone: snapshot['phone'],
+      bio: snapshot['bio'],
+      startPrice: snapshot['startPrice'],
+      endPrice: snapshot['endPrice'],
+      rating: (snapshot['rating'] as int).toDouble(),
+      services: ((snapshot['services'] as List?) ?? [])
+          .map(
+            (service) => Service(
+              id: service['id'],
+              description: service['description'],
+            ),
+          )
+          .toList(),
+      skills: ((snapshot['skills'] as List?) ?? [])
+          .map(
+            (skill) => Skill(
+              id: skill['id'],
+              description: skill['description'],
+            ),
+          )
+          .toList(),
+    );
+  }
 }

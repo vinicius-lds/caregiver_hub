@@ -4,6 +4,7 @@ class JobDetailActionButton extends StatelessWidget {
   final String text;
   final Color color;
   final Icon icon;
+  final bool disabled;
   final void Function() onPressed;
 
   const JobDetailActionButton({
@@ -11,6 +12,7 @@ class JobDetailActionButton extends StatelessWidget {
     required this.text,
     required this.color,
     required this.icon,
+    required this.disabled,
     required this.onPressed,
   }) : super(key: key);
 
@@ -18,7 +20,7 @@ class JobDetailActionButton extends StatelessWidget {
   Widget build(BuildContext context) {
     final textScaleFactor = MediaQuery.of(context).textScaleFactor;
     return ElevatedButton(
-      onPressed: onPressed,
+      onPressed: disabled ? null : onPressed,
       style: ButtonStyle(
         padding: MaterialStateProperty.all<EdgeInsets>(
           const EdgeInsets.symmetric(
