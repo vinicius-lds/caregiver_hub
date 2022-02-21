@@ -1,5 +1,5 @@
 import 'package:caregiver_hub/main.dart';
-import 'package:caregiver_hub/shared/providers/profile_provider.dart';
+import 'package:caregiver_hub/shared/providers/app_state_provider.dart';
 import 'package:caregiver_hub/shared/widgets/app_bar_popup_menu_button.dart';
 import 'package:caregiver_hub/shared/widgets/loading.dart';
 import 'package:caregiver_hub/social/models/chat_message.dart';
@@ -19,7 +19,7 @@ class ChatScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final profileProvider = Provider.of<ProfileProvider>(context);
+    final appStateProvider = Provider.of<AppStateProvider>(context);
     final args =
         ModalRoute.of(context)!.settings.arguments as Map<String, dynamic>;
     final otherUserImageURL = args['otherUserImageURL'] as String?;
@@ -39,9 +39,9 @@ class ChatScreen extends StatelessWidget {
       body: StreamBuilder<List<ChatMessage>>(
         stream: _chatService.fetchChatMessages(
           employerId:
-              profileProvider.isCaregiver ? otherUserId : profileProvider.id,
+              appStateProvider.isCaregiver ? otherUserId : appStateProvider.id,
           caregiverId:
-              profileProvider.isCaregiver ? profileProvider.id : otherUserId,
+              appStateProvider.isCaregiver ? appStateProvider.id : otherUserId,
         ),
         builder: (bContext, snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
@@ -62,7 +62,7 @@ class ChatScreen extends StatelessWidget {
                       return MessageBubble(
                         content: data[index].content,
                         isReceived:
-                            data[index].employerId == profileProvider.id,
+                            data[index].employerId == appStateProvider.id,
                       );
                     },
                   ),

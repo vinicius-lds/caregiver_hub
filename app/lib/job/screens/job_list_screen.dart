@@ -3,7 +3,7 @@ import 'package:caregiver_hub/job/services/job_service.dart';
 import 'package:caregiver_hub/job/widgets/job_item.dart';
 import 'package:caregiver_hub/main.dart';
 import 'package:caregiver_hub/shared/constants/pagination.dart';
-import 'package:caregiver_hub/shared/providers/profile_provider.dart';
+import 'package:caregiver_hub/shared/providers/app_state_provider.dart';
 import 'package:caregiver_hub/shared/widgets/app_bar_popup_menu_button.dart';
 import 'package:caregiver_hub/shared/widgets/empty_state.dart';
 import 'package:caregiver_hub/shared/widgets/loading.dart';
@@ -24,7 +24,7 @@ class _JobListScreenState extends State<JobListScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final profileProvider = Provider.of<ProfileProvider>(context);
+    final appStateProvider = Provider.of<AppStateProvider>(context);
     final textScaleFactor = MediaQuery.of(context).textScaleFactor;
     return Scaffold(
       appBar: AppBar(
@@ -37,9 +37,9 @@ class _JobListScreenState extends State<JobListScreen> {
         child: StreamBuilder<List<Job>>(
           stream: _jobService.fetchJobs(
             caregiverId:
-                profileProvider.isCaregiver ? profileProvider.id : null,
+                appStateProvider.isCaregiver ? appStateProvider.id : null,
             employerId:
-                !profileProvider.isCaregiver ? profileProvider.id : null,
+                !appStateProvider.isCaregiver ? appStateProvider.id : null,
             size: _size,
           ),
           builder: (bContext, snapshot) {

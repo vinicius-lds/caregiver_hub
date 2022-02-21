@@ -1,5 +1,5 @@
 import 'package:caregiver_hub/main.dart';
-import 'package:caregiver_hub/shared/providers/profile_provider.dart';
+import 'package:caregiver_hub/shared/providers/app_state_provider.dart';
 import 'package:caregiver_hub/shared/widgets/error_state.dart';
 import 'package:caregiver_hub/shared/widgets/loading.dart';
 import 'package:caregiver_hub/shared/models/user_form_data.dart';
@@ -15,9 +15,9 @@ class ProfileScreen extends StatelessWidget {
 
   Widget _buildBody(BuildContext context, {required bool isEdit}) {
     if (isEdit) {
-      final profileProvider = Provider.of<ProfileProvider>(context);
+      final appStateProvider = Provider.of<AppStateProvider>(context);
       return StreamBuilder(
-        stream: _userService.fetchUserFormData(profileProvider.id),
+        stream: _userService.fetchUserFormData(appStateProvider.id),
         builder: (bContext, snapshot) {
           if (snapshot.connectionState != ConnectionState.done) {
             return const Loading();

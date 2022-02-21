@@ -1,15 +1,23 @@
 import 'package:caregiver_hub/caregiver/models/caregiver_recomendation_form_data.dart';
+import 'package:caregiver_hub/caregiver/services/caregiver_recomendation_service.dart';
 import 'package:caregiver_hub/caregiver/widgets/star_rating.dart';
+import 'package:caregiver_hub/main.dart';
+import 'package:caregiver_hub/shared/exceptions/service_exception.dart';
+import 'package:caregiver_hub/shared/models/caregiver_recomendation_user_data.dart';
+import 'package:caregiver_hub/shared/providers/app_state_provider.dart';
 import 'package:caregiver_hub/shared/validation/functions.dart';
 import 'package:caregiver_hub/shared/validation/validators.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 class CaregiverRecomendationForm extends StatefulWidget {
-  final CaregiverRecomendationFormData data;
+  final CaregiverRecomendationFormData caregiverRecomendationFormData;
+  final CaregiverRecomendationUserData caregiverRecomendationUserData;
 
   const CaregiverRecomendationForm({
     Key? key,
-    required this.data,
+    required this.caregiverRecomendationFormData,
+    required this.caregiverRecomendationUserData,
   }) : super(key: key);
 
   @override
@@ -19,19 +27,50 @@ class CaregiverRecomendationForm extends StatefulWidget {
 
 class _CaregiverRecomendationFormState
     extends State<CaregiverRecomendationForm> {
+  final _caregiverRecomendationService = getIt<CaregiverRecomendationService>();
+
   final _formKey = GlobalKey<FormState>();
+
+  bool _disabled = false;
 
   String? _recomendation;
   int? _rating;
 
-  void _submit(BuildContext context) {
-    print('submit');
+  void _submit(BuildContext context) async {
     final isValid = _formKey.currentState!.validate();
     if (isValid) {
       _formKey.currentState!.save();
-      print('rating $_rating');
+      setState(() => _disabled = true);
+      try {
+        final appStateProvider =
+            Provider.of<AppStateProvider>(context, listen: false);
+        if (widget.caregiverRecomendationFormData.id == null) {
+          await _caregiverRecomendationService.createCaregiverRecomendation(
+            employerId: appStateProvider.id,
+            caregiverId: widget.caregiverRecomendationFormData.caregiverId,
+            recomendation: _recomendation,
+            rating: _rating!,
+          );
+        } else {
+          await _caregiverRecomendationService.updateCaregiverRecomendation(
+            id: widget.caregiverRecomendationFormData.id!,
+            recomendation: _recomendation,
+            rating: _rating!,
+          );
+        }
+        Navigator.of(context).pop();
+      } on ServiceException catch (e) {
+        _showSnackBar(context, e.message);
+      }
+      setState(() => _disabled = false);
     }
-    Navigator.of(context).pop();
+  }
+
+  void _showSnackBar(BuildContext context, String message) {
+    final snackBar = SnackBar(
+      content: Text(message),
+    );
+    ScaffoldMessenger.of(context).showSnackBar(snackBar);
   }
 
   @override
@@ -54,14 +93,21 @@ class _CaregiverRecomendationFormState
                   ),
                   image: DecorationImage(
                     fit: BoxFit.fill,
-                    image: NetworkImage(widget.data.caregiverImageURL),
+                    image:
+                        widget.caregiverRecomendationUserData.imageURL == null
+                            ? const AssetImage(
+                                'assets/images/user_profile_placeholder.png',
+                              )
+                            : NetworkImage(
+                                widget.caregiverRecomendationUserData.imageURL!,
+                              ) as ImageProvider<Object>,
                   ),
                 ),
               ),
               Padding(
                 padding: const EdgeInsets.symmetric(vertical: 10),
                 child: Text(
-                  widget.data.caregiverName,
+                  widget.caregiverRecomendationUserData.name,
                   style: TextStyle(
                     fontSize: 25 * textScaleFactor,
                   ),
@@ -70,7 +116,9 @@ class _CaregiverRecomendationFormState
               Padding(
                 padding: const EdgeInsets.symmetric(vertical: 10),
                 child: StarRating(
-                  initialValue: widget.data.rating?.toDouble(),
+                  initialValue:
+                      widget.caregiverRecomendationFormData.rating?.toDouble(),
+                  displayOnly: _disabled,
                   onSaved: (value) => _rating = value?.toInt(),
                   validator: composeValidators([
                     requiredValue(message: 'É obrigatório avaliar o cuidador'),
@@ -83,9 +131,11 @@ class _CaregiverRecomendationFormState
                   decoration: const InputDecoration(
                     labelText: 'Recomendação',
                   ),
+                  readOnly: _disabled,
                   minLines: 5,
                   maxLines: 20,
-                  initialValue: widget.data.recomendation,
+                  initialValue:
+                      widget.caregiverRecomendationFormData.recomendation,
                   onFieldSubmitted: (_) => _submit(context),
                   onSaved: (value) => _recomendation = value,
                 ),
@@ -105,7 +155,7 @@ class _CaregiverRecomendationFormState
                       const EdgeInsets.symmetric(vertical: 10),
                     ),
                   ),
-                  onPressed: () => _submit(context),
+                  onPressed: _disabled ? null : () => _submit(context),
                 ),
               ),
             ],

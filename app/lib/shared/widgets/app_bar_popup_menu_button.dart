@@ -1,6 +1,6 @@
 import 'package:caregiver_hub/main.dart';
 import 'package:caregiver_hub/shared/constants/routes.dart';
-import 'package:caregiver_hub/shared/providers/profile_provider.dart';
+import 'package:caregiver_hub/shared/providers/app_state_provider.dart';
 import 'package:caregiver_hub/shared/services/auth_service.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -27,9 +27,9 @@ class AppBarPopupMenuButton extends StatelessWidget {
 
   void _onSelected(BuildContext context, ActionType actionType) async {
     if (actionType == ActionType.invert) {
-      final profileProvider =
-          Provider.of<ProfileProvider>(context, listen: false);
-      profileProvider.isCaregiver = !profileProvider.isCaregiver;
+      final appStateProvider =
+          Provider.of<AppStateProvider>(context, listen: false);
+      appStateProvider.isCaregiver = !appStateProvider.isCaregiver;
       Navigator.of(context).pushNamedAndRemoveUntil(
         '/',
         (route) => false, // Remove todas as telas do stack
@@ -47,7 +47,7 @@ class AppBarPopupMenuButton extends StatelessWidget {
     }
     if (actionType == ActionType.logout) {
       await _authService.logout();
-      Provider.of<ProfileProvider>(context, listen: false).id = '';
+      Provider.of<AppStateProvider>(context, listen: false).id = '';
       Navigator.of(context).pushNamedAndRemoveUntil(
         Routes.landing,
         (route) => false, // Remove todas as telas do stack
@@ -76,9 +76,9 @@ class AppBarPopupMenuButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final profileProvider = Provider.of<ProfileProvider>(context);
+    final appStateProvider = Provider.of<AppStateProvider>(context);
     final inverseUserType =
-        profileProvider.isCaregiver ? 'empregador' : 'cuidador';
+        appStateProvider.isCaregiver ? 'empregador' : 'cuidador';
     return PopupMenuButton(
       onSelected: (value) => _onSelected(context, value as ActionType),
       itemBuilder: (bContext) {
@@ -91,17 +91,17 @@ class AppBarPopupMenuButton extends StatelessWidget {
             value: ActionType.profile,
             child: Text('Perfil'),
           ),
-          if (profileProvider.isCaregiver)
+          if (appStateProvider.isCaregiver)
             const PopupMenuItem<ActionType>(
               value: ActionType.caregiverProfile,
               child: Text('Perfil de cuidador'),
             ),
-          if (!profileProvider.isCaregiver)
+          if (!appStateProvider.isCaregiver)
             const PopupMenuItem<ActionType>(
               value: ActionType.caregiverFilter,
               child: Text('Filtro'),
             ),
-          if (!profileProvider.isCaregiver)
+          if (!appStateProvider.isCaregiver)
             const PopupMenuItem<ActionType>(
               value: ActionType.caregiverList,
               child: Text('Cuidadores'),

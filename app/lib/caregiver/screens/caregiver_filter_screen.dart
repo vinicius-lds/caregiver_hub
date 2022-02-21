@@ -26,8 +26,6 @@ class _CaregiverFilterScreenState extends State<CaregiverFilterScreen> {
   final _formKey = GlobalKey<FormState>();
 
   PlaceCoordinates? _placeCoordinates;
-  DateTime? _startDate;
-  DateTime? _endDate;
   List<Service?>? _services;
   List<Skill?>? _skills;
 
@@ -39,8 +37,6 @@ class _CaregiverFilterScreenState extends State<CaregiverFilterScreen> {
           Provider.of<CaregiverProvider>(context, listen: false);
       caregiverProvider.applyFilter(
         placeCoordinates: _placeCoordinates,
-        startDate: _startDate,
-        endDate: _endDate,
         services: _services,
         skills: _skills,
       );

@@ -3,7 +3,7 @@ import 'package:caregiver_hub/job/widgets/job_status_type_icon.dart';
 import 'package:caregiver_hub/main.dart';
 import 'package:caregiver_hub/shared/constants/routes.dart';
 import 'package:caregiver_hub/shared/models/job_user_data.dart';
-import 'package:caregiver_hub/shared/providers/profile_provider.dart';
+import 'package:caregiver_hub/shared/providers/app_state_provider.dart';
 import 'package:caregiver_hub/shared/services/user_service.dart';
 import 'package:caregiver_hub/shared/widgets/loading.dart';
 import 'package:flutter/material.dart';
@@ -26,11 +26,11 @@ class JobItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final profileProvider = Provider.of<ProfileProvider>(context);
+    final appStateProvider = Provider.of<AppStateProvider>(context);
     return StreamBuilder<JobUserData>(
         stream: _userService.fetchJobUserData(
           userId:
-              profileProvider.isCaregiver ? job.caregiverId : job.employerId,
+              appStateProvider.isCaregiver ? job.caregiverId : job.employerId,
         ),
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {

@@ -1,5 +1,5 @@
 import 'package:caregiver_hub/main.dart';
-import 'package:caregiver_hub/shared/providers/profile_provider.dart';
+import 'package:caregiver_hub/shared/providers/app_state_provider.dart';
 import 'package:caregiver_hub/shared/widgets/error_state.dart';
 import 'package:caregiver_hub/shared/widgets/loading.dart';
 import 'package:caregiver_hub/shared/models/caregiver_form_data.dart';
@@ -15,13 +15,13 @@ class CaregiverFormScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final profileProvider = Provider.of<ProfileProvider>(context);
+    final appStateProvider = Provider.of<AppStateProvider>(context);
     return Scaffold(
       appBar: AppBar(
         title: const Text('Perfil de cuidador'),
       ),
       body: StreamBuilder(
-        stream: _userService.fetchCaregiverFormData(profileProvider.id),
+        stream: _userService.fetchCaregiverFormData(appStateProvider.id),
         builder: (bContext, snapshot) {
           if (snapshot.connectionState != ConnectionState.done) {
             return const Loading();

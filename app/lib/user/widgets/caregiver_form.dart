@@ -3,7 +3,7 @@ import 'package:caregiver_hub/shared/constants/routes.dart';
 import 'package:caregiver_hub/shared/exceptions/service_exception.dart';
 import 'package:caregiver_hub/shared/models/service.dart';
 import 'package:caregiver_hub/shared/models/skill.dart';
-import 'package:caregiver_hub/shared/providers/profile_provider.dart';
+import 'package:caregiver_hub/shared/providers/app_state_provider.dart';
 import 'package:caregiver_hub/shared/validation/functions.dart';
 import 'package:caregiver_hub/shared/validation/validators.dart';
 import 'package:caregiver_hub/shared/widgets/multi_select_chip_field_custom.dart';
@@ -49,7 +49,7 @@ class _CaregiverFormState extends State<CaregiverForm> {
       setState(() => _disabled = true);
       try {
         await _userService.updateCaregiverData(
-          userId: Provider.of<ProfileProvider>(context, listen: false).id,
+          userId: Provider.of<AppStateProvider>(context, listen: false).id,
           showAsCaregiver: _showAsCaregiver!,
           bio: _bio,
           services: _services!
@@ -168,9 +168,10 @@ class _CaregiverFormState extends State<CaregiverForm> {
                   textInputAction: TextInputAction.next,
                   controller: _startPriceController,
                   validator: composeValidators([
-                    requiredValue(message: 'O campo é obrigatório'),
                     greaterThan(
-                      () => _endPriceController.numberValue,
+                      () => _endPriceController.numberValue > 0
+                          ? _endPriceController.numberValue
+                          : double.infinity,
                       message:
                           'O valor inicial deve ser inferior ao valor final',
                       doubleParser: (value) =>
@@ -187,13 +188,15 @@ class _CaregiverFormState extends State<CaregiverForm> {
                   ),
                   autovalidateMode: AutovalidateMode.onUserInteraction,
                   readOnly: _disabled,
-                  textInputAction: TextInputAction.next,
+                  textInputAction: TextInputAction.done,
                   keyboardType: TextInputType.number,
                   controller: _endPriceController,
+                  onFieldSubmitted: (_) => _submit(context),
                   validator: composeValidators([
-                    requiredValue(message: 'O campo é obrigatório'),
                     lessThan(
-                      () => _startPriceController.numberValue,
+                      () => _startPriceController.numberValue > 0
+                          ? _endPriceController.numberValue
+                          : -1,
                       message:
                           'O valor final deve ser superior ao valor inicial',
                       doubleParser: (value) => _endPriceController.numberValue,

@@ -1,6 +1,7 @@
 import 'package:caregiver_hub/caregiver/widgets/caregiver_list_item.dart';
 import 'package:caregiver_hub/shared/constants/pagination.dart';
 import 'package:caregiver_hub/shared/models/caregiver.dart';
+import 'package:caregiver_hub/shared/providers/app_state_provider.dart';
 import 'package:caregiver_hub/shared/providers/caregiver_provider.dart';
 import 'package:caregiver_hub/shared/widgets/app_bar_popup_menu_button.dart';
 import 'package:caregiver_hub/shared/widgets/empty_state.dart';
@@ -21,6 +22,7 @@ class _CaregiverListScreenState extends State<CaregiverListScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final appStateProvider = Provider.of<AppStateProvider>(context);
     final caregiverProvider = Provider.of<CaregiverProvider>(context);
     final textScaleFactor = MediaQuery.of(context).textScaleFactor;
     return Scaffold(
@@ -31,7 +33,10 @@ class _CaregiverListScreenState extends State<CaregiverListScreen> {
         ],
       ),
       body: StreamBuilder(
-        stream: caregiverProvider.listStream(size: _size),
+        stream: caregiverProvider.listStream(
+          idIgnore: appStateProvider.id,
+          size: _size,
+        ),
         builder: (bContext, snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
             return const SizedBox(

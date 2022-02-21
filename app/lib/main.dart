@@ -1,9 +1,8 @@
-import 'package:caregiver_hub/caregiver/providers/caregiver_recomendation_provider.dart';
 import 'package:caregiver_hub/caregiver/screens/caregiver_filter_screen.dart';
 import 'package:caregiver_hub/caregiver/screens/caregiver_list_screen.dart';
 import 'package:caregiver_hub/caregiver/screens/caregiver_profile_screen.dart';
 import 'package:caregiver_hub/caregiver/screens/caregiver_recomendation_screen.dart';
-import 'package:caregiver_hub/job/providers/job_provider.dart';
+import 'package:caregiver_hub/caregiver/services/caregiver_recomendation_service.dart';
 import 'package:caregiver_hub/job/screens/job_description_screen.dart';
 import 'package:caregiver_hub/job/screens/job_proposal_screen.dart';
 import 'package:caregiver_hub/job/screens/job_list_screen.dart';
@@ -12,7 +11,7 @@ import 'package:caregiver_hub/location/screens/place_picker_screen.dart';
 import 'package:caregiver_hub/location/services/location_service.dart';
 import 'package:caregiver_hub/shared/constants/routes.dart';
 import 'package:caregiver_hub/shared/providers/caregiver_provider.dart';
-import 'package:caregiver_hub/shared/providers/profile_provider.dart';
+import 'package:caregiver_hub/shared/providers/app_state_provider.dart';
 import 'package:caregiver_hub/shared/services/auth_service.dart';
 import 'package:caregiver_hub/shared/services/caregiver_service.dart';
 import 'package:caregiver_hub/shared/services/service_service.dart';
@@ -42,6 +41,9 @@ void main() async {
   getIt.registerLazySingleton<CaregiverService>(() => CaregiverService());
   getIt.registerLazySingleton<ChatService>(() => ChatService());
   getIt.registerLazySingleton<JobService>(() => JobService());
+  getIt.registerLazySingleton<CaregiverRecomendationService>(
+    () => CaregiverRecomendationService(),
+  );
   runApp(const MyApp());
 }
 
@@ -53,16 +55,10 @@ class MyApp extends StatelessWidget {
     return MultiProvider(
       providers: [
         ChangeNotifierProvider(
-          create: (ctx) => ProfileProvider(),
+          create: (ctx) => AppStateProvider(),
         ),
         ChangeNotifierProvider(
           create: (ctx) => CaregiverProvider(),
-        ),
-        ChangeNotifierProvider(
-          create: (ctx) => CaregiverRecomendationProvider(),
-        ),
-        ChangeNotifierProvider(
-          create: (ctx) => JobProvider(),
         ),
       ],
       child: const _MyHomePage(),
@@ -77,12 +73,12 @@ class _MyHomePage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final profileProvider = Provider.of<ProfileProvider>(context);
+    final appStateProvider = Provider.of<AppStateProvider>(context);
 
     Widget homeWidget;
-    if (profileProvider.id.isEmpty) {
+    if (appStateProvider.id.isEmpty) {
       homeWidget = const LandingScreen();
-    } else if (profileProvider.isCaregiver) {
+    } else if (appStateProvider.isCaregiver) {
       homeWidget = const JobListScreen();
     } else {
       homeWidget = const CaregiverFilterScreen();
@@ -99,11 +95,10 @@ class _MyHomePage extends StatelessWidget {
         Routes.caregiverFilter: (_) => const CaregiverFilterScreen(),
         Routes.caregiverList: (_) => const CaregiverListScreen(),
         Routes.caregiverProfile: (_) => const CaregiverProfileScreen(),
-        Routes.caregiverRecomendation: (_) =>
-            const CaregiverRecomendationScreen(),
+        Routes.caregiverRecomendation: (_) => CaregiverRecomendationScreen(),
 
         // job
-        Routes.jobDescription: (_) => JobDescriptionScreen(),
+        Routes.jobDescription: (_) => const JobDescriptionScreen(),
         Routes.jobForm: (_) => const JobProposalScreen(),
         Routes.jobList: (_) => const JobListScreen(),
 

@@ -2,18 +2,20 @@ import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 
 class ButtonFooter extends StatelessWidget {
+  final String primaryText;
+  final String secondaryText;
+  final bool disabled;
+  final void Function()? onPrimary;
+  final void Function()? onSecondary;
+
   const ButtonFooter({
     Key? key,
     required this.primaryText,
     required this.secondaryText,
+    required this.disabled,
     required this.onPrimary,
     required this.onSecondary,
   }) : super(key: key);
-
-  final String primaryText;
-  final String secondaryText;
-  final void Function()? onPrimary;
-  final void Function()? onSecondary;
 
   @override
   Widget build(BuildContext context) {
@@ -41,7 +43,7 @@ class ButtonFooter extends StatelessWidget {
                 Colors.grey,
               ),
             ),
-            onPressed: onSecondary,
+            onPressed: disabled ? null : onSecondary,
           ),
         ),
         Padding(
@@ -61,7 +63,7 @@ class ButtonFooter extends StatelessWidget {
                 ),
               ),
             ),
-            onPressed: onPrimary,
+            onPressed: disabled ? null : onPrimary,
           ),
         ),
       ],

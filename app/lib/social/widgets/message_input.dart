@@ -1,5 +1,5 @@
 import 'package:caregiver_hub/main.dart';
-import 'package:caregiver_hub/shared/providers/profile_provider.dart';
+import 'package:caregiver_hub/shared/providers/app_state_provider.dart';
 import 'package:caregiver_hub/social/services/chat_service.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -32,16 +32,18 @@ class _MessageInputState extends State<MessageInput> {
     if (_message == null || _message!.trim() == '') {
       return;
     }
-    final profileProvider =
-        Provider.of<ProfileProvider>(context, listen: false);
+    final appStateProvider =
+        Provider.of<AppStateProvider>(context, listen: false);
     _formKey.currentState!.reset();
     _focusNode.requestFocus();
     await _chatService.pushMessage(
       _message!,
-      caregiverId:
-          profileProvider.isCaregiver ? profileProvider.id : widget.otherUserId,
-      employerId:
-          profileProvider.isCaregiver ? widget.otherUserId : profileProvider.id,
+      caregiverId: appStateProvider.isCaregiver
+          ? appStateProvider.id
+          : widget.otherUserId,
+      employerId: appStateProvider.isCaregiver
+          ? widget.otherUserId
+          : appStateProvider.id,
     );
     widget.onSend();
   }

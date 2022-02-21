@@ -41,14 +41,13 @@ class JobService {
       'price': price,
       'isCanceled': false,
       'isApprovedByEmployer': true,
-      'isApprovedByCaregiver': false
+      'isApprovedByCaregiver': false,
+      'createdAt': DateTime.now(),
     });
   }
 
   Future<void> editProposal({
     required String jobId,
-    required String caregiverId,
-    required String employerId,
     required PlaceCoordinates placeCoordinates,
     required DateTime startDate,
     required DateTime endDate,
@@ -56,9 +55,7 @@ class JobService {
     required double price,
     required bool isCaregiver,
   }) async {
-    await _firestore.collection('jobs').doc(jobId).set({
-      'caregiverId': caregiverId,
-      'employerId': employerId,
+    await _firestore.collection('jobs').doc(jobId).update({
       'placeCoordinates': {
         'id': placeCoordinates.id,
         'description': placeCoordinates.description,
@@ -101,6 +98,7 @@ class JobService {
           isEqualTo: caregiverId ?? employerId,
         )
         .limit(size)
+        .orderBy('createdAt', descending: true)
         .snapshots()
         .map(
           (snapshot) => snapshot.docs

@@ -38,7 +38,7 @@ class Caregiver {
       bio: snapshot['bio'],
       startPrice: snapshot['startPrice'],
       endPrice: snapshot['endPrice'],
-      rating: (snapshot['rating'] as int).toDouble(),
+      rating: snapshot['rating'] == null ? 0.0 : snapshot['rating'].toDouble(),
       services: ((snapshot['services'] as List?) ?? [])
           .map(
             (service) => Service(

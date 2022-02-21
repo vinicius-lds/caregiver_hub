@@ -6,7 +6,7 @@ import 'package:caregiver_hub/shared/constants/routes.dart';
 import 'package:caregiver_hub/shared/exceptions/service_exception.dart';
 import 'package:caregiver_hub/shared/models/job_user_data.dart';
 import 'package:caregiver_hub/shared/models/service.dart';
-import 'package:caregiver_hub/shared/providers/profile_provider.dart';
+import 'package:caregiver_hub/shared/providers/app_state_provider.dart';
 import 'package:caregiver_hub/shared/widgets/app_bar_popup_menu_button.dart';
 import 'package:caregiver_hub/shared/widgets/contacts_bar.dart';
 import 'package:caregiver_hub/shared/widgets/multi_select_chip_field_custom.dart';
@@ -30,7 +30,8 @@ class _JobDescriptionScreenState extends State<JobDescriptionScreen> {
   void _accept(BuildContext context, Job job) async {
     setState(() => _disabled = true);
     try {
-      final profileProvider = Provider.of<ProfileProvider>(context);
+      final appStateProvider =
+          Provider.of<AppStateProvider>(context, listen: false);
       final now = DateTime.now();
       if (job.startDate.isBefore(now) || job.endDate.isBefore(now)) {
         _showSnackBar(
@@ -40,10 +41,10 @@ class _JobDescriptionScreenState extends State<JobDescriptionScreen> {
       } else {
         await _jobService.accept(
           jobId: job.id,
-          isCaregiver: profileProvider.isCaregiver,
+          isCaregiver: appStateProvider.isCaregiver,
         );
+        Navigator.of(context).pop();
       }
-      Navigator.of(context).pop();
     } on ServiceException catch (e) {
       _showSnackBar(context, e.message);
     }
@@ -76,7 +77,6 @@ class _JobDescriptionScreenState extends State<JobDescriptionScreen> {
   }
 
   void _recomenCaregiver(BuildContext context, Job job) {
-    print('recomenCaregiver');
     Navigator.of(context).pushNamed(Routes.caregiverRecomendation, arguments: {
       'caregiverId': job.caregiverId,
     });
@@ -95,7 +95,7 @@ class _JobDescriptionScreenState extends State<JobDescriptionScreen> {
         ModalRoute.of(context)!.settings.arguments as Map<String, dynamic>;
     final job = args['job'] as Job;
     final jobUserData = args['jobUserData'] as JobUserData;
-    final profileProvider = Provider.of<ProfileProvider>(context);
+    final appStateProvider = Provider.of<AppStateProvider>(context);
     final textScaleFactor = MediaQuery.of(context).textScaleFactor;
     return LayoutBuilder(
       builder: (bContext, constraints) => Scaffold(
@@ -208,9 +208,9 @@ class _JobDescriptionScreenState extends State<JobDescriptionScreen> {
                           ),
                         ),
                       if (job.jobStatusType == JobStatusType.inNegotiation &&
-                          ((profileProvider.isCaregiver &&
+                          ((appStateProvider.isCaregiver &&
                                   !job.isApprovedByCaregiver) ||
-                              (!profileProvider.isCaregiver &&
+                              (!appStateProvider.isCaregiver &&
                                   !job.isApprovedByEmployer)))
                         Padding(
                           padding: const EdgeInsets.symmetric(vertical: 4),
@@ -223,7 +223,7 @@ class _JobDescriptionScreenState extends State<JobDescriptionScreen> {
                           ),
                         ),
                       if (job.jobStatusType == JobStatusType.done &&
-                          !profileProvider.isCaregiver)
+                          !appStateProvider.isCaregiver)
                         Padding(
                           padding: const EdgeInsets.symmetric(vertical: 4),
                           child: JobDetailActionButton(

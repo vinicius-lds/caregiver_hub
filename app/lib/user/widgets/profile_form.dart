@@ -1,7 +1,7 @@
 import 'package:caregiver_hub/main.dart';
 import 'package:caregiver_hub/shared/constants/routes.dart';
 import 'package:caregiver_hub/shared/exceptions/service_exception.dart';
-import 'package:caregiver_hub/shared/providers/profile_provider.dart';
+import 'package:caregiver_hub/shared/providers/app_state_provider.dart';
 import 'package:caregiver_hub/shared/validation/functions.dart';
 import 'package:caregiver_hub/shared/validation/validators.dart';
 import 'package:caregiver_hub/shared/models/user_form_data.dart';
@@ -80,7 +80,7 @@ class _ProfileFormState extends State<ProfileForm> {
           email: _email!,
           password: _password!,
         );
-        Provider.of<ProfileProvider>(context, listen: false).id =
+        Provider.of<AppStateProvider>(context, listen: false).id =
             userCredential.user!.uid;
         Navigator.of(context).pushNamedAndRemoveUntil(
           Routes.caregiverFilter,
@@ -122,7 +122,8 @@ class _ProfileFormState extends State<ProfileForm> {
     final textScaleFactor = MediaQuery.of(context).textScaleFactor;
     if (widget.data != null) {
       PhoneNumber.getRegionInfoFromPhoneNumber(widget.data!.phone, 'BR').then(
-        (value) => _phoneTextEditingController.text = value.phoneNumber ?? '',
+        (value) =>
+            _phoneTextEditingController.text = value.parseNumber().substring(1),
       );
     }
     return Form(

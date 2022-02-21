@@ -121,12 +121,12 @@ class CaregiverProfileScreen extends StatelessWidget {
                             children: [
                               Icon(
                                 Icons.attach_money,
-                                size: 30 * textScaleFactor,
+                                size: 20 * textScaleFactor,
                               ),
                               Text(
                                 'Negociar trabalho',
                                 style: TextStyle(
-                                  fontSize: 25 * textScaleFactor,
+                                  fontSize: 20 * textScaleFactor,
                                 ),
                               ),
                             ],

@@ -10,16 +10,20 @@ class Loading extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      children: [
-        const CircularProgressIndicator.adaptive(),
-        Text(
-          'Carregando...',
-          style: TextStyle(
-            color: color,
+    return Container(
+      width: double.infinity,
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: [
+          const CircularProgressIndicator.adaptive(),
+          Text(
+            'Carregando...',
+            style: TextStyle(
+              color: color,
+            ),
           ),
-        ),
-      ],
+        ],
+      ),
     );
   }
 }

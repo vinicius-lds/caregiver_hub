@@ -1,5 +1,5 @@
 import 'package:caregiver_hub/shared/constants/routes.dart';
-import 'package:caregiver_hub/shared/providers/profile_provider.dart';
+import 'package:caregiver_hub/shared/providers/app_state_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -7,12 +7,12 @@ class LandingScreen extends StatelessWidget {
   const LandingScreen({Key? key}) : super(key: key);
 
   void _pushCaregiverLogin(BuildContext context) {
-    Provider.of<ProfileProvider>(context, listen: false).isCaregiver = true;
+    Provider.of<AppStateProvider>(context, listen: false).isCaregiver = true;
     Navigator.of(context).pushNamed(Routes.login);
   }
 
   void _pushEmployerLogin(BuildContext context) {
-    Provider.of<ProfileProvider>(context, listen: false).isCaregiver = false;
+    Provider.of<AppStateProvider>(context, listen: false).isCaregiver = false;
     Navigator.of(context).pushNamed(Routes.login);
   }
 

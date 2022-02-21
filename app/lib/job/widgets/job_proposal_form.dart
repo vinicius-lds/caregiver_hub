@@ -6,7 +6,7 @@ import 'package:caregiver_hub/shared/exceptions/service_exception.dart';
 import 'package:caregiver_hub/shared/models/caregiver.dart';
 import 'package:caregiver_hub/shared/models/place_coordinates.dart';
 import 'package:caregiver_hub/shared/models/service.dart';
-import 'package:caregiver_hub/shared/providers/profile_provider.dart';
+import 'package:caregiver_hub/shared/providers/app_state_provider.dart';
 import 'package:caregiver_hub/shared/validation/functions.dart';
 import 'package:caregiver_hub/shared/validation/validators.dart';
 import 'package:caregiver_hub/shared/widgets/date_time_picker.dart';
@@ -53,13 +53,11 @@ class _JobProposalFormState extends State<JobProposalForm> {
     _formKey.currentState!.save();
 
     setState(() => _disabled = true);
-    final profileProvider =
-        Provider.of<ProfileProvider>(context, listen: false);
+    final appStateProvider =
+        Provider.of<AppStateProvider>(context, listen: false);
     try {
       await _jobService.editProposal(
         jobId: widget.job!.id,
-        caregiverId: job.employerId,
-        employerId: job.employerId,
         placeCoordinates: _placeCoordinates!,
         startDate: _startDate!,
         endDate: _endDate!,
@@ -68,7 +66,7 @@ class _JobProposalFormState extends State<JobProposalForm> {
             .map((item) => item!)
             .toList(),
         price: _priceController.numberValue,
-        isCaregiver: profileProvider.isCaregiver,
+        isCaregiver: appStateProvider.isCaregiver,
       );
     } on ServiceException catch (e) {
       _showSnackBar(context, e.message);
@@ -90,11 +88,11 @@ class _JobProposalFormState extends State<JobProposalForm> {
 
     setState(() => _disabled = true);
     try {
-      final profileProvider =
-          Provider.of<ProfileProvider>(context, listen: false);
+      final appStateProvider =
+          Provider.of<AppStateProvider>(context, listen: false);
       _jobService.makeProposal(
         caregiverId: widget.caregiver.id,
-        employerId: profileProvider.id,
+        employerId: appStateProvider.id,
         placeCoordinates: _placeCoordinates!,
         startDate: _startDate!,
         endDate: _endDate!,
@@ -168,7 +166,7 @@ class _JobProposalFormState extends State<JobProposalForm> {
                       message:
                           'O início não pode ser igual ou superior ao fim da atividade',
                     ),
-                    after(
+                    before(
                       () => DateTime.now(),
                       message:
                           'O início não pode ser igual ou anterior ao horário atual',
@@ -190,7 +188,7 @@ class _JobProposalFormState extends State<JobProposalForm> {
                       message:
                           'O fim não pode ser igual ou inferior ao início da atividade',
                     ),
-                    after(
+                    before(
                       () => DateTime.now(),
                       message:
                           'O fim não pode ser igual ou anterior ao horário atual',
@@ -228,6 +226,12 @@ class _JobProposalFormState extends State<JobProposalForm> {
                 autovalidateMode: AutovalidateMode.onUserInteraction,
                 keyboardType: TextInputType.number,
                 textInputAction: TextInputAction.next,
+                onFieldSubmitted: (_) => widget.job == null
+                    ? _makeProposal(
+                        context,
+                        caregiverId: widget.caregiver.id,
+                      )
+                    : _editProposal(context, job: widget.job!),
                 validator: composeValidators([
                   requiredValue(message: 'O campo é obrigatório'),
                   greaterThan(
@@ -261,8 +265,10 @@ class _JobProposalFormState extends State<JobProposalForm> {
                   onPressed: _disabled
                       ? null
                       : () => widget.job == null
-                          ? _makeProposal(context,
-                              caregiverId: widget.caregiver.id)
+                          ? _makeProposal(
+                              context,
+                              caregiverId: widget.caregiver.id,
+                            )
                           : _editProposal(context, job: widget.job!),
                 ),
               ),

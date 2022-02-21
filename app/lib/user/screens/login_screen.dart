@@ -1,7 +1,7 @@
 import 'package:caregiver_hub/main.dart';
 import 'package:caregiver_hub/shared/constants/routes.dart';
 import 'package:caregiver_hub/shared/exceptions/service_exception.dart';
-import 'package:caregiver_hub/shared/providers/profile_provider.dart';
+import 'package:caregiver_hub/shared/providers/app_state_provider.dart';
 import 'package:caregiver_hub/shared/validation/functions.dart';
 import 'package:caregiver_hub/shared/validation/validators.dart';
 import 'package:caregiver_hub/shared/widgets/button_footer.dart';
@@ -43,19 +43,20 @@ class _LoginScreenState extends State<LoginScreen> {
 
   void _login(BuildContext context) async {
     setState(() => _disabled = true);
-    final profileProvider =
-        Provider.of<ProfileProvider>(context, listen: false);
+    final appStateProvider =
+        Provider.of<AppStateProvider>(context, listen: false);
     final isValid = _formKey.currentState!.validate();
     if (isValid) {
       _formKey.currentState!.save();
       try {
-        final userCredential = await _authService.login(
+        await _authService.login(
           email: _email!,
           password: _password!,
         );
-        profileProvider.id = userCredential.user!.uid;
         Navigator.of(context).pushNamedAndRemoveUntil(
-          profileProvider.isCaregiver ? Routes.jobList : Routes.caregiverFilter,
+          appStateProvider.isCaregiver
+              ? Routes.jobList
+              : Routes.caregiverFilter,
           (route) => false, // Remove todas as telas do stack
         );
       } on ServiceException catch (e) {
@@ -114,6 +115,7 @@ class _LoginScreenState extends State<LoginScreen> {
                       decoration: const InputDecoration(
                         labelText: 'E-mail',
                       ),
+                      readOnly: _disabled,
                       autovalidateMode: AutovalidateMode.onUserInteraction,
                       focusNode: _emailFocusNode,
                       onFieldSubmitted: _focusOn(context, _passwordFocusNode),
@@ -130,9 +132,10 @@ class _LoginScreenState extends State<LoginScreen> {
                       decoration: const InputDecoration(
                         labelText: 'Senha',
                       ),
+                      readOnly: _disabled,
                       autovalidateMode: AutovalidateMode.onUserInteraction,
                       focusNode: _passwordFocusNode,
-                      onFieldSubmitted: (_) => _login,
+                      onFieldSubmitted: (_) => _login(context),
                       obscureText: true,
                       onSaved: (value) => _password = value,
                       textInputAction: TextInputAction.next,
@@ -146,6 +149,7 @@ class _LoginScreenState extends State<LoginScreen> {
                     child: ButtonFooter(
                       primaryText: 'Entrar',
                       secondaryText: 'Criar conta',
+                      disabled: _disabled,
                       onPrimary: () => _login(context),
                       onSecondary: _signIn,
                     ),

@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:caregiver_hub/shared/exceptions/service_exception.dart';
+import 'package:caregiver_hub/shared/models/caregiver_recomendation_user_data.dart';
 import 'package:caregiver_hub/shared/models/job_user_data.dart';
 import 'package:caregiver_hub/shared/models/service.dart';
 import 'package:caregiver_hub/shared/models/skill.dart';
@@ -87,17 +88,30 @@ class UserService {
         _auth.currentUser!.updatePassword(password);
       }
 
-      String? imageURL = imagePath == null || imagePath.trim() == ''
-          ? null
-          : await uploadImage(_auth.currentUser!.uid, imagePath);
-
-      await _firestore.collection('users').doc(_auth.currentUser!.uid).update({
-        'fullName': fullName,
-        'cpf': cpf,
-        'phone': phone,
-        'email': email,
-        'imageURL': imageURL,
-      });
+      if (imagePath == null || imagePath.trim() == '') {
+        final String imageURL =
+            await uploadImage(_auth.currentUser!.uid, imagePath!);
+        await _firestore
+            .collection('users')
+            .doc(_auth.currentUser!.uid)
+            .update({
+          'fullName': fullName,
+          'cpf': cpf,
+          'phone': phone,
+          'email': email,
+          'imageURL': imageURL,
+        });
+      } else {
+        await _firestore
+            .collection('users')
+            .doc(_auth.currentUser!.uid)
+            .update({
+          'fullName': fullName,
+          'cpf': cpf,
+          'phone': phone,
+          'email': email,
+        });
+      }
     });
   }
 
@@ -132,7 +146,6 @@ class UserService {
             .toList(),
         'startPrice': startPrice,
         'endPrice': endPrice,
-        'rating': 0,
       });
     });
   }
@@ -179,6 +192,17 @@ class UserService {
             imageURL: snapshot['imageURL'],
             name: snapshot['fullName'],
             phone: snapshot['phone'],
+          ),
+        );
+  }
+
+  Stream<CaregiverRecomendationUserData> fetchCaregiverRecomendationUserData({
+    required String userId,
+  }) {
+    return _firestore.collection('users').doc(userId).get().asStream().map(
+          (snapshot) => CaregiverRecomendationUserData(
+            imageURL: snapshot['imageURL'],
+            name: snapshot['fullName'],
           ),
         );
   }
