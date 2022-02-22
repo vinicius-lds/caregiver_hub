@@ -7,7 +7,6 @@ import 'package:caregiver_hub/shared/validation/functions.dart';
 import 'package:caregiver_hub/shared/validation/validators.dart';
 import 'package:caregiver_hub/shared/widgets/button_footer.dart';
 import 'package:caregiver_hub/shared/services/auth_service.dart';
-import 'package:caregiver_hub/user/widgets/google_sign_in_button.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -146,12 +145,6 @@ class _LoginScreenState extends State<LoginScreen> {
                       disabled: _disabled,
                       onPrimary: () => _login(context),
                       onSecondary: _signIn,
-                    ),
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.symmetric(vertical: 4),
-                    child: GoogleSignInButton(
-                      onPressed: _signInWithGoogle,
                     ),
                   ),
                 ],
