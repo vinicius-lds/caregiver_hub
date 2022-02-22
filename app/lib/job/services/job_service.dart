@@ -2,6 +2,7 @@ import 'package:caregiver_hub/job/models/job.dart';
 import 'package:caregiver_hub/shared/constants/pagination.dart';
 import 'package:caregiver_hub/shared/models/place_coordinates.dart';
 import 'package:caregiver_hub/shared/models/service.dart';
+import 'package:caregiver_hub/shared/utils/io.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 
@@ -17,32 +18,34 @@ class JobService {
     required List<Service> services,
     required double price,
   }) async {
-    await _firestore.collection('jobs').add({
-      'caregiverId': caregiverId,
-      'employerId': employerId,
-      'placeCoordinates': {
-        'id': placeCoordinates.id,
-        'description': placeCoordinates.description,
-        'coordinates': {
-          'latitude': placeCoordinates.coordinates.latitude,
-          'longitude': placeCoordinates.coordinates.longitude,
+    handleFirebaseExceptions(() async {
+      await _firestore.collection('jobs').add({
+        'caregiverId': caregiverId,
+        'employerId': employerId,
+        'placeCoordinates': {
+          'id': placeCoordinates.id,
+          'description': placeCoordinates.description,
+          'coordinates': {
+            'latitude': placeCoordinates.coordinates.latitude,
+            'longitude': placeCoordinates.coordinates.longitude,
+          },
         },
-      },
-      'startDate': startDate,
-      'endDate': endDate,
-      'services': services
-          .map(
-            (service) => {
-              'id': service.id,
-              'description': service.description,
-            },
-          )
-          .toList(),
-      'price': price,
-      'isCanceled': false,
-      'isApprovedByEmployer': true,
-      'isApprovedByCaregiver': false,
-      'createdAt': DateTime.now(),
+        'startDate': startDate,
+        'endDate': endDate,
+        'services': services
+            .map(
+              (service) => {
+                'id': service.id,
+                'description': service.description,
+              },
+            )
+            .toList(),
+        'price': price,
+        'isCanceled': false,
+        'isApprovedByEmployer': true,
+        'isApprovedByCaregiver': false,
+        'createdAt': DateTime.now(),
+      });
     });
   }
 
@@ -55,29 +58,31 @@ class JobService {
     required double price,
     required bool isCaregiver,
   }) async {
-    await _firestore.collection('jobs').doc(jobId).update({
-      'placeCoordinates': {
-        'id': placeCoordinates.id,
-        'description': placeCoordinates.description,
-        'coordinates': {
-          'latitude': placeCoordinates.coordinates.latitude,
-          'longitude': placeCoordinates.coordinates.longitude,
+    handleFirebaseExceptions(() async {
+      await _firestore.collection('jobs').doc(jobId).update({
+        'placeCoordinates': {
+          'id': placeCoordinates.id,
+          'description': placeCoordinates.description,
+          'coordinates': {
+            'latitude': placeCoordinates.coordinates.latitude,
+            'longitude': placeCoordinates.coordinates.longitude,
+          },
         },
-      },
-      'startDate': startDate,
-      'endDate': endDate,
-      'services': services
-          .map(
-            (service) => {
-              'id': service.id,
-              'description': service.description,
-            },
-          )
-          .toList(),
-      'price': price,
-      'isCanceled': false,
-      'isApprovedByEmployer': !isCaregiver,
-      'isApprovedByCaregiver': isCaregiver
+        'startDate': startDate,
+        'endDate': endDate,
+        'services': services
+            .map(
+              (service) => {
+                'id': service.id,
+                'description': service.description,
+              },
+            )
+            .toList(),
+        'price': price,
+        'isCanceled': false,
+        'isApprovedByEmployer': !isCaregiver,
+        'isApprovedByCaregiver': isCaregiver
+      });
     });
   }
 
@@ -139,13 +144,20 @@ class JobService {
     required String jobId,
     required bool isCaregiver,
   }) async {
-    final payload = isCaregiver
-        ? {'isApprovedByCaregiver': true}
-        : {'isApprovedByEmployer': true};
-    await _firestore.collection('jobs').doc(jobId).update(payload);
+    handleFirebaseExceptions(() async {
+      final payload = isCaregiver
+          ? {'isApprovedByCaregiver': true}
+          : {'isApprovedByEmployer': true};
+      await _firestore.collection('jobs').doc(jobId).update(payload);
+    });
   }
 
   Future<void> cancel({required String jobId}) async {
-    await _firestore.collection('jobs').doc(jobId).update({'isCanceled': true});
+    handleFirebaseExceptions(() async {
+      await _firestore
+          .collection('jobs')
+          .doc(jobId)
+          .update({'isCanceled': true});
+    });
   }
 }

@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:caregiver_hub/shared/models/place.dart';
 import 'package:caregiver_hub/shared/models/place_coordinates.dart';
+import 'package:caregiver_hub/shared/utils/io.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:http/http.dart' as http;
 
@@ -33,23 +34,25 @@ class PlaceService {
   }
 
   Future<PlaceCoordinates> toPlaceCoordinates(final Place place) async {
-    final uri = Uri.https(
-      'maps.googleapis.com',
-      '/maps/api/place/details/json',
-      {
-        'fields': 'geometry',
-        'place_id': place.id,
-        'key': 'AIzaSyCmw_go04MwX36WMZDOb6XsvXGZLWTIda0',
-      },
-    );
-    final response = await http.get(uri);
-    final body = jsonDecode(response.body);
-    final location = body['result']['geometry']['location'];
-    final coordinates = LatLng(location['lat'], location['lng']);
-    return PlaceCoordinates(
-      id: place.id,
-      description: place.description,
-      coordinates: coordinates,
-    );
+    return await handleHttpExceptions(() async {
+      final uri = Uri.https(
+        'maps.googleapis.com',
+        '/maps/api/place/details/json',
+        {
+          'fields': 'geometry',
+          'place_id': place.id,
+          'key': 'AIzaSyCmw_go04MwX36WMZDOb6XsvXGZLWTIda0',
+        },
+      );
+      final response = await http.get(uri);
+      final body = jsonDecode(response.body);
+      final location = body['result']['geometry']['location'];
+      final coordinates = LatLng(location['lat'], location['lng']);
+      return PlaceCoordinates(
+        id: place.id,
+        description: place.description,
+        coordinates: coordinates,
+      );
+    });
   }
 }

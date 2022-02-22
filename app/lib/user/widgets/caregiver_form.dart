@@ -4,6 +4,7 @@ import 'package:caregiver_hub/shared/exceptions/service_exception.dart';
 import 'package:caregiver_hub/shared/models/service.dart';
 import 'package:caregiver_hub/shared/models/skill.dart';
 import 'package:caregiver_hub/shared/providers/app_state_provider.dart';
+import 'package:caregiver_hub/shared/utils/gui.dart';
 import 'package:caregiver_hub/shared/validation/functions.dart';
 import 'package:caregiver_hub/shared/validation/validators.dart';
 import 'package:caregiver_hub/shared/widgets/multi_select_chip_field_custom.dart';
@@ -68,17 +69,10 @@ class _CaregiverFormState extends State<CaregiverForm> {
           (route) => false, // Remove todas as telas do stack
         );
       } on ServiceException catch (e) {
-        _showSnackBar(context, e.message);
+        showSnackBar(context, e.message);
       }
       setState(() => _disabled = false);
     }
-  }
-
-  void _showSnackBar(BuildContext context, String message) {
-    final snackBar = SnackBar(
-      content: Text(message),
-    );
-    ScaffoldMessenger.of(context).showSnackBar(snackBar);
   }
 
   @override

@@ -1,7 +1,9 @@
 import 'package:caregiver_hub/main.dart';
 import 'package:caregiver_hub/shared/constants/routes.dart';
+import 'package:caregiver_hub/shared/exceptions/service_exception.dart';
 import 'package:caregiver_hub/shared/providers/app_state_provider.dart';
 import 'package:caregiver_hub/shared/services/auth_service.dart';
+import 'package:caregiver_hub/shared/utils/gui.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -46,12 +48,16 @@ class AppBarPopupMenuButton extends StatelessWidget {
       return;
     }
     if (actionType == ActionType.logout) {
-      await _authService.logout();
-      Provider.of<AppStateProvider>(context, listen: false).id = '';
-      Navigator.of(context).pushNamedAndRemoveUntil(
-        Routes.landing,
-        (route) => false, // Remove todas as telas do stack
-      );
+      try {
+        await _authService.logout();
+        Provider.of<AppStateProvider>(context, listen: false).id = '';
+        Navigator.of(context).pushNamedAndRemoveUntil(
+          Routes.landing,
+          (route) => false, // Remove todas as telas do stack
+        );
+      } on ServiceException catch (e) {
+        showSnackBar(context, e.message);
+      }
       return;
     }
     String newRouteName;

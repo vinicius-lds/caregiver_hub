@@ -7,6 +7,7 @@ import 'package:caregiver_hub/shared/models/service.dart';
 import 'package:caregiver_hub/shared/models/skill.dart';
 import 'package:caregiver_hub/shared/models/caregiver_form_data.dart';
 import 'package:caregiver_hub/shared/models/user_form_data.dart';
+import 'package:caregiver_hub/shared/utils/io.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
@@ -77,7 +78,7 @@ class UserService {
     required String email,
     required String? password,
   }) async {
-    return await _safe(() async {
+    return await handleFirebaseExceptions(() async {
       if (_auth.currentUser == null) {
         throw ServiceException(
           'É necessário estar logado para alterar os dados do usuário.',
@@ -124,7 +125,7 @@ class UserService {
     required double startPrice,
     required double endPrice,
   }) async {
-    return await _safe(() async {
+    return await handleFirebaseExceptions(() async {
       await _firestore.collection('users').doc(_auth.currentUser!.uid).update({
         'showAsCaregiver': showAsCaregiver,
         'bio': bio,
@@ -158,7 +159,7 @@ class UserService {
     required String email,
     required String password,
   }) async {
-    return await _safe(() async {
+    return await handleFirebaseExceptions(() async {
       final userCredential = await _auth.createUserWithEmailAndPassword(
         email: email,
         password: password,
@@ -181,8 +182,10 @@ class UserService {
   }
 
   Future<String> uploadImage(String userId, String imagePath) async {
-    final ref = _storage.ref().child('userImage').child(userId + '.jpg');
-    return await (await ref.putFile(File(imagePath))).ref.getDownloadURL();
+    return await handleFirebaseExceptions(() async {
+      final ref = _storage.ref().child('userImage').child(userId + '.jpg');
+      return await (await ref.putFile(File(imagePath))).ref.getDownloadURL();
+    });
   }
 
   Stream<JobUserData> fetchJobUserData({required String userId}) {
@@ -205,29 +208,5 @@ class UserService {
             name: snapshot['fullName'],
           ),
         );
-  }
-
-  Future<dynamic> _safe(Function fn) async {
-    try {
-      return await fn();
-    } on FirebaseAuthException catch (e) {
-      if (e.code == 'email-already-in-use') {
-        throw ServiceException('O e-mail já está em uso.');
-      }
-      if (e.code == 'invalid-email') {
-        throw ServiceException('O e-mail é inválido.');
-      }
-      if (e.code == 'operation-not-allowed') {
-        throw ServiceException('A operação não é permitida.');
-      }
-      if (e.code == 'weak-password') {
-        throw ServiceException('A senha é muito fraca.');
-      }
-      throw ServiceException('Ocorreu um erro na comunicação com o servidor.');
-    } on ServiceException catch (_) {
-      rethrow;
-    } on Exception catch (_) {
-      throw ServiceException('Ocorreu um erro na comunicação com o servidor.');
-    }
   }
 }

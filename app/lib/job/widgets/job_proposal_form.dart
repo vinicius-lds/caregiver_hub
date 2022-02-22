@@ -7,6 +7,7 @@ import 'package:caregiver_hub/shared/models/caregiver.dart';
 import 'package:caregiver_hub/shared/models/place_coordinates.dart';
 import 'package:caregiver_hub/shared/models/service.dart';
 import 'package:caregiver_hub/shared/providers/app_state_provider.dart';
+import 'package:caregiver_hub/shared/utils/gui.dart';
 import 'package:caregiver_hub/shared/validation/functions.dart';
 import 'package:caregiver_hub/shared/validation/validators.dart';
 import 'package:caregiver_hub/shared/widgets/date_time_picker.dart';
@@ -69,7 +70,7 @@ class _JobProposalFormState extends State<JobProposalForm> {
         isCaregiver: appStateProvider.isCaregiver,
       );
     } on ServiceException catch (e) {
-      _showSnackBar(context, e.message);
+      showSnackBar(context, e.message);
     }
     setState(() => _disabled = false);
 
@@ -103,7 +104,7 @@ class _JobProposalFormState extends State<JobProposalForm> {
         price: _priceController.numberValue,
       );
     } on ServiceException catch (e) {
-      _showSnackBar(context, e.message);
+      showSnackBar(context, e.message);
     }
     setState(() => _disabled = false);
 
@@ -111,13 +112,6 @@ class _JobProposalFormState extends State<JobProposalForm> {
       Routes.jobList,
       (route) => false, // Remove todas as telas do stack
     );
-  }
-
-  void _showSnackBar(BuildContext context, String message) {
-    final snackBar = SnackBar(
-      content: Text(message),
-    );
-    ScaffoldMessenger.of(context).showSnackBar(snackBar);
   }
 
   @override

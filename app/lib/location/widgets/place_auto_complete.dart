@@ -1,3 +1,4 @@
+import 'package:caregiver_hub/shared/exceptions/service_exception.dart';
 import 'package:caregiver_hub/shared/models/place.dart';
 import 'package:caregiver_hub/shared/models/place_coordinates.dart';
 import 'package:caregiver_hub/location/services/location_service.dart';
@@ -5,6 +6,7 @@ import 'package:caregiver_hub/location/widgets/place_auto_complete_button.dart';
 import 'package:caregiver_hub/location/widgets/place_auto_complete_item.dart';
 import 'package:caregiver_hub/location/widgets/text_field_custom.dart';
 import 'package:caregiver_hub/main.dart';
+import 'package:caregiver_hub/shared/utils/gui.dart';
 import 'package:caregiver_hub/shared/widgets/empty_state.dart';
 import 'package:caregiver_hub/shared/widgets/loading.dart';
 import 'package:flutter/material.dart';
@@ -66,8 +68,14 @@ class _PlaceAutoCompleteState extends State<PlaceAutoComplete> {
       _showResults = false;
       _selectedPlace = place;
     });
-    final placeCoordinates = await placeService.toPlaceCoordinates(place);
-    widget.onSelectedPlaceCoordinates(placeCoordinates);
+    try {
+      final placeCoordinates = await placeService.toPlaceCoordinates(place);
+      widget.onSelectedPlaceCoordinates(placeCoordinates);
+    } on ServiceException catch (e) {
+      showSnackBar(context, e.message);
+      _controller.text = '';
+      setState(() => _selectedPlace = null);
+    }
   }
 
   void _onSearchValueChanged(String? input) {

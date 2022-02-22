@@ -1,5 +1,7 @@
 import 'package:caregiver_hub/main.dart';
+import 'package:caregiver_hub/shared/exceptions/service_exception.dart';
 import 'package:caregiver_hub/shared/providers/app_state_provider.dart';
+import 'package:caregiver_hub/shared/utils/gui.dart';
 import 'package:caregiver_hub/social/services/chat_service.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -36,16 +38,20 @@ class _MessageInputState extends State<MessageInput> {
         Provider.of<AppStateProvider>(context, listen: false);
     _formKey.currentState!.reset();
     _focusNode.requestFocus();
-    await _chatService.pushMessage(
-      _message!,
-      caregiverId: appStateProvider.isCaregiver
-          ? appStateProvider.id
-          : widget.otherUserId,
-      employerId: appStateProvider.isCaregiver
-          ? widget.otherUserId
-          : appStateProvider.id,
-    );
-    widget.onSend();
+    try {
+      await _chatService.pushMessage(
+        _message!,
+        caregiverId: appStateProvider.isCaregiver
+            ? appStateProvider.id
+            : widget.otherUserId,
+        employerId: appStateProvider.isCaregiver
+            ? widget.otherUserId
+            : appStateProvider.id,
+      );
+      widget.onSend();
+    } on ServiceException catch (e) {
+      showSnackBar(context, e.message);
+    }
   }
 
   @override

@@ -2,6 +2,7 @@ import 'package:caregiver_hub/caregiver/models/caregiver_recomendation_card_data
 import 'package:caregiver_hub/caregiver/models/caregiver_recomendation_form_data.dart';
 import 'package:caregiver_hub/shared/services/user_service.dart';
 import 'package:caregiver_hub/main.dart';
+import 'package:caregiver_hub/shared/utils/io.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 class CaregiverRecomendationService {
@@ -35,13 +36,15 @@ class CaregiverRecomendationService {
     required String? recomendation,
     required int rating,
   }) async {
-    await _firestore.collection('caregiverRecomendations').add({
-      'employerId': employerId,
-      'caregiverId': caregiverId,
-      'recomendation': recomendation,
-      'rating': rating,
-      'createdAt': DateTime.now(),
-      'updatedAt': DateTime.now(),
+    handleFirebaseExceptions(() async {
+      await _firestore.collection('caregiverRecomendations').add({
+        'employerId': employerId,
+        'caregiverId': caregiverId,
+        'recomendation': recomendation,
+        'rating': rating,
+        'createdAt': DateTime.now(),
+        'updatedAt': DateTime.now(),
+      });
     });
   }
 
@@ -50,10 +53,12 @@ class CaregiverRecomendationService {
     required String? recomendation,
     required int rating,
   }) async {
-    await _firestore.collection('caregiverRecomendations').doc(id).update({
-      'recomendation': recomendation,
-      'rating': rating,
-      'updatedAt': DateTime.now(),
+    handleFirebaseExceptions(() async {
+      await _firestore.collection('caregiverRecomendations').doc(id).update({
+        'recomendation': recomendation,
+        'rating': rating,
+        'updatedAt': DateTime.now(),
+      });
     });
   }
 

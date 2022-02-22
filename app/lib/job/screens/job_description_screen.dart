@@ -7,6 +7,7 @@ import 'package:caregiver_hub/shared/exceptions/service_exception.dart';
 import 'package:caregiver_hub/shared/models/job_user_data.dart';
 import 'package:caregiver_hub/shared/models/service.dart';
 import 'package:caregiver_hub/shared/providers/app_state_provider.dart';
+import 'package:caregiver_hub/shared/utils/gui.dart';
 import 'package:caregiver_hub/shared/widgets/app_bar_popup_menu_button.dart';
 import 'package:caregiver_hub/shared/widgets/contacts_bar.dart';
 import 'package:caregiver_hub/shared/widgets/multi_select_chip_field_custom.dart';
@@ -34,7 +35,7 @@ class _JobDescriptionScreenState extends State<JobDescriptionScreen> {
           Provider.of<AppStateProvider>(context, listen: false);
       final now = DateTime.now();
       if (job.startDate.isBefore(now) || job.endDate.isBefore(now)) {
-        _showSnackBar(
+        showSnackBar(
           context,
           'Não é possível aprovar um trabalho com data anterior a atual.',
         );
@@ -46,7 +47,7 @@ class _JobDescriptionScreenState extends State<JobDescriptionScreen> {
         Navigator.of(context).pop();
       }
     } on ServiceException catch (e) {
-      _showSnackBar(context, e.message);
+      showSnackBar(context, e.message);
     }
     setState(() => _disabled = false);
   }
@@ -67,7 +68,7 @@ class _JobDescriptionScreenState extends State<JobDescriptionScreen> {
       await _jobService.cancel(jobId: job.id);
       Navigator.of(context).pop();
     } on ServiceException catch (e) {
-      _showSnackBar(context, e.message);
+      showSnackBar(context, e.message);
     }
     setState(() => _disabled = false);
   }
@@ -80,13 +81,6 @@ class _JobDescriptionScreenState extends State<JobDescriptionScreen> {
     Navigator.of(context).pushNamed(Routes.caregiverRecomendation, arguments: {
       'caregiverId': job.caregiverId,
     });
-  }
-
-  void _showSnackBar(BuildContext context, String message) {
-    final snackBar = SnackBar(
-      content: Text(message),
-    );
-    ScaffoldMessenger.of(context).showSnackBar(snackBar);
   }
 
   @override

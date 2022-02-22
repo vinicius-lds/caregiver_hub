@@ -2,6 +2,7 @@ import 'package:caregiver_hub/main.dart';
 import 'package:caregiver_hub/shared/constants/routes.dart';
 import 'package:caregiver_hub/shared/exceptions/service_exception.dart';
 import 'package:caregiver_hub/shared/providers/app_state_provider.dart';
+import 'package:caregiver_hub/shared/utils/gui.dart';
 import 'package:caregiver_hub/shared/validation/functions.dart';
 import 'package:caregiver_hub/shared/validation/validators.dart';
 import 'package:caregiver_hub/shared/models/user_form_data.dart';
@@ -98,16 +99,9 @@ class _ProfileFormState extends State<ProfileForm> {
         Navigator.of(context).pop();
       }
     } on ServiceException catch (e) {
-      _showSnackBar(context, e.message);
+      showSnackBar(context, e.message);
     }
     setState(() => _disabled = false);
-  }
-
-  void _showSnackBar(BuildContext context, String message) {
-    final snackBar = SnackBar(
-      content: Text(message),
-    );
-    ScaffoldMessenger.of(context).showSnackBar(snackBar);
   }
 
   MaskTextInputFormatter get _cpfMask {

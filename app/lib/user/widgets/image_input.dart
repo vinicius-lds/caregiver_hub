@@ -1,6 +1,6 @@
 import 'dart:io';
 
-import 'package:caregiver_hub/shared/utils/io/camera.dart';
+import 'package:caregiver_hub/shared/utils/io.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 

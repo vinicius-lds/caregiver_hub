@@ -1,3 +1,4 @@
+import 'package:caregiver_hub/shared/utils/io.dart';
 import 'package:caregiver_hub/social/models/chat_message.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
@@ -9,11 +10,13 @@ class ChatService {
     required String caregiverId,
     required String employerId,
   }) async {
-    await _firestore.collection('chat').add({
-      'content': message,
-      'createdAt': Timestamp.now(),
-      'caregiverId': caregiverId,
-      'employerId': employerId,
+    handleFirebaseExceptions(() async {
+      await _firestore.collection('chat').add({
+        'content': message,
+        'createdAt': Timestamp.now(),
+        'caregiverId': caregiverId,
+        'employerId': employerId,
+      });
     });
   }
 

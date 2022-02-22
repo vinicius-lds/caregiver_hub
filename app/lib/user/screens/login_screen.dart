@@ -2,6 +2,7 @@ import 'package:caregiver_hub/main.dart';
 import 'package:caregiver_hub/shared/constants/routes.dart';
 import 'package:caregiver_hub/shared/exceptions/service_exception.dart';
 import 'package:caregiver_hub/shared/providers/app_state_provider.dart';
+import 'package:caregiver_hub/shared/utils/gui.dart';
 import 'package:caregiver_hub/shared/validation/functions.dart';
 import 'package:caregiver_hub/shared/validation/validators.dart';
 import 'package:caregiver_hub/shared/widgets/button_footer.dart';
@@ -60,7 +61,7 @@ class _LoginScreenState extends State<LoginScreen> {
           (route) => false, // Remove todas as telas do stack
         );
       } on ServiceException catch (e) {
-        _showSnackBar(context, e.message);
+        showSnackBar(context, e.message);
       }
     }
     setState(() => _disabled = false);
@@ -76,13 +77,6 @@ class _LoginScreenState extends State<LoginScreen> {
       Routes.caregiverFilter,
       (route) => false, // Remove todas as telas do stack
     );
-  }
-
-  void _showSnackBar(BuildContext context, String message) {
-    final snackBar = SnackBar(
-      content: Text(message),
-    );
-    ScaffoldMessenger.of(context).showSnackBar(snackBar);
   }
 
   @override
