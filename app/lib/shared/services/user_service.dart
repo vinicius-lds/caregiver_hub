@@ -195,6 +195,7 @@ class UserService {
             imageURL: snapshot['imageURL'],
             name: snapshot['fullName'],
             phone: snapshot['phone'],
+            email: snapshot['email'],
           ),
         );
   }

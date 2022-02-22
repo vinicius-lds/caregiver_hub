@@ -3,14 +3,22 @@ class JobUserData {
   final String? imageURL;
   final String name;
   final String phone;
+  final String email;
   const JobUserData({
     required this.id,
     required this.imageURL,
     required this.name,
     required this.phone,
+    required this.email,
   });
 
   factory JobUserData.empty() {
-    return JobUserData(id: '', imageURL: null, name: '', phone: '');
+    return const JobUserData(
+      id: '',
+      imageURL: null,
+      name: '',
+      phone: '',
+      email: '',
+    );
   }
 }

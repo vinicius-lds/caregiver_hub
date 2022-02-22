@@ -71,6 +71,7 @@ class CaregiverProfileScreen extends StatelessWidget {
                         otherUserImageURL: caregiver.imageURL,
                         otherUserName: caregiver.name,
                         otherUserPhone: caregiver.phone,
+                        otherUserEmail: caregiver.email,
                       ),
                       Container(
                         alignment: Alignment.center,

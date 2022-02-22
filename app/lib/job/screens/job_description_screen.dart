@@ -130,6 +130,7 @@ class _JobDescriptionScreenState extends State<JobDescriptionScreen> {
                         otherUserImageURL: jobUserData.imageURL,
                         otherUserName: jobUserData.name,
                         otherUserPhone: jobUserData.phone,
+                        otherUserEmail: jobUserData.email,
                       ),
                       Container(
                         alignment: Alignment.center,

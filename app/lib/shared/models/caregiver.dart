@@ -7,6 +7,7 @@ class Caregiver {
   final String name;
   final String? imageURL;
   final String phone;
+  final String email;
   final String? bio;
   final double? startPrice;
   final double? endPrice;
@@ -19,6 +20,7 @@ class Caregiver {
     required this.name,
     required this.imageURL,
     required this.phone,
+    required this.email,
     required this.bio,
     required this.startPrice,
     required this.endPrice,
@@ -35,6 +37,7 @@ class Caregiver {
       name: snapshot['fullName'],
       imageURL: snapshot['imageURL'],
       phone: snapshot['phone'],
+      email: snapshot['email'],
       bio: snapshot['bio'],
       startPrice: snapshot['startPrice'],
       endPrice: snapshot['endPrice'],

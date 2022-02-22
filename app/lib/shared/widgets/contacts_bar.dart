@@ -1,6 +1,8 @@
 import 'package:caregiver_hub/shared/constants/routes.dart';
 import 'package:caregiver_hub/shared/widgets/contact_item.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_launch/flutter_launch.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class ContactsBar extends StatelessWidget {
   final double size;
@@ -8,6 +10,7 @@ class ContactsBar extends StatelessWidget {
   final String? otherUserImageURL;
   final String otherUserName;
   final String otherUserPhone;
+  final String otherUserEmail;
 
   const ContactsBar({
     Key? key,
@@ -16,10 +19,10 @@ class ContactsBar extends StatelessWidget {
     required this.otherUserImageURL,
     required this.otherUserName,
     required this.otherUserPhone,
+    required this.otherUserEmail,
   }) : super(key: key);
 
   void _pushChat(BuildContext context) {
-    print('pushChat');
     Navigator.of(context).pushNamed(Routes.chat, arguments: {
       'otherUserId': otherUserId,
       'otherUserName': otherUserName,
@@ -27,12 +30,28 @@ class ContactsBar extends StatelessWidget {
     });
   }
 
-  void _pushWhatsApp(BuildContext context) {
-    print('pushWhatsApp');
+  void _pushWhatsApp(BuildContext context) async {
+    await FlutterLaunch.launchWhatsapp(
+      phone: '55992681107',
+      message: 'Hello',
+    );
   }
 
-  void _pushPhone(BuildContext context) {
-    print('pushPhone');
+  void _pushEmail(BuildContext context) {
+    final Uri emailLaunchUri = Uri(
+      scheme: 'mailto',
+      path: otherUserEmail,
+      query: _encodeQueryParameters(
+          <String, String>{'subject': 'Negociação no CaregiverHub!'}),
+    );
+    launch(emailLaunchUri.toString());
+  }
+
+  String? _encodeQueryParameters(Map<String, String> params) {
+    return params.entries
+        .map((e) =>
+            '${Uri.encodeComponent(e.key)}=${Uri.encodeComponent(e.value)}')
+        .join('&');
   }
 
   @override
@@ -51,9 +70,9 @@ class ContactsBar extends StatelessWidget {
           onTap: () => _pushWhatsApp(context),
         ),
         ContactItem(
-          icon: const AssetImage('assets/images/phone.png'),
+          icon: const AssetImage('assets/images/email.png'),
           size: size,
-          onTap: () => _pushPhone(context),
+          onTap: () => _pushEmail(context),
         ),
       ],
     );

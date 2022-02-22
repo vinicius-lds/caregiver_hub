@@ -131,12 +131,12 @@ class _JobProposalFormState extends State<JobProposalForm> {
       child: SingleChildScrollView(
         child: Container(
           width: double.infinity,
-          padding: const EdgeInsets.symmetric(vertical: 16, horizontal: 16),
+          padding: const EdgeInsets.symmetric(horizontal: 10),
           alignment: Alignment.center,
           child: Column(
             children: [
               Padding(
-                padding: const EdgeInsets.symmetric(vertical: 4),
+                padding: const EdgeInsets.symmetric(vertical: 10),
                 child: PlaceCoordinatesField(
                   initialValue: widget.job?.placeCoordinates,
                   disabled: _disabled,
@@ -148,7 +148,7 @@ class _JobProposalFormState extends State<JobProposalForm> {
                 ),
               ),
               Padding(
-                padding: const EdgeInsets.symmetric(vertical: 4),
+                padding: const EdgeInsets.symmetric(vertical: 10),
                 child: DateTimePicker(
                   label: 'Início da atividade',
                   disabled: _disabled,
@@ -170,7 +170,7 @@ class _JobProposalFormState extends State<JobProposalForm> {
                 ),
               ),
               Padding(
-                padding: const EdgeInsets.symmetric(vertical: 4),
+                padding: const EdgeInsets.symmetric(vertical: 10),
                 child: DateTimePicker(
                   label: 'Fim da atividade',
                   disabled: _disabled,
@@ -192,7 +192,7 @@ class _JobProposalFormState extends State<JobProposalForm> {
                 ),
               ),
               Padding(
-                padding: const EdgeInsets.symmetric(vertical: 4),
+                padding: const EdgeInsets.symmetric(vertical: 10),
                 child: MultiSelectChipFieldCustom<Service, String>(
                   items: widget.caregiver.services,
                   displayOnly: _disabled,
@@ -242,7 +242,7 @@ class _JobProposalFormState extends State<JobProposalForm> {
                 ]),
               ),
               Container(
-                padding: const EdgeInsets.symmetric(vertical: 4),
+                padding: const EdgeInsets.symmetric(vertical: 10),
                 width: double.infinity,
                 child: ElevatedButton(
                   child: Text(
