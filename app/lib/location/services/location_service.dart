@@ -16,7 +16,6 @@ class PlaceService {
           {
             'input': input,
             'language': 'pt_BR',
-            'types': 'address',
             'key': 'AIzaSyCmw_go04MwX36WMZDOb6XsvXGZLWTIda0',
           },
         ),

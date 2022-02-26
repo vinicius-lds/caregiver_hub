@@ -4,6 +4,7 @@ import 'package:caregiver_hub/main.dart';
 import 'package:caregiver_hub/shared/constants/routes.dart';
 import 'package:caregiver_hub/shared/exceptions/service_exception.dart';
 import 'package:caregiver_hub/shared/models/caregiver.dart';
+import 'package:caregiver_hub/shared/models/location.dart';
 import 'package:caregiver_hub/shared/models/place_coordinates.dart';
 import 'package:caregiver_hub/shared/models/service.dart';
 import 'package:caregiver_hub/shared/providers/app_state_provider.dart';
@@ -12,7 +13,7 @@ import 'package:caregiver_hub/shared/validation/functions.dart';
 import 'package:caregiver_hub/shared/validation/validators.dart';
 import 'package:caregiver_hub/shared/widgets/date_time_picker.dart';
 import 'package:caregiver_hub/shared/widgets/multi_select_chip_field_custom.dart';
-import 'package:caregiver_hub/shared/widgets/place_coordinates_field.dart';
+import 'package:caregiver_hub/shared/widgets/location_field.dart';
 import 'package:extended_masked_text/extended_masked_text.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
@@ -137,13 +138,19 @@ class _JobProposalFormState extends State<JobProposalForm> {
             children: [
               Padding(
                 padding: const EdgeInsets.symmetric(vertical: 10),
-                child: PlaceCoordinatesField(
-                  initialValue: widget.job?.placeCoordinates,
+                child: LocationField(
+                  initialValue: widget.job != null
+                      ? Location.fromPlaceCoordinates(
+                          widget.job!.placeCoordinates,
+                        )
+                      : null,
                   disabled: _disabled,
                   decoration: const InputDecoration(
                     label: Text('Localização'),
                   ),
-                  onSaved: (value) => _placeCoordinates = value,
+                  onSaved: (value) => _placeCoordinates = value == null
+                      ? null
+                      : PlaceCoordinates.fromLocation(value),
                   validator: requiredValue(message: 'O campo é obrigatório'),
                 ),
               ),

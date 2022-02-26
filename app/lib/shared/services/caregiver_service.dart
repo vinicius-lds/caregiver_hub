@@ -1,7 +1,7 @@
 import 'package:caregiver_hub/main.dart';
 import 'package:caregiver_hub/shared/constants/pagination.dart';
 import 'package:caregiver_hub/shared/models/caregiver.dart';
-import 'package:caregiver_hub/shared/models/place_coordinates.dart';
+import 'package:caregiver_hub/shared/models/location.dart';
 import 'package:caregiver_hub/shared/models/service.dart';
 import 'package:caregiver_hub/shared/models/skill.dart';
 import 'package:caregiver_hub/shared/services/auth_service.dart';
@@ -23,7 +23,7 @@ class CaregiverService {
 
   Stream<List<Caregiver>> fetchCaregivers({
     required String idIgnore,
-    PlaceCoordinates? placeCoordinates,
+    Location? location,
     List<Service>? services,
     List<Skill>? skills,
     int size = pageSize,

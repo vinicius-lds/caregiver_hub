@@ -7,7 +7,7 @@ import 'package:caregiver_hub/job/screens/job_description_screen.dart';
 import 'package:caregiver_hub/job/screens/job_proposal_screen.dart';
 import 'package:caregiver_hub/job/screens/job_list_screen.dart';
 import 'package:caregiver_hub/job/services/job_service.dart';
-import 'package:caregiver_hub/location/screens/place_picker_screen.dart';
+import 'package:caregiver_hub/location/screens/location_screen.dart';
 import 'package:caregiver_hub/location/services/location_service.dart';
 import 'package:caregiver_hub/shared/constants/routes.dart';
 import 'package:caregiver_hub/shared/providers/caregiver_provider.dart';

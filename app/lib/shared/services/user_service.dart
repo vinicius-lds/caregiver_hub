@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:caregiver_hub/shared/exceptions/service_exception.dart';
 import 'package:caregiver_hub/shared/models/caregiver_recomendation_user_data.dart';
 import 'package:caregiver_hub/shared/models/job_user_data.dart';
+import 'package:caregiver_hub/shared/models/location.dart';
 import 'package:caregiver_hub/shared/models/service.dart';
 import 'package:caregiver_hub/shared/models/skill.dart';
 import 'package:caregiver_hub/shared/models/caregiver_form_data.dart';
@@ -11,6 +12,7 @@ import 'package:caregiver_hub/shared/utils/io.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
 
 class UserService {
   final _auth = FirebaseAuth.instance;
@@ -47,6 +49,15 @@ class UserService {
       return CaregiverFormData(
         id: userId,
         showAsCaregiver: doc['showAsCaregiver'] ?? false,
+        location: Location(
+          placeId: doc['location']['placeId'],
+          placeDescription: doc['location']['placeDescription'],
+          coordinates: LatLng(
+            doc['location']['coordinates']['latitude'],
+            doc['location']['coordinates']['longitude'],
+          ),
+          radius: doc['location']['radius'],
+        ),
         bio: doc['bio'],
         services: ((doc['services'] as List?) ?? [])
             .map(
@@ -119,6 +130,7 @@ class UserService {
   Future<void> updateCaregiverData({
     required String userId,
     required bool showAsCaregiver,
+    required Location location,
     required String? bio,
     required List<Service> services,
     required List<Skill> skills,
@@ -128,6 +140,15 @@ class UserService {
     return await handleFirebaseExceptions(() async {
       await _firestore.collection('users').doc(_auth.currentUser!.uid).update({
         'showAsCaregiver': showAsCaregiver,
+        'location': {
+          'placeId': location.placeId,
+          'placeDescription': location.placeDescription,
+          'coordinates': {
+            'latitude': location.coordinates.latitude,
+            'longitude': location.coordinates.longitude,
+          },
+          'radius': location.radius,
+        },
         'bio': bio,
         'services': services
             .map(

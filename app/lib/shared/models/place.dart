@@ -1,4 +1,4 @@
-import 'package:caregiver_hub/shared/models/place_coordinates.dart';
+import 'package:caregiver_hub/shared/models/location.dart';
 
 class Place {
   final String id;
@@ -9,10 +9,10 @@ class Place {
     required this.description,
   });
 
-  factory Place.from(PlaceCoordinates placeCoordinates) {
+  factory Place.fromLocation(Location location) {
     return Place(
-      id: placeCoordinates.id,
-      description: placeCoordinates.description,
+      id: location.placeId,
+      description: location.placeDescription,
     );
   }
 }

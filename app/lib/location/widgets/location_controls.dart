@@ -1,8 +1,10 @@
+import 'package:caregiver_hub/location/widgets/radius_slider.dart';
 import 'package:caregiver_hub/shared/exceptions/service_exception.dart';
+import 'package:caregiver_hub/shared/models/location.dart';
 import 'package:caregiver_hub/shared/models/place.dart';
 import 'package:caregiver_hub/shared/models/place_coordinates.dart';
 import 'package:caregiver_hub/location/services/location_service.dart';
-import 'package:caregiver_hub/location/widgets/place_auto_complete_button.dart';
+import 'package:caregiver_hub/location/widgets/location_button.dart';
 import 'package:caregiver_hub/location/widgets/place_auto_complete_item.dart';
 import 'package:caregiver_hub/location/widgets/text_field_custom.dart';
 import 'package:caregiver_hub/main.dart';
@@ -11,29 +13,37 @@ import 'package:caregiver_hub/shared/widgets/empty_state.dart';
 import 'package:caregiver_hub/shared/widgets/loading.dart';
 import 'package:flutter/material.dart';
 
-class PlaceAutoComplete extends StatefulWidget {
+class LocationControls extends StatefulWidget {
   final bool readOnly;
-  final Place? initialPlace;
-  final void Function(PlaceCoordinates) onSelectedPlaceCoordinates;
+  final Location? initialLocation;
+  final bool radiusSelection;
+  final double? radiusMinValue;
+  final double? radiusMaxValue;
+  final void Function(Location) onChangeLocation;
+  final Function(double) onRadiusChanged;
   final VoidCallback onClear;
   final VoidCallback onCancel;
   final VoidCallback onConfirm;
 
-  const PlaceAutoComplete({
+  const LocationControls({
     Key? key,
     required this.readOnly,
-    required this.initialPlace,
-    required this.onSelectedPlaceCoordinates,
+    required this.initialLocation,
+    required this.radiusSelection,
+    required this.radiusMinValue,
+    required this.radiusMaxValue,
+    required this.onChangeLocation,
+    required this.onRadiusChanged,
     required this.onClear,
     required this.onCancel,
     required this.onConfirm,
   }) : super(key: key);
 
   @override
-  State<PlaceAutoComplete> createState() => _PlaceAutoCompleteState();
+  State<LocationControls> createState() => _LocationControlsState();
 }
 
-class _PlaceAutoCompleteState extends State<PlaceAutoComplete> {
+class _LocationControlsState extends State<LocationControls> {
   final PlaceService placeService = getIt<PlaceService>();
 
   final TextEditingController _controller = TextEditingController();
@@ -43,10 +53,12 @@ class _PlaceAutoCompleteState extends State<PlaceAutoComplete> {
   Stream<List<Place>> _placeStream = const Stream.empty();
   bool _showResults = false;
   Place? _selectedPlace;
+  double? _radius;
 
   @override
   void initState() {
     super.initState();
+    _radius = widget.radiusMinValue;
     _focusNode.addListener(() {
       if (_focusNode.hasFocus) {
         _controller.selection = TextSelection(
@@ -55,9 +67,9 @@ class _PlaceAutoCompleteState extends State<PlaceAutoComplete> {
         );
       }
     });
-    if (widget.initialPlace != null) {
-      _controller.text = widget.initialPlace!.description;
-      _selectedPlace = widget.initialPlace;
+    if (widget.initialLocation != null) {
+      _controller.text = widget.initialLocation!.placeDescription;
+      _selectedPlace = Place.fromLocation(widget.initialLocation!);
     }
   }
 
@@ -70,7 +82,10 @@ class _PlaceAutoCompleteState extends State<PlaceAutoComplete> {
     });
     try {
       final placeCoordinates = await placeService.toPlaceCoordinates(place);
-      widget.onSelectedPlaceCoordinates(placeCoordinates);
+      widget.onChangeLocation(Location.fromPlaceCoordinates(
+        placeCoordinates,
+        radius: _radius,
+      ));
     } on ServiceException catch (e) {
       showSnackBar(context, e.message);
       _controller.text = '';
@@ -92,6 +107,11 @@ class _PlaceAutoCompleteState extends State<PlaceAutoComplete> {
         _placeStream = placeService.placeAutoCompleteStream(input);
       }
     });
+  }
+
+  void _onRadiusChanged(double radius) {
+    _radius = radius;
+    widget.onRadiusChanged(radius);
   }
 
   @override
@@ -184,7 +204,18 @@ class _PlaceAutoCompleteState extends State<PlaceAutoComplete> {
             Expanded(
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.end,
+                crossAxisAlignment: CrossAxisAlignment.end,
                 children: [
+                  if (widget.radiusSelection)
+                    Padding(
+                      padding: const EdgeInsets.only(right: 4),
+                      child: RadiusSlider(
+                        initialValue: widget.initialLocation?.radius ?? _radius,
+                        minValue: widget.radiusMinValue!,
+                        maxValue: widget.radiusMaxValue!,
+                        onChanged: _onRadiusChanged,
+                      ),
+                    ),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [

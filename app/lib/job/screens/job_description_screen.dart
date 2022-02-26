@@ -5,13 +5,14 @@ import 'package:caregiver_hub/main.dart';
 import 'package:caregiver_hub/shared/constants/routes.dart';
 import 'package:caregiver_hub/shared/exceptions/service_exception.dart';
 import 'package:caregiver_hub/shared/models/job_user_data.dart';
+import 'package:caregiver_hub/shared/models/location.dart';
 import 'package:caregiver_hub/shared/models/service.dart';
 import 'package:caregiver_hub/shared/providers/app_state_provider.dart';
 import 'package:caregiver_hub/shared/utils/gui.dart';
 import 'package:caregiver_hub/shared/widgets/app_bar_popup_menu_button.dart';
 import 'package:caregiver_hub/shared/widgets/contacts_bar.dart';
 import 'package:caregiver_hub/shared/widgets/multi_select_chip_field_custom.dart';
-import 'package:caregiver_hub/shared/widgets/place_coordinates_field.dart';
+import 'package:caregiver_hub/shared/widgets/location_field.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
@@ -77,7 +78,7 @@ class _JobDescriptionScreenState extends State<JobDescriptionScreen> {
     Navigator.of(context).pushNamed(Routes.jobForm, arguments: {'job': job});
   }
 
-  void _recomenCaregiver(BuildContext context, Job job) {
+  void _recomendCaregiver(BuildContext context, Job job) {
     Navigator.of(context).pushNamed(Routes.caregiverRecomendation, arguments: {
       'caregiverId': job.caregiverId,
     });
@@ -135,9 +136,11 @@ class _JobDescriptionScreenState extends State<JobDescriptionScreen> {
                       Container(
                         alignment: Alignment.center,
                         padding: const EdgeInsets.symmetric(vertical: 10),
-                        child: PlaceCoordinatesField(
+                        child: LocationField(
                           readOnly: true,
-                          initialValue: job.placeCoordinates,
+                          initialValue: Location.fromPlaceCoordinates(
+                            job.placeCoordinates,
+                          ),
                           decoration: const InputDecoration(
                             label: Text('Localização'),
                           ),
@@ -226,7 +229,7 @@ class _JobDescriptionScreenState extends State<JobDescriptionScreen> {
                             text: 'Recomendar cuidador',
                             color: Theme.of(context).primaryColor,
                             icon: const Icon(Icons.star_border),
-                            onPressed: () => _recomenCaregiver(context, job),
+                            onPressed: () => _recomendCaregiver(context, job),
                           ),
                         ),
                     ],

@@ -1,5 +1,6 @@
 import 'package:caregiver_hub/main.dart';
 import 'package:caregiver_hub/shared/constants/routes.dart';
+import 'package:caregiver_hub/shared/models/location.dart';
 import 'package:caregiver_hub/shared/models/place_coordinates.dart';
 import 'package:caregiver_hub/shared/models/service.dart';
 import 'package:caregiver_hub/shared/models/skill.dart';
@@ -8,7 +9,7 @@ import 'package:caregiver_hub/shared/services/service_service.dart';
 import 'package:caregiver_hub/shared/services/skill_service.dart';
 import 'package:caregiver_hub/shared/widgets/app_bar_popup_menu_button.dart';
 import 'package:caregiver_hub/shared/widgets/multi_select_chip_field_custom.dart';
-import 'package:caregiver_hub/shared/widgets/place_coordinates_field.dart';
+import 'package:caregiver_hub/shared/widgets/location_field.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -25,7 +26,7 @@ class _CaregiverFilterScreenState extends State<CaregiverFilterScreen> {
 
   final _formKey = GlobalKey<FormState>();
 
-  PlaceCoordinates? _placeCoordinates;
+  Location? _location;
   List<Service?>? _services;
   List<Skill?>? _skills;
 
@@ -36,7 +37,7 @@ class _CaregiverFilterScreenState extends State<CaregiverFilterScreen> {
       final caregiverProvider =
           Provider.of<CaregiverProvider>(context, listen: false);
       caregiverProvider.applyFilter(
-        placeCoordinates: _placeCoordinates,
+        location: _location,
         services: _services,
         skills: _skills,
       );
@@ -65,11 +66,11 @@ class _CaregiverFilterScreenState extends State<CaregiverFilterScreen> {
               children: [
                 Padding(
                   padding: const EdgeInsets.symmetric(vertical: 4),
-                  child: PlaceCoordinatesField(
+                  child: LocationField(
                     decoration: const InputDecoration(
                       label: Text('Localização'),
                     ),
-                    onSaved: (value) => _placeCoordinates = value,
+                    onSaved: (value) => _location = value,
                   ),
                 ),
                 Padding(

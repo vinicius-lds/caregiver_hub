@@ -1,12 +1,14 @@
 import 'package:caregiver_hub/main.dart';
 import 'package:caregiver_hub/shared/constants/routes.dart';
 import 'package:caregiver_hub/shared/exceptions/service_exception.dart';
+import 'package:caregiver_hub/shared/models/location.dart';
 import 'package:caregiver_hub/shared/models/service.dart';
 import 'package:caregiver_hub/shared/models/skill.dart';
 import 'package:caregiver_hub/shared/providers/app_state_provider.dart';
 import 'package:caregiver_hub/shared/utils/gui.dart';
 import 'package:caregiver_hub/shared/validation/functions.dart';
 import 'package:caregiver_hub/shared/validation/validators.dart';
+import 'package:caregiver_hub/shared/widgets/location_field.dart';
 import 'package:caregiver_hub/shared/widgets/multi_select_chip_field_custom.dart';
 import 'package:caregiver_hub/shared/services/service_service.dart';
 import 'package:caregiver_hub/shared/services/skill_service.dart';
@@ -39,6 +41,7 @@ class _CaregiverFormState extends State<CaregiverForm> {
   bool _disabled = false;
 
   bool? _showAsCaregiver;
+  Location? _location;
   String? _bio;
   List<Service?>? _services;
   List<Skill?>? _skills;
@@ -52,6 +55,7 @@ class _CaregiverFormState extends State<CaregiverForm> {
         await _userService.updateCaregiverData(
           userId: Provider.of<AppStateProvider>(context, listen: false).id,
           showAsCaregiver: _showAsCaregiver!,
+          location: _location!,
           bio: _bio,
           services: _services!
               .where((element) => element != null)
@@ -94,6 +98,22 @@ class _CaregiverFormState extends State<CaregiverForm> {
                   falseLabel: 'Não aparecer como cuidador',
                   trueLabel: 'Aparecer como cuidador',
                   onSaved: (value) => _showAsCaregiver = value ?? false,
+                ),
+              ),
+              Padding(
+                padding: const EdgeInsets.symmetric(vertical: 4),
+                child: LocationField(
+                  decoration: const InputDecoration(
+                    label: Text('Área de atuação'),
+                  ),
+                  initialValue: widget.data.location,
+                  radiusSelection: true,
+                  radiusMinValue: 100, // 100 meters
+                  radiusMaxValue: 10000, // 10 kilometers
+                  onSaved: (value) => _location = value,
+                  validator: composeValidators([
+                    requiredValue(message: 'O campo é obrigatório'),
+                  ]),
                 ),
               ),
               Padding(

@@ -1,6 +1,7 @@
 import 'package:caregiver_hub/main.dart';
 import 'package:caregiver_hub/shared/constants/pagination.dart';
 import 'package:caregiver_hub/shared/models/caregiver.dart';
+import 'package:caregiver_hub/shared/models/location.dart';
 import 'package:caregiver_hub/shared/models/place_coordinates.dart';
 import 'package:caregiver_hub/shared/models/service.dart';
 import 'package:caregiver_hub/shared/models/skill.dart';
@@ -10,7 +11,7 @@ import 'package:flutter/foundation.dart';
 class CaregiverProvider with ChangeNotifier {
   final CaregiverService _caregiverService = getIt<CaregiverService>();
 
-  PlaceCoordinates? placeCoordinates;
+  Location? location;
   List<Service>? services;
   List<Skill>? skills;
 
@@ -20,7 +21,7 @@ class CaregiverProvider with ChangeNotifier {
   }) {
     return _caregiverService.fetchCaregivers(
       idIgnore: idIgnore,
-      placeCoordinates: placeCoordinates,
+      location: location,
       services: services,
       skills: skills,
       size: size,
@@ -28,11 +29,11 @@ class CaregiverProvider with ChangeNotifier {
   }
 
   void applyFilter({
-    PlaceCoordinates? placeCoordinates,
+    Location? location,
     List<Service?>? services,
     List<Skill?>? skills,
   }) {
-    placeCoordinates = placeCoordinates;
+    location = location;
     services = services;
     skills = skills;
   }
