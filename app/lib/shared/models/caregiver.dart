@@ -42,22 +42,12 @@ class Caregiver {
       startPrice: snapshot['startPrice'],
       endPrice: snapshot['endPrice'],
       rating: snapshot['rating'] == null ? 0.0 : snapshot['rating'].toDouble(),
-      services: ((snapshot['services'] as List?) ?? [])
-          .map(
-            (service) => Service(
-              id: service['id'],
-              description: service['description'],
-            ),
-          )
-          .toList(),
-      skills: ((snapshot['skills'] as List?) ?? [])
-          .map(
-            (skill) => Skill(
-              id: skill['id'],
-              description: skill['description'],
-            ),
-          )
-          .toList(),
+      services: Service.fromServicesFlagMap(
+        Map<String, dynamic>.from(snapshot['services']),
+      ),
+      skills: Skill.fromSkillsFlagMap(
+        Map<String, dynamic>.from(snapshot['skills']),
+      ),
     );
   }
 }

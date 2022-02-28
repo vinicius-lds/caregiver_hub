@@ -14,8 +14,6 @@ import 'package:caregiver_hub/shared/providers/caregiver_provider.dart';
 import 'package:caregiver_hub/shared/providers/app_state_provider.dart';
 import 'package:caregiver_hub/shared/services/auth_service.dart';
 import 'package:caregiver_hub/shared/services/caregiver_service.dart';
-import 'package:caregiver_hub/shared/services/service_service.dart';
-import 'package:caregiver_hub/shared/services/skill_service.dart';
 import 'package:caregiver_hub/social/services/chat_service.dart';
 import 'package:caregiver_hub/shared/services/user_service.dart';
 import 'package:caregiver_hub/user/screens/carregiver_form_screen.dart';
@@ -37,8 +35,6 @@ void main() async {
   getIt.registerLazySingleton<PlaceService>(() => PlaceService());
   getIt.registerLazySingleton<UserService>(() => UserService());
   getIt.registerLazySingleton<AuthService>(() => AuthService());
-  getIt.registerLazySingleton<ServiceService>(() => ServiceService());
-  getIt.registerLazySingleton<SkillService>(() => SkillService());
   getIt.registerLazySingleton<CaregiverService>(() => CaregiverService());
   getIt.registerLazySingleton<ChatService>(() => ChatService());
   getIt.registerLazySingleton<JobService>(() => JobService());

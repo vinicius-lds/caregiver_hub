@@ -1,12 +1,8 @@
-import 'package:caregiver_hub/main.dart';
 import 'package:caregiver_hub/shared/constants/routes.dart';
 import 'package:caregiver_hub/shared/models/location.dart';
-import 'package:caregiver_hub/shared/models/place_coordinates.dart';
 import 'package:caregiver_hub/shared/models/service.dart';
 import 'package:caregiver_hub/shared/models/skill.dart';
 import 'package:caregiver_hub/shared/providers/caregiver_provider.dart';
-import 'package:caregiver_hub/shared/services/service_service.dart';
-import 'package:caregiver_hub/shared/services/skill_service.dart';
 import 'package:caregiver_hub/shared/validation/functions.dart';
 import 'package:caregiver_hub/shared/validation/validators.dart';
 import 'package:caregiver_hub/shared/widgets/app_bar_popup_menu_button.dart';
@@ -23,9 +19,6 @@ class CaregiverFilterScreen extends StatefulWidget {
 }
 
 class _CaregiverFilterScreenState extends State<CaregiverFilterScreen> {
-  final _serviceService = getIt<ServiceService>();
-  final _skillService = getIt<SkillService>();
-
   final _formKey = GlobalKey<FormState>();
 
   Location? _location;
@@ -81,9 +74,9 @@ class _CaregiverFilterScreenState extends State<CaregiverFilterScreen> {
                 Padding(
                   padding: const EdgeInsets.symmetric(vertical: 4),
                   child: MultiSelectChipFieldCustom<Service, String>(
-                    stream: _serviceService.fetchServices(),
+                    items: Service.values,
                     idFn: (serviceType) =>
-                        serviceType == null ? '' : serviceType.id,
+                        serviceType == null ? '' : serviceType.key,
                     labelFn: (serviceType) =>
                         serviceType == null ? '' : serviceType.description,
                     title: 'Serviços',
@@ -93,8 +86,8 @@ class _CaregiverFilterScreenState extends State<CaregiverFilterScreen> {
                 Padding(
                   padding: const EdgeInsets.symmetric(vertical: 4),
                   child: MultiSelectChipFieldCustom<Skill, String>(
-                    stream: _skillService.fetchSkills(),
-                    idFn: (skillType) => skillType == null ? '' : skillType.id,
+                    items: Skill.values,
+                    idFn: (skillType) => skillType == null ? '' : skillType.key,
                     labelFn: (skillType) =>
                         skillType == null ? '' : skillType.description,
                     title: 'Habilidades',

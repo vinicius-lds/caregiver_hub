@@ -32,14 +32,7 @@ class JobService {
         },
         'startDate': startDate,
         'endDate': endDate,
-        'services': services
-            .map(
-              (service) => {
-                'id': service.id,
-                'description': service.description,
-              },
-            )
-            .toList(),
+        'services': services.map((service) => service.key).toList(),
         'price': price,
         'isCanceled': false,
         'isApprovedByEmployer': true,
@@ -70,14 +63,7 @@ class JobService {
         },
         'startDate': startDate,
         'endDate': endDate,
-        'services': services
-            .map(
-              (service) => {
-                'id': service.id,
-                'description': service.description,
-              },
-            )
-            .toList(),
+        'services': services.map((service) => service.key).toList(),
         'price': price,
         'isCanceled': false,
         'isApprovedByEmployer': !isCaregiver,
@@ -115,12 +101,7 @@ class JobService {
                   startDate: (item['startDate'] as Timestamp).toDate(),
                   endDate: (item['endDate'] as Timestamp).toDate(),
                   services: (item['services'] as List)
-                      .map(
-                        (service) => Service(
-                          id: service['id'],
-                          description: service['description'],
-                        ),
-                      )
+                      .map((service) => Service.fromKey(service['key']))
                       .toList(),
                   price: item['price'],
                   isCanceled: item['isCanceled'],

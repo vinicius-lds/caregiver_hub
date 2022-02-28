@@ -10,8 +10,6 @@ import 'package:caregiver_hub/shared/validation/functions.dart';
 import 'package:caregiver_hub/shared/validation/validators.dart';
 import 'package:caregiver_hub/shared/widgets/location_field.dart';
 import 'package:caregiver_hub/shared/widgets/multi_select_chip_field_custom.dart';
-import 'package:caregiver_hub/shared/services/service_service.dart';
-import 'package:caregiver_hub/shared/services/skill_service.dart';
 import 'package:caregiver_hub/shared/models/caregiver_form_data.dart';
 import 'package:caregiver_hub/shared/services/user_service.dart';
 import 'package:caregiver_hub/user/widgets/checkbox_custom.dart';
@@ -30,8 +28,6 @@ class CaregiverForm extends StatefulWidget {
 
 class _CaregiverFormState extends State<CaregiverForm> {
   final _userService = getIt<UserService>();
-  final _serviceService = getIt<ServiceService>();
-  final _skillService = getIt<SkillService>();
 
   final _formKey = GlobalKey<FormState>();
 
@@ -132,10 +128,10 @@ class _CaregiverFormState extends State<CaregiverForm> {
               Padding(
                 padding: const EdgeInsets.symmetric(vertical: 4),
                 child: MultiSelectChipFieldCustom<Service, String>(
-                  stream: _serviceService.fetchServices(),
+                  items: Service.values,
                   displayOnly: _disabled,
                   idFn: (serviceType) =>
-                      serviceType == null ? '' : serviceType.id,
+                      serviceType == null ? '' : serviceType.key,
                   labelFn: (serviceType) =>
                       serviceType == null ? '' : serviceType.description,
                   title: 'Serviços',
@@ -152,10 +148,10 @@ class _CaregiverFormState extends State<CaregiverForm> {
               Padding(
                 padding: const EdgeInsets.symmetric(vertical: 4),
                 child: MultiSelectChipFieldCustom<Skill, String>(
-                  stream: _skillService.fetchSkills(),
+                  items: Skill.values,
                   displayOnly: _disabled,
                   idFn: (serviceType) =>
-                      serviceType == null ? '' : serviceType.id,
+                      serviceType == null ? '' : serviceType.key,
                   labelFn: (serviceType) =>
                       serviceType == null ? '' : serviceType.description,
                   title: 'Habilidades',

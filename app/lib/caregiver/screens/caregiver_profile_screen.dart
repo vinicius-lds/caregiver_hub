@@ -92,7 +92,7 @@ class CaregiverProfileScreen extends StatelessWidget {
                             items: caregiver.services,
                             displayOnly: true,
                             idFn: (serviceType) =>
-                                serviceType == null ? '' : serviceType.id,
+                                serviceType == null ? '' : serviceType.key,
                             labelFn: (serviceType) => serviceType == null
                                 ? ''
                                 : serviceType.description,
@@ -106,7 +106,7 @@ class CaregiverProfileScreen extends StatelessWidget {
                             items: caregiver.skills,
                             displayOnly: true,
                             idFn: (serviceType) =>
-                                serviceType == null ? '' : serviceType.id,
+                                serviceType == null ? '' : serviceType.key,
                             labelFn: (serviceType) => serviceType == null
                                 ? ''
                                 : serviceType.description,

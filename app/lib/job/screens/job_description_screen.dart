@@ -162,7 +162,7 @@ class _JobDescriptionScreenState extends State<JobDescriptionScreen> {
                           items: job.services,
                           displayOnly: true,
                           idFn: (serviceType) =>
-                              serviceType == null ? '' : serviceType.id,
+                              serviceType == null ? '' : serviceType.key,
                           labelFn: (serviceType) => serviceType == null
                               ? ''
                               : serviceType.description,

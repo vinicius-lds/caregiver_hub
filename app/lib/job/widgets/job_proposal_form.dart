@@ -205,7 +205,7 @@ class _JobProposalFormState extends State<JobProposalForm> {
                   displayOnly: _disabled,
                   initialValue: widget.job?.services,
                   idFn: (serviceType) =>
-                      serviceType == null ? '' : serviceType.id,
+                      serviceType == null ? '' : serviceType.key,
                   labelFn: (serviceType) =>
                       serviceType == null ? '' : serviceType.description,
                   title: 'Serviços',
