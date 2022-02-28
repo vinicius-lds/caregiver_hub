@@ -183,7 +183,11 @@ class _JobDescriptionScreenState extends State<JobDescriptionScreen> {
                           ),
                         ),
                       ),
-                      if (job.jobStatusType == JobStatusType.inNegotiation)
+                      if (job.jobStatusType == JobStatusType.inNegotiation &&
+                          ((appStateProvider.isCaregiver &&
+                                  !job.isApprovedByCaregiver) ||
+                              (!appStateProvider.isCaregiver &&
+                                  !job.isApprovedByEmployer)))
                         Padding(
                           padding: const EdgeInsets.symmetric(vertical: 4),
                           child: JobDetailActionButton(

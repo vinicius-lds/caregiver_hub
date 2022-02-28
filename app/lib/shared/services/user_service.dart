@@ -66,12 +66,12 @@ class UserService {
         //   radius: null,
         // ),
         bio: doc['bio'],
-        services: ((doc['services'] as List?) ?? [])
-            .map((item) => Service.fromKey(item))
-            .toList(),
-        skills: ((doc['skills'] as List?) ?? [])
-            .map((item) => Skill.fromKey(item))
-            .toList(),
+        services: Service.fromServicesFlagMap(
+          Map<String, dynamic>.from(snapshot['services']),
+        ),
+        skills: Skill.fromSkillsFlagMap(
+          Map<String, dynamic>.from(snapshot['skills']),
+        ),
         startPrice: doc['startPrice'] ?? 0,
         endPrice: doc['endPrice'] ?? 0,
       );

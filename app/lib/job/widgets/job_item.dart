@@ -30,7 +30,7 @@ class JobItem extends StatelessWidget {
     return StreamBuilder<JobUserData>(
         stream: _userService.fetchJobUserData(
           userId:
-              appStateProvider.isCaregiver ? job.caregiverId : job.employerId,
+              appStateProvider.isCaregiver ? job.employerId : job.caregiverId,
         ),
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {

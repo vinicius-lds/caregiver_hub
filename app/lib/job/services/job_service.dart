@@ -100,9 +100,7 @@ class JobService {
                   employerId: item['employerId'],
                   startDate: (item['startDate'] as Timestamp).toDate(),
                   endDate: (item['endDate'] as Timestamp).toDate(),
-                  services: (item['services'] as List)
-                      .map((service) => Service.fromKey(service['key']))
-                      .toList(),
+                  services: Service.fromConstantList(item['services']),
                   price: item['price'],
                   isCanceled: item['isCanceled'],
                   isApprovedByEmployer: item['isApprovedByEmployer'],

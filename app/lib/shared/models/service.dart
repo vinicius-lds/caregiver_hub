@@ -38,12 +38,12 @@ class Service {
     return result;
   }
 
+  static List<Service> fromConstantList(List<dynamic> constants) {
+    return values.where((element) => constants.contains(element.key)).toList();
+  }
+
   final String key;
   final String description;
 
   const Service._(this.key, this.description);
-
-  factory Service.fromKey(String key) {
-    return values.where((element) => element.key == key).single;
-  }
 }

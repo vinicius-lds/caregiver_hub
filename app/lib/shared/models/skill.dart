@@ -40,8 +40,4 @@ class Skill {
   final String description;
 
   const Skill._(this.key, this.description);
-
-  factory Skill.fromKey(String key) {
-    return values.where((element) => element.key == key).single;
-  }
 }
