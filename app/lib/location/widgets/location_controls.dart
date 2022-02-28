@@ -2,7 +2,6 @@ import 'package:caregiver_hub/location/widgets/radius_slider.dart';
 import 'package:caregiver_hub/shared/exceptions/service_exception.dart';
 import 'package:caregiver_hub/shared/models/location.dart';
 import 'package:caregiver_hub/shared/models/place.dart';
-import 'package:caregiver_hub/shared/models/place_coordinates.dart';
 import 'package:caregiver_hub/location/services/location_service.dart';
 import 'package:caregiver_hub/location/widgets/location_button.dart';
 import 'package:caregiver_hub/location/widgets/place_auto_complete_item.dart';
@@ -58,7 +57,7 @@ class _LocationControlsState extends State<LocationControls> {
   @override
   void initState() {
     super.initState();
-    _radius = widget.radiusMinValue;
+    _radius = widget.initialLocation?.radius ?? widget.radiusMinValue;
     _focusNode.addListener(() {
       if (_focusNode.hasFocus) {
         _controller.selection = TextSelection(

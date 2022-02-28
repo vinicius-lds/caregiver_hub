@@ -11,9 +11,9 @@ import 'package:flutter/foundation.dart';
 class CaregiverProvider with ChangeNotifier {
   final CaregiverService _caregiverService = getIt<CaregiverService>();
 
-  Location? location;
-  List<Service>? services;
-  List<Skill>? skills;
+  Location? _location;
+  List<Service>? _services;
+  List<Skill>? _skills;
 
   Stream<List<Caregiver>> listStream({
     required String idIgnore,
@@ -21,9 +21,9 @@ class CaregiverProvider with ChangeNotifier {
   }) {
     return _caregiverService.fetchCaregivers(
       idIgnore: idIgnore,
-      location: location,
-      services: services,
-      skills: skills,
+      location: _location,
+      services: _services,
+      skills: _skills,
       size: size,
     );
   }
@@ -33,8 +33,11 @@ class CaregiverProvider with ChangeNotifier {
     List<Service?>? services,
     List<Skill?>? skills,
   }) {
-    location = location;
-    services = services;
-    skills = skills;
+    _location = location;
+    _services =
+        services?.where((item) => item != null).map((item) => item!).toList();
+    _skills =
+        skills?.where((item) => item != null).map((item) => item!).toList();
+    notifyListeners();
   }
 }

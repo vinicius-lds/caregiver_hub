@@ -10,12 +10,19 @@ class ErrorState extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Center(
-      child: Column(
-        children: [
-          Image.asset('assets/images/error.png'),
-          Text(text),
-        ],
+    return Padding(
+      padding: const EdgeInsets.all(4),
+      child: Center(
+        child: Column(
+          children: [
+            Image.asset(
+              'assets/images/error.png',
+              width: 96,
+              height: 96,
+            ),
+            Text(text),
+          ],
+        ),
       ),
     );
   }

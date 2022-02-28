@@ -25,6 +25,7 @@ import 'package:caregiver_hub/user/screens/profile_screen.dart';
 import 'package:caregiver_hub/social/screens/chat_screen.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
+import 'package:geoflutterfire/geoflutterfire.dart';
 import 'package:get_it/get_it.dart';
 import 'package:provider/provider.dart';
 
@@ -41,6 +42,7 @@ void main() async {
   getIt.registerLazySingleton<CaregiverService>(() => CaregiverService());
   getIt.registerLazySingleton<ChatService>(() => ChatService());
   getIt.registerLazySingleton<JobService>(() => JobService());
+  getIt.registerLazySingleton<Geoflutterfire>(() => Geoflutterfire());
   getIt.registerLazySingleton<CaregiverRecomendationService>(
     () => CaregiverRecomendationService(),
   );

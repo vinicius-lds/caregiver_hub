@@ -31,6 +31,7 @@ dependencies:
   extended_masked_text: ^2.3.1
   flutter_launch: ^0.3.0
   url_launcher: ^6.0.20
+  geoflutterfire: ^3.0.3
 
 dev_dependencies:
   flutter_test:

@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:caregiver_hub/main.dart';
 import 'package:caregiver_hub/shared/exceptions/service_exception.dart';
 import 'package:caregiver_hub/shared/models/caregiver_recomendation_user_data.dart';
 import 'package:caregiver_hub/shared/models/job_user_data.dart';
@@ -12,12 +13,14 @@ import 'package:caregiver_hub/shared/utils/io.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
+import 'package:geoflutterfire/geoflutterfire.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 
 class UserService {
   final _auth = FirebaseAuth.instance;
   final _firestore = FirebaseFirestore.instance;
   final _storage = FirebaseStorage.instance;
+  final _geo = getIt<Geoflutterfire>();
 
   Stream<UserFormData> fetchUserFormData(String userId) {
     return _firestore
@@ -56,8 +59,15 @@ class UserService {
             doc['location']['coordinates']['latitude'],
             doc['location']['coordinates']['longitude'],
           ),
-          radius: doc['location']['radius'],
+          radius: double.parse(doc['location']['radius'].toString()),
         ),
+        // location: Location(
+        //   placeId: '',
+        //   placeDescription: '',
+        //   coordinates: LatLng(0, 0),
+        //   geoHash: '',
+        //   radius: null,
+        // ),
         bio: doc['bio'],
         services: ((doc['services'] as List?) ?? [])
             .map(

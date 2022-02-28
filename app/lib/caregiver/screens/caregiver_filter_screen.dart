@@ -7,6 +7,8 @@ import 'package:caregiver_hub/shared/models/skill.dart';
 import 'package:caregiver_hub/shared/providers/caregiver_provider.dart';
 import 'package:caregiver_hub/shared/services/service_service.dart';
 import 'package:caregiver_hub/shared/services/skill_service.dart';
+import 'package:caregiver_hub/shared/validation/functions.dart';
+import 'package:caregiver_hub/shared/validation/validators.dart';
 import 'package:caregiver_hub/shared/widgets/app_bar_popup_menu_button.dart';
 import 'package:caregiver_hub/shared/widgets/multi_select_chip_field_custom.dart';
 import 'package:caregiver_hub/shared/widgets/location_field.dart';
@@ -70,6 +72,9 @@ class _CaregiverFilterScreenState extends State<CaregiverFilterScreen> {
                     decoration: const InputDecoration(
                       label: Text('Localização'),
                     ),
+                    validator: composeValidators([
+                      requiredValue(message: 'O campo é obrigatório'),
+                    ]),
                     onSaved: (value) => _location = value,
                   ),
                 ),

@@ -12,20 +12,25 @@ class EmptyState extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Center(
-      child: Column(
-        children: [
-          Image.asset(
-            'assets/images/nothing_found.png',
-            color: color,
-          ),
-          Text(
-            text,
-            style: TextStyle(
+    return Padding(
+      padding: const EdgeInsets.all(4),
+      child: Center(
+        child: Column(
+          children: [
+            Image.asset(
+              'assets/images/nothing_found.png',
               color: color,
+              width: 96,
+              height: 96,
             ),
-          ),
-        ],
+            Text(
+              text,
+              style: TextStyle(
+                color: color,
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }

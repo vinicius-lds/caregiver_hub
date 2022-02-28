@@ -45,12 +45,16 @@ class _CaregiverListScreenState extends State<CaregiverListScreen> {
             );
           }
           if (!snapshot.hasData) {
-            return const EmptyState(text: 'Nenhum cuidador encontrado');
+            return const EmptyState(
+              text: 'Nenhum cuidador encontrado',
+            );
           }
 
           final caregivers = snapshot.data as List<Caregiver>;
           if (caregivers.isEmpty) {
-            return const EmptyState(text: 'Nenhum cuidador encontrado');
+            return const EmptyState(
+              text: 'Nenhum cuidador encontrado',
+            );
           }
 
           return SingleChildScrollView(

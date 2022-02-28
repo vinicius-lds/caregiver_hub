@@ -1,11 +1,13 @@
 import 'dart:async';
 
+import 'package:caregiver_hub/main.dart';
 import 'package:caregiver_hub/shared/models/location.dart';
 import 'package:caregiver_hub/shared/models/place.dart';
 import 'package:caregiver_hub/shared/models/place_coordinates.dart';
 import 'package:caregiver_hub/location/widgets/location_controls.dart';
 import 'package:caregiver_hub/shared/widgets/loading.dart';
 import 'package:flutter/material.dart';
+import 'package:geoflutterfire/geoflutterfire.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 
@@ -26,6 +28,7 @@ class PlacePickerScreen extends StatefulWidget {
 
 class _PlacePickerScreenState extends State<PlacePickerScreen> {
   final Completer<GoogleMapController> _mapController = Completer();
+
   Location? _initialLocation;
   bool? _readOnly;
   bool? _radiusSelection;

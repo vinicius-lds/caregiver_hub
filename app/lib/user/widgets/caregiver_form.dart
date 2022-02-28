@@ -109,7 +109,7 @@ class _CaregiverFormState extends State<CaregiverForm> {
                   initialValue: widget.data.location,
                   radiusSelection: true,
                   radiusMinValue: 100, // 100 meters
-                  radiusMaxValue: 10000, // 10 kilometers
+                  radiusMaxValue: 25000, // 25 kilometers
                   onSaved: (value) => _location = value,
                   validator: composeValidators([
                     requiredValue(message: 'O campo é obrigatório'),
