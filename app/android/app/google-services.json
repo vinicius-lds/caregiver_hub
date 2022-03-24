@@ -1,6 +1,7 @@
 {
   "project_info": {
     "project_number": "261539607375",
+    "firebase_url": "https://caregiver-hub-default-rtdb.firebaseio.com",
     "project_id": "caregiver-hub",
     "storage_bucket": "caregiver-hub.appspot.com"
   },

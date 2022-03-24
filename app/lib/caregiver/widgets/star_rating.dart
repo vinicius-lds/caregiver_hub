@@ -6,13 +6,11 @@ class StarRating extends FormField<double?> {
     FormFieldSetter<double?>? onSaved,
     FormFieldValidator<double?>? validator,
     double? initialValue,
-    bool autovalidate = false,
     bool displayOnly = false,
   }) : super(
           onSaved: onSaved,
           validator: validator,
           initialValue: initialValue,
-          autovalidate: autovalidate,
           builder: (FormFieldState<double?> state) {
             Widget _buildStar(double value) {
               final IconData iconData;

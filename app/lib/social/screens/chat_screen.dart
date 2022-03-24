@@ -58,11 +58,13 @@ class ChatScreen extends StatelessWidget {
                   child: ListView.builder(
                     controller: _controller,
                     itemCount: data.length,
+                    reverse: true,
                     itemBuilder: (bContext, index) {
+                      final reversedIndex = data.length - 1 - index;
                       return MessageBubble(
-                        content: data[index].content,
-                        isReceived:
-                            data[index].employerId == appStateProvider.id,
+                        content: data[reversedIndex].content,
+                        isReceived: data[reversedIndex].createdBy !=
+                            appStateProvider.id,
                       );
                     },
                   ),
@@ -70,7 +72,7 @@ class ChatScreen extends StatelessWidget {
                 MessageInput(
                   otherUserId: otherUserId,
                   onSend: () =>
-                      _controller.jumpTo(_controller.position.maxScrollExtent),
+                      _controller.jumpTo(_controller.position.minScrollExtent),
                 ),
               ],
             ),

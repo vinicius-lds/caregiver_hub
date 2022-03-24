@@ -43,6 +43,11 @@ class _CaregiverFilterScreenState extends State<CaregiverFilterScreen> {
   @override
   Widget build(BuildContext context) {
     final textScaleFactor = MediaQuery.of(context).textScaleFactor;
+    final caregiverProvider =
+        Provider.of<CaregiverProvider>(context, listen: false);
+    final location = caregiverProvider.location;
+    final services = caregiverProvider.services;
+    final skills = caregiverProvider.skills;
     return Scaffold(
       appBar: AppBar(
         title: const Text('Filtro de cuidadores'),
@@ -62,6 +67,7 @@ class _CaregiverFilterScreenState extends State<CaregiverFilterScreen> {
                 Padding(
                   padding: const EdgeInsets.symmetric(vertical: 4),
                   child: LocationField(
+                    initialValue: location,
                     decoration: const InputDecoration(
                       label: Text('Localização'),
                     ),
@@ -75,6 +81,7 @@ class _CaregiverFilterScreenState extends State<CaregiverFilterScreen> {
                   padding: const EdgeInsets.symmetric(vertical: 4),
                   child: MultiSelectChipFieldCustom<Service, String>(
                     items: Service.values,
+                    initialValue: services ?? [],
                     idFn: (serviceType) =>
                         serviceType == null ? '' : serviceType.key,
                     labelFn: (serviceType) =>
@@ -87,6 +94,7 @@ class _CaregiverFilterScreenState extends State<CaregiverFilterScreen> {
                   padding: const EdgeInsets.symmetric(vertical: 4),
                   child: MultiSelectChipFieldCustom<Skill, String>(
                     items: Skill.values,
+                    initialValue: skills ?? [],
                     idFn: (skillType) => skillType == null ? '' : skillType.key,
                     labelFn: (skillType) =>
                         skillType == null ? '' : skillType.description,

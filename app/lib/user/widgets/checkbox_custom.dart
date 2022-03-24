@@ -8,13 +8,11 @@ class CheckboxCustom extends FormField<bool?> {
     String trueLabel = 'True',
     String falseLabel = 'False',
     bool readOnly = false,
-    bool autovalidate = false,
     bool initialValue = false,
   }) : super(
           onSaved: onSaved,
           validator: validator,
           initialValue: initialValue,
-          autovalidate: autovalidate,
           builder: (FormFieldState<bool?> state) {
             return Column(
               mainAxisAlignment: MainAxisAlignment.center,

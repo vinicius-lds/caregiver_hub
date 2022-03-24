@@ -4,6 +4,7 @@ import 'package:caregiver_hub/shared/exceptions/service_exception.dart';
 import 'package:caregiver_hub/shared/models/caregiver_recomendation_user_data.dart';
 import 'package:caregiver_hub/shared/models/job_user_data.dart';
 import 'package:caregiver_hub/shared/models/location.dart';
+import 'package:caregiver_hub/shared/models/other_user_chat_data.dart';
 import 'package:caregiver_hub/shared/models/service.dart';
 import 'package:caregiver_hub/shared/models/skill.dart';
 import 'package:caregiver_hub/shared/models/caregiver_form_data.dart';
@@ -11,6 +12,7 @@ import 'package:caregiver_hub/shared/models/user_form_data.dart';
 import 'package:caregiver_hub/shared/utils/io.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 
@@ -18,6 +20,7 @@ class UserService {
   final _auth = FirebaseAuth.instance;
   final _firestore = FirebaseFirestore.instance;
   final _storage = FirebaseStorage.instance;
+  final _messaging = FirebaseMessaging.instance;
 
   Stream<UserFormData> fetchUserFormData(String userId) {
     return _firestore
@@ -58,13 +61,6 @@ class UserService {
           ),
           radius: double.parse(doc['location']['radius'].toString()),
         ),
-        // location: Location(
-        //   placeId: '',
-        //   placeDescription: '',
-        //   coordinates: LatLng(0, 0),
-        //   geoHash: '',
-        //   radius: null,
-        // ),
         bio: doc['bio'],
         services: Service.fromServicesFlagMap(
           Map<String, dynamic>.from(snapshot['services']),
@@ -75,6 +71,13 @@ class UserService {
         startPrice: doc['startPrice'] ?? 0,
         endPrice: doc['endPrice'] ?? 0,
       );
+    });
+  }
+
+  Future<OtherUserChatData> fetchOtherUserChatData(String userId) async {
+    return await handleFirebaseExceptions(() async {
+      final doc = await _firestore.collection('users').doc(userId).get();
+      return OtherUserChatData.fromUserDocumentSnapshot(doc);
     });
   }
 
@@ -97,9 +100,9 @@ class UserService {
         _auth.currentUser!.updatePassword(password);
       }
 
-      if (imagePath == null || imagePath.trim() == '') {
+      if (imagePath != null && imagePath.trim() != '') {
         final String imageURL =
-            await uploadImage(_auth.currentUser!.uid, imagePath!);
+            await uploadImage(_auth.currentUser!.uid, imagePath);
         await _firestore
             .collection('users')
             .doc(_auth.currentUser!.uid)
@@ -213,5 +216,22 @@ class UserService {
             name: snapshot['fullName'],
           ),
         );
+  }
+
+  Future<void> updateFCMUserToken({required String userId}) async {
+    await handleFirebaseExceptions(() async {
+      _firestore
+          .collection('users')
+          .doc(userId)
+          .update({'fcmToken': await _messaging.getToken()});
+    });
+  }
+
+  Future<String> fetchEmail({required String userId}) async {
+    return await handleFirebaseExceptions(() async {
+      final user = await _firestore.collection('users').doc(userId).get();
+      final userData = user.data();
+      return userData!['email'];
+    });
   }
 }

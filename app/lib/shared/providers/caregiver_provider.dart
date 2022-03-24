@@ -2,7 +2,6 @@ import 'package:caregiver_hub/main.dart';
 import 'package:caregiver_hub/shared/constants/pagination.dart';
 import 'package:caregiver_hub/shared/models/caregiver.dart';
 import 'package:caregiver_hub/shared/models/location.dart';
-import 'package:caregiver_hub/shared/models/place_coordinates.dart';
 import 'package:caregiver_hub/shared/models/service.dart';
 import 'package:caregiver_hub/shared/models/skill.dart';
 import 'package:caregiver_hub/shared/services/caregiver_service.dart';
@@ -39,5 +38,17 @@ class CaregiverProvider with ChangeNotifier {
     _skills =
         skills?.where((item) => item != null).map((item) => item!).toList();
     notifyListeners();
+  }
+
+  get location {
+    return _location;
+  }
+
+  get services {
+    return _services;
+  }
+
+  get skills {
+    return _skills;
   }
 }

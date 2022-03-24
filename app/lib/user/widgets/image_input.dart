@@ -8,7 +8,6 @@ class ImageInput extends FormField<String?> {
   ImageInput({
     FormFieldSetter<String?>? onSaved,
     FormFieldValidator<String?>? validator,
-    bool autovalidate = false,
     bool readOnly = false,
     String? initialValue,
     double? size = 0,
@@ -16,7 +15,6 @@ class ImageInput extends FormField<String?> {
           onSaved: onSaved,
           validator: validator,
           initialValue: initialValue,
-          autovalidate: autovalidate,
           builder: (FormFieldState<String?> state) {
             ImageProvider<Object> _buildImage() {
               final path = state.value;

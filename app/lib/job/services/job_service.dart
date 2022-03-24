@@ -9,7 +9,7 @@ import 'package:google_maps_flutter/google_maps_flutter.dart';
 class JobService {
   final _firestore = FirebaseFirestore.instance;
 
-  Future<void> makeProposal({
+  Future<String> makeProposal({
     required String caregiverId,
     required String employerId,
     required PlaceCoordinates placeCoordinates,
@@ -18,8 +18,8 @@ class JobService {
     required List<Service> services,
     required double price,
   }) async {
-    handleFirebaseExceptions(() async {
-      await _firestore.collection('jobs').add({
+    return await handleFirebaseExceptions(() async {
+      final doc = await _firestore.collection('jobs').add({
         'caregiverId': caregiverId,
         'employerId': employerId,
         'placeCoordinates': {
@@ -39,6 +39,7 @@ class JobService {
         'isApprovedByCaregiver': false,
         'createdAt': DateTime.now(),
       });
+      return doc.id;
     });
   }
 
@@ -67,7 +68,8 @@ class JobService {
         'price': price,
         'isCanceled': false,
         'isApprovedByEmployer': !isCaregiver,
-        'isApprovedByCaregiver': isCaregiver
+        'isApprovedByCaregiver': isCaregiver,
+        'updatedAt': DateTime.now(),
       });
     });
   }
@@ -137,6 +139,13 @@ class JobService {
           .collection('jobs')
           .doc(jobId)
           .update({'isCanceled': true});
+    });
+  }
+
+  Future<Job> fetchJob({required String id}) async {
+    return await handleFirebaseExceptions(() async {
+      final doc = await _firestore.collection('jobs').doc(id).get();
+      return Job.fromJobDocumentSnapshpt(doc);
     });
   }
 }

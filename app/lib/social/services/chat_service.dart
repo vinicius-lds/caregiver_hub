@@ -9,6 +9,7 @@ class ChatService {
     String message, {
     required String caregiverId,
     required String employerId,
+    required String createdBy,
   }) async {
     handleFirebaseExceptions(() async {
       await _firestore.collection('chat').add({
@@ -16,6 +17,7 @@ class ChatService {
         'createdAt': Timestamp.now(),
         'caregiverId': caregiverId,
         'employerId': employerId,
+        'createdBy': createdBy,
       });
     });
   }
@@ -39,6 +41,7 @@ class ChatService {
                   content: item['content'],
                   employerId: item['employerId'],
                   caregiverId: item['caregiverId'],
+                  createdBy: item['createdBy'],
                 ),
               )
               .toList(),

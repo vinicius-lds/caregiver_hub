@@ -8,13 +8,11 @@ class DateTimePicker extends FormField<DateTime?> {
     FormFieldSetter<DateTime?>? onChange,
     FormFieldValidator<DateTime?>? validator,
     DateTime? initialValue,
-    bool autovalidate = false,
     bool disabled = false,
   }) : super(
           onSaved: onSaved,
           validator: validator,
           initialValue: initialValue,
-          autovalidate: autovalidate,
           builder: (FormFieldState<DateTime?> state) {
             final selectedValueToShow = state.value == null
                 ? null

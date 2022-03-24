@@ -11,7 +11,6 @@ class LocationField extends FormField<Location?> {
     Location? initialValue,
     bool readOnly = false,
     bool disabled = false,
-    bool autovalidate = false,
     bool radiusSelection = false,
     double? radiusMinValue,
     double? radiusMaxValue,
@@ -19,7 +18,6 @@ class LocationField extends FormField<Location?> {
           onSaved: onSaved,
           validator: validator,
           initialValue: initialValue,
-          autovalidate: autovalidate,
           builder: (FormFieldState<Location?> state) {
             String _getInputText(Location? location) {
               if (location == null) {

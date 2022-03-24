@@ -21,4 +21,14 @@ class JobUserData {
       email: '',
     );
   }
+
+  factory JobUserData.fromDynamicMap(Map<dynamic, dynamic> data) {
+    return JobUserData(
+      id: data['id'],
+      imageURL: data['imageURL'],
+      name: data['name'],
+      phone: data['phone'],
+      email: data['email'],
+    );
+  }
 }

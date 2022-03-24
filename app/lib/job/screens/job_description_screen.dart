@@ -6,8 +6,10 @@ import 'package:caregiver_hub/shared/constants/routes.dart';
 import 'package:caregiver_hub/shared/exceptions/service_exception.dart';
 import 'package:caregiver_hub/shared/models/job_user_data.dart';
 import 'package:caregiver_hub/shared/models/location.dart';
+import 'package:caregiver_hub/shared/models/notification_type.dart';
 import 'package:caregiver_hub/shared/models/service.dart';
 import 'package:caregiver_hub/shared/providers/app_state_provider.dart';
+import 'package:caregiver_hub/shared/services/notification_service.dart';
 import 'package:caregiver_hub/shared/utils/gui.dart';
 import 'package:caregiver_hub/shared/widgets/app_bar_popup_menu_button.dart';
 import 'package:caregiver_hub/shared/widgets/contacts_bar.dart';
@@ -16,6 +18,8 @@ import 'package:caregiver_hub/shared/widgets/location_field.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
+import 'package:caregiver_hub/shared/models/notification.dart'
+    as CaregiverHubNotification;
 
 class JobDescriptionScreen extends StatefulWidget {
   const JobDescriptionScreen({Key? key}) : super(key: key);
@@ -26,6 +30,7 @@ class JobDescriptionScreen extends StatefulWidget {
 
 class _JobDescriptionScreenState extends State<JobDescriptionScreen> {
   final _jobService = getIt<JobService>();
+  final _notificationService = getIt<NotificationService>();
 
   bool _disabled = false;
 
@@ -45,7 +50,22 @@ class _JobDescriptionScreenState extends State<JobDescriptionScreen> {
           jobId: job.id,
           isCaregiver: appStateProvider.isCaregiver,
         );
-        Navigator.of(context).pop();
+        final notification = CaregiverHubNotification.Notification(
+          type: NotificationType.jobChange,
+          title: 'Proposta aceita',
+          content: 'A proporta foi aceita',
+          data: {
+            'jobId': job.id,
+            'otherUserId': appStateProvider.id,
+            'receivedNotificationAsCaregiver':
+                '${!appStateProvider.isCaregiver}',
+          },
+          fromUserId: appStateProvider.id,
+          toUserId:
+              appStateProvider.isCaregiver ? job.employerId : job.caregiverId,
+        );
+        await _notificationService.pushNotification(notification);
+        _goBack();
       }
     } on ServiceException catch (e) {
       showSnackBar(context, e.message);
@@ -65,9 +85,27 @@ class _JobDescriptionScreenState extends State<JobDescriptionScreen> {
 
   void _cancel(BuildContext context, Job job) async {
     setState(() => _disabled = true);
+    final appStateProvider = Provider.of<AppStateProvider>(
+      context,
+      listen: false,
+    );
     try {
       await _jobService.cancel(jobId: job.id);
-      Navigator.of(context).pop();
+      final notification = CaregiverHubNotification.Notification(
+        type: NotificationType.jobChange,
+        title: 'Proposta cancelada',
+        content: 'A proporta foi cancelada',
+        data: {
+          'jobId': job.id,
+          'otherUserId': appStateProvider.id,
+          'receivedNotificationAsCaregiver': '${!appStateProvider.isCaregiver}',
+        },
+        fromUserId: appStateProvider.id,
+        toUserId:
+            appStateProvider.isCaregiver ? job.employerId : job.caregiverId,
+      );
+      await _notificationService.pushNotification(notification);
+      _goBack();
     } on ServiceException catch (e) {
       showSnackBar(context, e.message);
     }
@@ -82,6 +120,17 @@ class _JobDescriptionScreenState extends State<JobDescriptionScreen> {
     Navigator.of(context).pushNamed(Routes.caregiverRecomendation, arguments: {
       'caregiverId': job.caregiverId,
     });
+  }
+
+  void _goBack() {
+    if (Navigator.of(context).canPop()) {
+      Navigator.of(context).pop();
+    } else {
+      Navigator.of(context).pushNamedAndRemoveUntil(
+        Routes.jobList,
+        (route) => false, // Remove todas as telas do stack
+      );
+    }
   }
 
   @override

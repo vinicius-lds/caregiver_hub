@@ -5,9 +5,11 @@ import 'package:caregiver_hub/shared/constants/routes.dart';
 import 'package:caregiver_hub/shared/exceptions/service_exception.dart';
 import 'package:caregiver_hub/shared/models/caregiver.dart';
 import 'package:caregiver_hub/shared/models/location.dart';
+import 'package:caregiver_hub/shared/models/notification_type.dart';
 import 'package:caregiver_hub/shared/models/place_coordinates.dart';
 import 'package:caregiver_hub/shared/models/service.dart';
 import 'package:caregiver_hub/shared/providers/app_state_provider.dart';
+import 'package:caregiver_hub/shared/providers/caregiver_provider.dart';
 import 'package:caregiver_hub/shared/utils/gui.dart';
 import 'package:caregiver_hub/shared/validation/functions.dart';
 import 'package:caregiver_hub/shared/validation/validators.dart';
@@ -18,6 +20,9 @@ import 'package:extended_masked_text/extended_masked_text.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
+import 'package:caregiver_hub/shared/models/notification.dart'
+    as CaregiverHubNotification;
+import 'package:caregiver_hub/shared/services/notification_service.dart';
 
 class JobProposalForm extends StatefulWidget {
   final Caregiver caregiver;
@@ -35,6 +40,7 @@ class JobProposalForm extends StatefulWidget {
 
 class _JobProposalFormState extends State<JobProposalForm> {
   final _jobService = getIt<JobService>();
+  final _notificationService = getIt<NotificationService>();
 
   final _formKey = GlobalKey<FormState>();
 
@@ -70,6 +76,21 @@ class _JobProposalFormState extends State<JobProposalForm> {
         price: _priceController.numberValue,
         isCaregiver: appStateProvider.isCaregiver,
       );
+      final notification = CaregiverHubNotification.Notification(
+        type: NotificationType.jobChange,
+        title: 'Alteração na proposta',
+        content: 'Foi feita uma alteração na proposta',
+        data: {
+          'jobId': widget.job!.id,
+          'otherUserId': appStateProvider.id,
+          'receivedNotificationAsCaregiver': '${!appStateProvider.isCaregiver}',
+        },
+        fromUserId: appStateProvider.id,
+        toUserId: appStateProvider.isCaregiver
+            ? widget.job!.employerId
+            : widget.job!.caregiverId,
+      );
+      await _notificationService.pushNotification(notification);
     } on ServiceException catch (e) {
       showSnackBar(context, e.message);
     }
@@ -81,7 +102,8 @@ class _JobProposalFormState extends State<JobProposalForm> {
     );
   }
 
-  void _makeProposal(BuildContext context, {required String caregiverId}) {
+  void _makeProposal(BuildContext context,
+      {required String caregiverId}) async {
     final isValid = _formKey.currentState!.validate();
     if (!isValid) {
       return;
@@ -92,7 +114,7 @@ class _JobProposalFormState extends State<JobProposalForm> {
     try {
       final appStateProvider =
           Provider.of<AppStateProvider>(context, listen: false);
-      _jobService.makeProposal(
+      String jobId = await _jobService.makeProposal(
         caregiverId: widget.caregiver.id,
         employerId: appStateProvider.id,
         placeCoordinates: _placeCoordinates!,
@@ -104,6 +126,19 @@ class _JobProposalFormState extends State<JobProposalForm> {
             .toList(),
         price: _priceController.numberValue,
       );
+      final notification = CaregiverHubNotification.Notification(
+        type: NotificationType.jobChange,
+        title: 'Nova proposta',
+        content: 'Você recebeu uma nova proposta de trabalho',
+        data: {
+          'jobId': jobId,
+          'otherUserId': appStateProvider.id,
+          'receivedNotificationAsCaregiver': '${!appStateProvider.isCaregiver}',
+        },
+        fromUserId: appStateProvider.id,
+        toUserId: widget.caregiver.id,
+      );
+      await _notificationService.pushNotification(notification);
     } on ServiceException catch (e) {
       showSnackBar(context, e.message);
     }
@@ -127,6 +162,10 @@ class _JobProposalFormState extends State<JobProposalForm> {
         ? formatter.format(widget.caregiver.endPrice)
         : null;
     _priceController.text = widget.job?.price.toStringAsFixed(2) ?? '';
+    final caregiverProvider =
+        Provider.of<CaregiverProvider>(context, listen: false);
+    final location = caregiverProvider.location;
+    final services = caregiverProvider.services;
     return Form(
       key: _formKey,
       child: SingleChildScrollView(
@@ -143,7 +182,7 @@ class _JobProposalFormState extends State<JobProposalForm> {
                       ? Location.fromPlaceCoordinates(
                           widget.job!.placeCoordinates,
                         )
-                      : null,
+                      : location,
                   disabled: _disabled,
                   decoration: const InputDecoration(
                     label: Text('Localização'),
@@ -203,7 +242,7 @@ class _JobProposalFormState extends State<JobProposalForm> {
                 child: MultiSelectChipFieldCustom<Service, String>(
                   items: widget.caregiver.services,
                   displayOnly: _disabled,
-                  initialValue: widget.job?.services,
+                  initialValue: widget.job?.services ?? services ?? [],
                   idFn: (serviceType) =>
                       serviceType == null ? '' : serviceType.key,
                   labelFn: (serviceType) =>
@@ -216,6 +255,7 @@ class _JobProposalFormState extends State<JobProposalForm> {
                     )
                   ]),
                   onTap: (values) => _services = values,
+                  onSaved: (values) => _services = values,
                 ),
               ),
               TextFormField(

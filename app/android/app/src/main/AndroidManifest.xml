@@ -1,8 +1,8 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.furb.caregiver_hub">
     <application
-        android:name="io.flutter.app.FlutterApplication"
-        android:label="caregiver_hub"
+        android:name="${applicationName}"
+        android:label="Caregiver Hub"
         android:icon="@mipmap/ic_launcher">
         <activity
             android:name=".MainActivity"
@@ -32,6 +32,10 @@
         <meta-data
             android:name="com.google.android.geo.API_KEY" 
             android:value="AIzaSyCmw_go04MwX36WMZDOb6XsvXGZLWTIda0"
+        />
+        <meta-data
+            android:name="com.google.firebase.messaging.default_notification_channel_id"
+            android:value="caregiver_hub_notification_channel"
         />
     </application>
     <queries>

@@ -7,6 +7,7 @@ import 'package:caregiver_hub/shared/validation/functions.dart';
 import 'package:caregiver_hub/shared/validation/validators.dart';
 import 'package:caregiver_hub/shared/widgets/button_footer.dart';
 import 'package:caregiver_hub/shared/services/auth_service.dart';
+import 'package:caregiver_hub/shared/services/notification_service.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -19,6 +20,7 @@ class LoginScreen extends StatefulWidget {
 
 class _LoginScreenState extends State<LoginScreen> {
   final _authService = getIt<AuthService>();
+  final _notificationService = getIt<NotificationService>();
 
   final _formKey = GlobalKey<FormState>();
 
@@ -53,12 +55,28 @@ class _LoginScreenState extends State<LoginScreen> {
           email: _email!,
           password: _password!,
         );
-        Navigator.of(context).pushNamedAndRemoveUntil(
-          appStateProvider.isCaregiver
-              ? Routes.jobList
-              : Routes.caregiverFilter,
-          (route) => false, // Remove todas as telas do stack
-        );
+
+        final pendingNotificationData =
+            appStateProvider.pollPendingNotificationData();
+
+        if (pendingNotificationData != null) {
+          final notificationRoute = await _notificationService
+              .buildNotificationRoute(pendingNotificationData);
+          appStateProvider.isCaregiver =
+              notificationRoute.receivedNotificationAsCaregiver;
+          Navigator.of(context).pushNamedAndRemoveUntil(
+            notificationRoute.route,
+            (route) => false, // Remove todas as telas do stack
+            arguments: notificationRoute.arguments,
+          );
+        } else {
+          Navigator.of(context).pushNamedAndRemoveUntil(
+            appStateProvider.isCaregiver
+                ? Routes.jobList
+                : Routes.caregiverFilter,
+            (route) => false, // Remove todas as telas do stack
+          );
+        }
       } on ServiceException catch (e) {
         showSnackBar(context, e.message);
       }
@@ -70,16 +88,12 @@ class _LoginScreenState extends State<LoginScreen> {
     Navigator.pushNamed(context, Routes.profile, arguments: {'isEdit': false});
   }
 
-  void _signInWithGoogle() {
-    print('signInWithGoogle');
-    Navigator.of(context).pushNamedAndRemoveUntil(
-      Routes.caregiverFilter,
-      (route) => false, // Remove todas as telas do stack
-    );
-  }
-
   @override
   Widget build(BuildContext context) {
+    final args =
+        ModalRoute.of(context)!.settings.arguments as Map<String, dynamic>? ??
+            {};
+    final fixedEmail = args['fixedEmail'];
     return Scaffold(
       body: Form(
         key: _formKey,
@@ -108,6 +122,8 @@ class _LoginScreenState extends State<LoginScreen> {
                       decoration: const InputDecoration(
                         labelText: 'E-mail',
                       ),
+                      initialValue: fixedEmail,
+                      enabled: fixedEmail == null,
                       readOnly: _disabled,
                       autovalidateMode: AutovalidateMode.onUserInteraction,
                       focusNode: _emailFocusNode,

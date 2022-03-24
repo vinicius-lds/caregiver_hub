@@ -61,7 +61,7 @@ class _ProfileFormState extends State<ProfileForm> {
   }
 
   void _setImage(String? image) {
-    _imagePath = image;
+    _imagePath = image != widget.data?.imageURL ? image : null;
   }
 
   void _submit(BuildContext context) async {

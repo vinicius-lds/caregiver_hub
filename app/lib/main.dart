@@ -14,6 +14,8 @@ import 'package:caregiver_hub/shared/providers/caregiver_provider.dart';
 import 'package:caregiver_hub/shared/providers/app_state_provider.dart';
 import 'package:caregiver_hub/shared/services/auth_service.dart';
 import 'package:caregiver_hub/shared/services/caregiver_service.dart';
+import 'package:caregiver_hub/shared/services/notification_service.dart';
+import 'package:caregiver_hub/shared/widgets/notifiable.dart';
 import 'package:caregiver_hub/social/services/chat_service.dart';
 import 'package:caregiver_hub/shared/services/user_service.dart';
 import 'package:caregiver_hub/user/screens/carregiver_form_screen.dart';
@@ -25,13 +27,16 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:geoflutterfire/geoflutterfire.dart';
 import 'package:get_it/get_it.dart';
+import 'package:navigation_history_observer/navigation_history_observer.dart';
 import 'package:provider/provider.dart';
 
-GetIt getIt = GetIt.instance;
+final GetIt getIt = GetIt.instance;
+final GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
+
   getIt.registerLazySingleton<PlaceService>(() => PlaceService());
   getIt.registerLazySingleton<UserService>(() => UserService());
   getIt.registerLazySingleton<AuthService>(() => AuthService());
@@ -42,6 +47,8 @@ void main() async {
   getIt.registerLazySingleton<CaregiverRecomendationService>(
     () => CaregiverRecomendationService(),
   );
+  getIt.registerLazySingleton<NotificationService>(() => NotificationService());
+
   runApp(const MyApp());
 }
 
@@ -59,16 +66,21 @@ class MyApp extends StatelessWidget {
           create: (ctx) => CaregiverProvider(),
         ),
       ],
-      child: const _MyHomePage(),
+      child: const _Router(),
     );
   }
 }
 
-class _MyHomePage extends StatelessWidget {
-  const _MyHomePage({
+class _Router extends StatefulWidget {
+  const _Router({
     Key? key,
   }) : super(key: key);
 
+  @override
+  State<_Router> createState() => _RouterState();
+}
+
+class _RouterState extends State<_Router> {
   @override
   Widget build(BuildContext context) {
     final appStateProvider = Provider.of<AppStateProvider>(context);
@@ -83,11 +95,13 @@ class _MyHomePage extends StatelessWidget {
     }
 
     return MaterialApp(
-      title: 'CaregiverHub',
+      title: 'Caregiver Hub',
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
-      home: homeWidget,
+      home: Notifiable(homeWidget),
+      navigatorKey: navigatorKey,
+      navigatorObservers: [NavigationHistoryObserver()],
       routes: {
         // caregiver
         Routes.caregiverFilter: (_) => const CaregiverFilterScreen(),

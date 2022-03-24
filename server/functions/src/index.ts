@@ -1,17 +1,15 @@
 import * as functions from "firebase-functions";
 import * as admin from "firebase-admin";
-import {DocumentSnapshot} from "firebase-functions/v1/firestore";
+import {
+  DocumentSnapshot,
+  QueryDocumentSnapshot,
+} from "firebase-functions/v1/firestore";
 import {createGeohashes} from "proximityhash";
 
 admin.initializeApp({
   credential: admin.credential.applicationDefault(),
 });
 const db = admin.firestore();
-
-export const helloWorld = functions.https.onRequest((request, response) => {
-  functions.logger.info("Hello logs!", {structuredData: true});
-  response.send("Hello from Firebase!");
-});
 
 const updateCaregiverRating = async (snapshot: DocumentSnapshot) => {
   const data = snapshot.data();
@@ -20,16 +18,20 @@ const updateCaregiverRating = async (snapshot: DocumentSnapshot) => {
     return;
   }
 
-  const ratings = await db.collection("caregiverRecomendations")
+  const ratings = await db
+      .collection("caregiverRecomendations")
       .where("caregiverId", "==", caregiverId)
       .select("rating")
       .get();
 
   const ratingsCount = ratings.docs.length;
-  const ratingsSum = ratings.docs
-      .reduce((acc, curr) => acc + curr.data()["rating"], 0);
+  const ratingsSum = ratings.docs.reduce(
+      (acc, curr) => acc + curr.data()["rating"],
+      0
+  );
 
-  await db.collection("users")
+  await db
+      .collection("users")
       .doc(caregiverId)
       .update({rating: ratingsSum / ratingsCount});
 };
@@ -41,7 +43,6 @@ export const onWriteCaregiverRecomendation = functions.firestore
 export const onDeleteCaregiverRecomendation = functions.firestore
     .document("caregiverRecomendations/{caregiverRecomendationId}")
     .onDelete(async (change) => await updateCaregiverRating(change));
-
 
 interface Coordinates {
   latitude: number;
@@ -56,10 +57,10 @@ const updateCaregiverGeoHashes = async (snapshot: DocumentSnapshot) => {
     return;
   }
 
-  const afterCoordinates: Coordinates =
-      ((data || {})["location"] || {})["coordinates"];
-  const afterRadius: number =
-      ((data || {})["location"] || {})["radius"];
+  const afterCoordinates: Coordinates = ((data || {})["location"] || {})[
+      "coordinates"
+  ];
+  const afterRadius: number = ((data || {})["location"] || {})["radius"];
 
   // for reference: https://github.com/SHAINAAZ992/proximityhash
   const geoHashes = createGeohashes({
@@ -75,14 +76,59 @@ const updateCaregiverGeoHashes = async (snapshot: DocumentSnapshot) => {
 
   console.log("geoHashes.length:", geoHashes.length);
 
-  await db.collection("users").doc(snapshot.id).update({
-    location: {
-      ...data["location"],
-      geoHashes: geoHashes,
-    },
-  });
+  await db
+      .collection("users")
+      .doc(snapshot.id)
+      .update({
+        location: {
+          ...data["location"],
+          geoHashes: geoHashes,
+        },
+      });
 };
 
 export const onWriteUser = functions.firestore
     .document("users/{userId}")
     .onWrite(async (change) => await updateCaregiverGeoHashes(change.after));
+
+export const onCreateNotification = functions.firestore
+    .document("notifications/{notificationId}")
+    .onCreate(async (data) =>
+      await sendNotification(data)
+    );
+
+const sendNotification = async (
+    snapshot: QueryDocumentSnapshot
+) => {
+  const data = snapshot.data();
+  if (!data) {
+    return;
+  }
+
+  const userToNotify = await admin
+      .firestore()
+      .collection("users")
+      .doc(data.toUserId)
+      .get();
+  const userToNotifyData = userToNotify.data() || {};
+  if (userToNotifyData.fcmToken) {
+    await admin.messaging().sendMulticast({
+      tokens: [userToNotifyData.fcmToken],
+      notification: {
+        title: data.title,
+        body: data.content,
+      },
+      data: {
+        type: data.type,
+        ...data.data,
+      },
+    });
+  }
+};
+
+// export const onWriteChat = functions.firestore
+//     .document("chat/{chatId}")
+//     .onCreate(async (data) =>
+//       await notifyCounterPartyAboutChatMessage(data)
+//     );
+

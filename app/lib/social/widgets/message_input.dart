@@ -1,8 +1,12 @@
 import 'package:caregiver_hub/main.dart';
 import 'package:caregiver_hub/shared/exceptions/service_exception.dart';
+import 'package:caregiver_hub/shared/models/notification.dart'
+    as CaregiverHubNotification;
+import 'package:caregiver_hub/shared/models/notification_type.dart';
 import 'package:caregiver_hub/shared/providers/app_state_provider.dart';
 import 'package:caregiver_hub/shared/utils/gui.dart';
 import 'package:caregiver_hub/social/services/chat_service.dart';
+import 'package:caregiver_hub/shared/services/notification_service.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -22,6 +26,7 @@ class MessageInput extends StatefulWidget {
 
 class _MessageInputState extends State<MessageInput> {
   final _chatService = getIt<ChatService>();
+  final _notificationService = getIt<NotificationService>();
 
   final _formKey = GlobalKey<FormState>();
 
@@ -47,7 +52,20 @@ class _MessageInputState extends State<MessageInput> {
         employerId: appStateProvider.isCaregiver
             ? widget.otherUserId
             : appStateProvider.id,
+        createdBy: appStateProvider.id,
       );
+      final notification = CaregiverHubNotification.Notification(
+        type: NotificationType.chat,
+        title: 'Nova mensagem',
+        content: 'Você recebeu uma nova mensagem',
+        data: {
+          'otherUserId': appStateProvider.id,
+          'receivedNotificationAsCaregiver': '${!appStateProvider.isCaregiver}',
+        },
+        fromUserId: appStateProvider.id,
+        toUserId: widget.otherUserId,
+      );
+      await _notificationService.pushNotification(notification);
       widget.onSend();
     } on ServiceException catch (e) {
       showSnackBar(context, e.message);
