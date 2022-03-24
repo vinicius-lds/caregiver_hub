@@ -6,6 +6,8 @@ import 'package:caregiver_hub/shared/utils/io.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:http/http.dart' as http;
 
+const apiKey = 'AIzaSyCmw_go04MwX36WMZDOb6XsvXGZLWTIda0';
+
 class PlaceService {
   Stream<List<Place>> placeAutoCompleteStream(final String input) {
     return Stream.fromFuture(
@@ -16,7 +18,7 @@ class PlaceService {
           {
             'input': input,
             'language': 'pt_BR',
-            'key': 'AIzaSyCmw_go04MwX36WMZDOb6XsvXGZLWTIda0',
+            'key': apiKey,
           },
         ),
       ),
@@ -40,7 +42,7 @@ class PlaceService {
         {
           'fields': 'geometry',
           'place_id': place.id,
-          'key': 'AIzaSyCmw_go04MwX36WMZDOb6XsvXGZLWTIda0',
+          'key': apiKey,
         },
       );
       final response = await http.get(uri);
