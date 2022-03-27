@@ -1,6 +1,5 @@
 import 'package:caregiver_hub/shared/widgets/loading.dart';
 import 'package:flutter/material.dart';
-import 'package:multi_select_flutter/chip_field/multi_select_chip_field.dart';
 import 'package:multi_select_flutter/multi_select_flutter.dart';
 
 class MultiSelectChipFieldCustom<T, K> extends StatelessWidget {

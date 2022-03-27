@@ -8,6 +8,7 @@ class AppStateProvider with ChangeNotifier {
   final _userService = getIt<UserService>();
 
   bool _isCaregiver = false;
+  bool _isLoading = false;
   String _id = '';
   Map<String, dynamic>? _pendingNotificationData;
 
@@ -38,6 +39,10 @@ class AppStateProvider with ChangeNotifier {
     return _isCaregiver;
   }
 
+  bool get isLoading {
+    return _isLoading;
+  }
+
   String get id {
     return _id;
   }
@@ -49,8 +54,17 @@ class AppStateProvider with ChangeNotifier {
     }
   }
 
+  set isLoading(bool value) {
+    if (_isLoading != value) {
+      _isLoading = value;
+      notifyListeners();
+    }
+  }
+
   set id(String value) {
-    _id = value;
-    notifyListeners();
+    if (_id != value) {
+      _id = value;
+      notifyListeners();
+    }
   }
 }

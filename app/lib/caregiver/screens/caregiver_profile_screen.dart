@@ -19,7 +19,6 @@ class CaregiverProfileScreen extends StatelessWidget {
     required double? startPrice,
     required double? endPrice,
   }) {
-    print('pushJobForm');
     Navigator.of(context).pushNamed(Routes.jobForm, arguments: {
       'caregiverId': caregiverId,
       'availableServices': availableServices,

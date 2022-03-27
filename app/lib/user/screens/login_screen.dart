@@ -60,8 +60,10 @@ class _LoginScreenState extends State<LoginScreen> {
             appStateProvider.pollPendingNotificationData();
 
         if (pendingNotificationData != null) {
+          appStateProvider.isLoading = true;
           final notificationRoute = await _notificationService
               .buildNotificationRoute(pendingNotificationData);
+          appStateProvider.isLoading = false;
           appStateProvider.isCaregiver =
               notificationRoute.receivedNotificationAsCaregiver;
           Navigator.of(context).pushNamedAndRemoveUntil(

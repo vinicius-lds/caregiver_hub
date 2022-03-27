@@ -275,17 +275,22 @@ class _JobProposalFormState extends State<JobProposalForm> {
                     : _editProposal(context, job: widget.job!),
                 validator: composeValidators([
                   requiredValue(message: 'O campo é obrigatório'),
-                  greaterThan(
-                    () => widget.caregiver.endPrice ?? 0,
-                    message: 'O valor não pode ser superior a $endPriceString',
-                    doubleParser: (value) => _priceController.numberValue,
-                  ),
-                  lessThan(
-                    () => widget.caregiver.startPrice ?? 0,
-                    message:
-                        'O valor não pode ser inferior a $startPriceString',
-                    doubleParser: (value) => _priceController.numberValue,
-                  ),
+                  if (widget.caregiver.endPrice != null &&
+                      widget.caregiver.endPrice! > 0)
+                    greaterThan(
+                      () => widget.caregiver.endPrice ?? 0,
+                      message:
+                          'O valor não pode ser superior a $endPriceString',
+                      doubleParser: (value) => _priceController.numberValue,
+                    ),
+                  if (widget.caregiver.startPrice != null &&
+                      widget.caregiver.startPrice! > 0)
+                    lessThan(
+                      () => widget.caregiver.startPrice ?? 0,
+                      message:
+                          'O valor não pode ser inferior a $startPriceString',
+                      doubleParser: (value) => _priceController.numberValue,
+                    ),
                 ]),
               ),
               Container(

@@ -52,22 +52,28 @@ class UserService {
       return CaregiverFormData(
         id: userId,
         showAsCaregiver: doc['showAsCaregiver'] ?? false,
-        location: Location(
-          placeId: doc['location']['placeId'],
-          placeDescription: doc['location']['placeDescription'],
-          coordinates: LatLng(
-            doc['location']['coordinates']['latitude'],
-            doc['location']['coordinates']['longitude'],
-          ),
-          radius: double.parse(doc['location']['radius'].toString()),
-        ),
+        location: doc['location'] == null
+            ? null
+            : Location(
+                placeId: doc['location']['placeId'],
+                placeDescription: doc['location']['placeDescription'],
+                coordinates: LatLng(
+                  doc['location']['coordinates']['latitude'],
+                  doc['location']['coordinates']['longitude'],
+                ),
+                radius: double.parse(doc['location']['radius'].toString()),
+              ),
         bio: doc['bio'],
-        services: Service.fromServicesFlagMap(
-          Map<String, dynamic>.from(snapshot['services']),
-        ),
-        skills: Skill.fromSkillsFlagMap(
-          Map<String, dynamic>.from(snapshot['skills']),
-        ),
+        services: doc['services'] == null
+            ? []
+            : Service.fromServicesFlagMap(
+                Map<String, dynamic>.from(doc['services']),
+              ),
+        skills: doc['skills'] == null
+            ? []
+            : Skill.fromSkillsFlagMap(
+                Map<String, dynamic>.from(doc['skills']),
+              ),
         startPrice: doc['startPrice'] ?? 0,
         endPrice: doc['endPrice'] ?? 0,
       );

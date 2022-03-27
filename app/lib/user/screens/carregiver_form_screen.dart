@@ -26,7 +26,9 @@ class CaregiverFormScreen extends StatelessWidget {
           if (snapshot.connectionState != ConnectionState.done) {
             return const Loading();
           }
-          if (!snapshot.hasData || snapshot.data == null) {
+          if (snapshot.error != null ||
+              !snapshot.hasData ||
+              snapshot.data == null) {
             return const ErrorState(
               text: 'Ocorreu um erro ao carregar os dados do perfil',
             );

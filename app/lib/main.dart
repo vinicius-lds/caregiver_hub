@@ -12,6 +12,7 @@ import 'package:caregiver_hub/location/services/location_service.dart';
 import 'package:caregiver_hub/shared/constants/routes.dart';
 import 'package:caregiver_hub/shared/providers/caregiver_provider.dart';
 import 'package:caregiver_hub/shared/providers/app_state_provider.dart';
+import 'package:caregiver_hub/shared/screens/loading_screen.dart';
 import 'package:caregiver_hub/shared/services/auth_service.dart';
 import 'package:caregiver_hub/shared/services/caregiver_service.dart';
 import 'package:caregiver_hub/shared/services/notification_service.dart';
@@ -86,7 +87,9 @@ class _RouterState extends State<_Router> {
     final appStateProvider = Provider.of<AppStateProvider>(context);
 
     Widget homeWidget;
-    if (appStateProvider.id.isEmpty) {
+    if (appStateProvider.isLoading) {
+      homeWidget = const LoadingScreen();
+    } else if (appStateProvider.id.isEmpty) {
       homeWidget = const LandingScreen();
     } else if (appStateProvider.isCaregiver) {
       homeWidget = const JobListScreen();

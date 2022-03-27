@@ -1,9 +1,77 @@
 rules_version = '2';
 service cloud.firestore {
   match /databases/{database}/documents {
-    match /{document=**} {
-      allow read, write: if
-          request.time < timestamp.date(2022, 3, 31);
+  	match /caregiverRecomendations/{caregiverRecomendation} {
+    	allow read: if isLoggedIn();
+      allow write: if isLoggedIn() && authUidIsRequestDataEmployerId();
     }
+    match /chat/{message} {
+    	allow read: if isLoggedIn() && (authUidIsResourceDataEmployerId() || authUidIsResourceDataCaregiverId());
+      allow write:
+      	if isLoggedIn()
+        	&& authUidIsRequestDataCreatedBy()
+          && (authUidIsRequestDataEmployerId() || authUidIsRequestDataCaregiverId());
+    }
+    match /jobs/{job} {
+    	allow read: if isLoggedIn() && (authUidIsResourceDataEmployerId() || authUidIsResourceDataCaregiverId());
+      allow create: if isLoggedIn() && (authUidIsRequestDataEmployerId() || authUidIsRequestDataCaregiverId());
+      allow update: if isLoggedIn()
+      	&& (authUidIsRequestDataEmployerId() || authUidIsRequestDataCaregiverId())
+        && requestDataCaregiverIdDoesNotChange()
+        && requestDataEmployerIdDoesNotChange();
+    }
+    match /notifications/{notification} {
+    	allow read: if isLoggedIn() && authUidIsResourceDataToUserId();
+      allow create: if isLoggedIn() && authUidIsRequestDataFromUserId();
+    }
+    match /users/{user} {
+    	allow create: if true;
+    	allow update: if isLoggedIn() && authUidIsRequestDataUid();
+      allow read: if isLoggedIn();
+    }
+  }
+  
+  function isLoggedIn() {
+  	return request.auth != null;
+  }
+  
+  function authUidIsResourceDataEmployerId() {
+    return request.auth != null && request.auth.uid == resource.data.employerId;
+  }
+
+  function authUidIsRequestDataEmployerId() {
+  	return request.auth != null && request.auth.uid == request.resource.data.employerId;
+  }
+
+  function authUidIsResourceDataCaregiverId() {
+  	return request.auth != null && request.auth.uid == resource.data.caregiverId;
+  }
+  
+  function authUidIsRequestDataCaregiverId() {
+  	return request.auth != null && request.auth.uid == request.resource.data.caregiverId;
+  }
+  
+  function authUidIsRequestDataCreatedBy() {
+  	return request.auth != null && request.auth.uid == request.resource.data.createdBy;
+  }
+  
+  function authUidIsRequestDataFromUserId() {
+  	return request.auth != null && request.auth.uid == request.resource.data.fromUserId;
+  }
+  
+  function authUidIsResourceDataToUserId() {
+  	return request.auth != null && request.auth.uid == resource.data.toUserId;
+  }
+
+  function authUidIsRequestDataUid() {
+  	return request.auth != null && request.auth.uid == request.resource.id;
+  }
+  
+  function requestDataCaregiverIdDoesNotChange() {
+  	return request.resource.data.caregiverId == resource.data.caregiverId;
+  }
+  
+  function requestDataEmployerIdDoesNotChange() {
+  	return request.resource.data.employerId == resource.data.employerId;
   }
 }

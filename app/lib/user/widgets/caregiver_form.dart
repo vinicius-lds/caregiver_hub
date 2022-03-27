@@ -78,8 +78,8 @@ class _CaregiverFormState extends State<CaregiverForm> {
   @override
   Widget build(BuildContext context) {
     final textScaleFactor = MediaQuery.of(context).textScaleFactor;
-    _startPriceController.text = widget.data.startPrice.toString();
-    _endPriceController.text = widget.data.endPrice.toString();
+    _startPriceController.text = widget.data.startPrice.toStringAsFixed(2);
+    _endPriceController.text = widget.data.endPrice.toStringAsFixed(2);
     return Form(
       key: _formKey,
       child: SingleChildScrollView(
@@ -179,7 +179,8 @@ class _CaregiverFormState extends State<CaregiverForm> {
                   controller: _startPriceController,
                   validator: composeValidators([
                     greaterThan(
-                      () => _endPriceController.numberValue > 0
+                      () => _startPriceController.numberValue > 0 &&
+                              _endPriceController.numberValue > 0
                           ? _endPriceController.numberValue
                           : double.infinity,
                       message:
@@ -204,8 +205,9 @@ class _CaregiverFormState extends State<CaregiverForm> {
                   onFieldSubmitted: (_) => _submit(context),
                   validator: composeValidators([
                     lessThan(
-                      () => _startPriceController.numberValue > 0
-                          ? _endPriceController.numberValue
+                      () => _startPriceController.numberValue > 0 &&
+                              _endPriceController.numberValue > 0
+                          ? _startPriceController.numberValue
                           : -1,
                       message:
                           'O valor final deve ser superior ao valor inicial',

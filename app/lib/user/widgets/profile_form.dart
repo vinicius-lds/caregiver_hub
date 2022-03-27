@@ -226,6 +226,7 @@ class _ProfileFormState extends State<ProfileForm> {
                     focusNode: _passwordFocusNode,
                     obscureText: true,
                     readOnly: _disabled,
+                    onChanged: (value) => _password = value,
                     onFieldSubmitted:
                         _focusOn(context, _confirmPasswordFocusNode),
                     onSaved: (value) => _password = value,

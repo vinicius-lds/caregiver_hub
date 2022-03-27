@@ -78,8 +78,10 @@ class _NotifiableState extends State<Notifiable> {
         },
       );
     } else {
+      appStateProvider.isLoading = true;
       final notificationRoute =
           await _notificationService.buildNotificationRoute(data);
+      appStateProvider.isLoading = false;
       appStateProvider.isCaregiver =
           notificationRoute.receivedNotificationAsCaregiver;
       navigatorKey.currentState!.pushNamedAndRemoveUntil(

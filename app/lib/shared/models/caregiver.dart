@@ -32,21 +32,22 @@ class Caregiver {
   factory Caregiver.fromDocumentSnapshot(
     DocumentSnapshot<Map<String, dynamic>> snapshot,
   ) {
+    final doc = snapshot.data() ?? {};
     return Caregiver(
       id: snapshot.id,
-      name: snapshot['fullName'],
-      imageURL: snapshot['imageURL'],
-      phone: snapshot['phone'],
-      email: snapshot['email'],
-      bio: snapshot['bio'],
-      startPrice: snapshot['startPrice'],
-      endPrice: snapshot['endPrice'],
-      rating: snapshot['rating'] == null ? 0.0 : snapshot['rating'].toDouble(),
+      name: doc['fullName'],
+      imageURL: doc['imageURL'],
+      phone: doc['phone'],
+      email: doc['email'],
+      bio: doc['bio'],
+      startPrice: doc['startPrice'],
+      endPrice: doc['endPrice'],
+      rating: doc['rating'] == null ? 0.0 : doc['rating'].toDouble(),
       services: Service.fromServicesFlagMap(
-        Map<String, dynamic>.from(snapshot['services']),
+        Map<String, dynamic>.from(doc['services']),
       ),
       skills: Skill.fromSkillsFlagMap(
-        Map<String, dynamic>.from(snapshot['skills']),
+        Map<String, dynamic>.from(doc['skills']),
       ),
     );
   }

@@ -32,8 +32,8 @@ class ContactsBar extends StatelessWidget {
 
   void _pushWhatsApp(BuildContext context) async {
     await FlutterLaunch.launchWhatsapp(
-      phone: '55992681107',
-      message: 'Hello',
+      phone: otherUserPhone,
+      message: '',
     );
   }
 

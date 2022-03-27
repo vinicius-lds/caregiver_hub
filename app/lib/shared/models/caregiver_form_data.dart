@@ -5,7 +5,7 @@ import 'package:caregiver_hub/shared/models/skill.dart';
 class CaregiverFormData {
   final String id;
   final bool showAsCaregiver;
-  final Location location;
+  final Location? location;
   final String? bio;
   final List<Service> services;
   final List<Skill> skills;
