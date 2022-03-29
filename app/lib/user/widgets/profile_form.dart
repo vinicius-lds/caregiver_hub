@@ -81,12 +81,20 @@ class _ProfileFormState extends State<ProfileForm> {
           email: _email!,
           password: _password!,
         );
-        Provider.of<AppStateProvider>(context, listen: false).id =
-            userCredential.user!.uid;
-        Navigator.of(context).pushNamedAndRemoveUntil(
-          Routes.caregiverFilter,
-          (route) => false, // Remove todas as telas do stack
-        );
+        final appStateProvider =
+            Provider.of<AppStateProvider>(context, listen: false);
+        appStateProvider.id = userCredential.user!.uid;
+        if (appStateProvider.isCaregiver) {
+          Navigator.of(context).pushNamedAndRemoveUntil(
+            Routes.jobList,
+            (route) => false, // Remove todas as telas do stack
+          );
+        } else {
+          Navigator.of(context).pushNamedAndRemoveUntil(
+            Routes.caregiverFilter,
+            (route) => false, // Remove todas as telas do stack
+          );
+        }
       } else {
         await _userService.updateUser(
           imagePath: _imagePath,
