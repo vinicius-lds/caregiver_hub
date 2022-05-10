@@ -37,12 +37,15 @@ If he chooses to create a account, he is taken to this other screen where he can
 The filtering process can be done by filling out some fields that help the use find a caregiver near by that can do the job. The filter can be done by choosing the services provided, the skills required and the location where the job is going to take place. The location o mandatory to fill out, so the filtering does not include caregivers from completely different locations.
 
 Filtering screen:
+
 ![Caregiver filtering](./resources/images/caregiver_filter_01.png)
 
 Caregiver listing screen:
+
 ![Caregiver listing](./resources/images/caregiver_list_01.png)
 
 Caregiver profile animations:
+
 [![Showcase video for caregiver profile animations](https://img.youtube.com/vi/BUhRdZ605jo/maxresdefault.jpg)](https://www.youtube.com/watch?v=BUhRdZ605jo)
 
 ## Caregiver acting place
