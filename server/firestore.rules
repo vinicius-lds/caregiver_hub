@@ -2,32 +2,34 @@ rules_version = '2';
 service cloud.firestore {
   match /databases/{database}/documents {
   	match /caregiverRecomendations/{caregiverRecomendation} {
-    	allow read: if isLoggedIn();
-      allow write: if isLoggedIn() && authUidIsRequestDataEmployerId();
+    	allow read: if isActive() && isLoggedIn();
+      allow write: if isActive() && isLoggedIn() && authUidIsRequestDataEmployerId();
     }
     match /chat/{message} {
-    	allow read: if isLoggedIn() && (authUidIsResourceDataEmployerId() || authUidIsResourceDataCaregiverId());
+    	allow read: if isActive() && isLoggedIn() && (authUidIsResourceDataEmployerId() || authUidIsResourceDataCaregiverId());
       allow write:
-      	if isLoggedIn()
+      	if isActive()
+        	&& isLoggedIn()
         	&& authUidIsRequestDataCreatedBy()
           && (authUidIsRequestDataEmployerId() || authUidIsRequestDataCaregiverId());
     }
     match /jobs/{job} {
-    	allow read: if isLoggedIn() && (authUidIsResourceDataEmployerId() || authUidIsResourceDataCaregiverId());
-      allow create: if isLoggedIn() && (authUidIsRequestDataEmployerId() || authUidIsRequestDataCaregiverId());
-      allow update: if isLoggedIn()
+    	allow read: if isActive() && isLoggedIn() && (authUidIsResourceDataEmployerId() || authUidIsResourceDataCaregiverId());
+      allow create: if isActive() && isLoggedIn() && (authUidIsRequestDataEmployerId() || authUidIsRequestDataCaregiverId());
+      allow update: if isActive()
+      	&& isLoggedIn()
       	&& (authUidIsRequestDataEmployerId() || authUidIsRequestDataCaregiverId())
         && requestDataCaregiverIdDoesNotChange()
         && requestDataEmployerIdDoesNotChange();
     }
     match /notifications/{notification} {
-    	allow read: if isLoggedIn() && authUidIsResourceDataToUserId();
-      allow create: if isLoggedIn() && authUidIsRequestDataFromUserId();
+    	allow read: if isActive() && isLoggedIn() && authUidIsResourceDataToUserId();
+      allow create: if isActive() && isLoggedIn() && authUidIsRequestDataFromUserId();
     }
     match /users/{user} {
-    	allow create: if true;
-    	allow update: if isLoggedIn() && authUidIsRequestDataUid();
-      allow read: if isLoggedIn();
+    	allow create: if isActive() && true;
+    	allow update: if isActive() && isLoggedIn() && authUidIsRequestDataUid();
+      allow read: if isActive() && isLoggedIn();
     }
   }
   
@@ -73,5 +75,9 @@ service cloud.firestore {
   
   function requestDataEmployerIdDoesNotChange() {
   	return request.resource.data.employerId == resource.data.employerId;
+  }
+  
+  function isActive() {
+  	return false;
   }
 }
